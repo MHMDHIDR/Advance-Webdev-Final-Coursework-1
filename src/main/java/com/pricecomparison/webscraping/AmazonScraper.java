@@ -8,25 +8,18 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
 public class AmazonScraper extends Thread {
     @Override
     public void run() {
         // Set up your Java project and configure Selenium
         System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
-
-        // Create a new instance of the Chrome driver
         WebDriver driver = new ChromeDriver();
 
         // Initialize Hibernate session
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
-        // Initialize counters for tracking scraped and skipped items
-        int scrapedItems = 0;
-        int skippedItems = 0;
 
         boolean cookiesAccepted = false;
 
@@ -53,7 +46,7 @@ public class AmazonScraper extends Thread {
                     String productDescription = product.findElement(By.cssSelector("span.a-text-normal")).getText();
                     String productImageSRC = product.findElement(By.cssSelector("img.s-image")).getAttribute("src");
 
-                    // Price selector
+                    // Price selector and getting the price value as a double
                     String productPriceStr = product.findElement(By.cssSelector("span.a-price")).getText().replace("\n", ".");
                     String priceValue = productPriceStr.replaceAll("[^0-9.]+", "");
                     double productPrice = 0.0; // Default value if priceValue is empty
@@ -69,10 +62,8 @@ public class AmazonScraper extends Thread {
                     phoneCase.setProductImageUrl(productImageSRC);
 
                     session.save(phoneCase);
-                    scrapedItems++;
                 } catch (org.openqa.selenium.NoSuchElementException e) {
                     System.err.println("Some elements not found in the product listing. Skipping this product.");
-                    skippedItems++;
                 }
             }
         }
@@ -82,11 +73,5 @@ public class AmazonScraper extends Thread {
 
         // Close the browser
         driver.quit();
-
-        // Log the summary
-        int totalItems = scrapedItems + skippedItems;
-        System.out.println("Amazon Scraped items: " + scrapedItems);
-        System.out.println("Amazon Skipped items: " + skippedItems);
-        System.out.println("Amazon Total items: " + totalItems);
     }
 }

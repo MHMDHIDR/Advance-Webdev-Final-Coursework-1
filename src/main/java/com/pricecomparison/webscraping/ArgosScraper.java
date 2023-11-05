@@ -1,0 +1,57 @@
+package com.pricecomparison.webscraping;
+
+import com.pricecomparison.PhoneCase;
+import com.pricecomparison.util.HibernateUtil;
+import org.hibernate.Session;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class ArgosScraper extends Thread {
+    @Override
+    public void run() {
+        int MAX_PAGES = 6;
+        for (int page = 1; page <= MAX_PAGES; page++) {
+            String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
+
+            try {
+                Document doc = Jsoup.connect(argosUrl).get();
+
+                // Initialize Hibernate session
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                session.beginTransaction();
+
+                // Find and process each product on the page
+                Elements productElements = doc.select("div[data-test='component-product-card']");
+
+                for (Element product : productElements) {
+                    String productName = product.select("div[data-test='component-product-card-title']").text();
+                    String productPrice = product.select("div[data-test='component-product-card-price'] strong").text();
+                    String productLink = product.select("[data-test='component-product-card-textContainer'] a[data-test='component-product-card-title-link']").attr("href");
+                    String productImageURL = product.select("[data-test='component-product-card']").attr("data-product-id");
+
+                    // Check if any of the essential data is missing
+                    if (productName.isEmpty() || productPrice.isEmpty()) {
+                        continue; // Skip this product
+                    }
+
+                    // Create PhoneCase object and save it to the database
+                    PhoneCase phoneCase = new PhoneCase();
+                    phoneCase.setName(productName);
+                    phoneCase.setPrice(productPrice);
+                    phoneCase.setDescription(productName);
+                    phoneCase.setWebsiteLink("https://www.argos.co.uk" + productLink);
+                    phoneCase.setProductImageUrl("https://media.4rgos.it/s/Argos/" + productImageURL + "_R_SET");
+
+                    session.save(phoneCase);
+                }
+
+                session.getTransaction().commit(); // Commit the transaction
+                session.close();
+            } catch (Exception e) {
+                System.out.println("Thread was interrupted: " + e.getMessage());
+            }
+        }
+    }
+}
