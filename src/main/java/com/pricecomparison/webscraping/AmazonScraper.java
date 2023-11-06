@@ -31,10 +31,10 @@ public class AmazonScraper extends Thread {
                 try {
                     WebElement cookiesButton = driver.findElement(By.id("sp-cc-accept"));
                     cookiesButton.click();
-                    System.out.println("Accept Cookies button clicked.");
+                    System.out.println("Amazon Accept Cookies button clicked.");
                     cookiesAccepted = true;
                 } catch (NoSuchElementException e) {
-                    System.err.println("Accept Cookies button not found. Continuing without clicking it.");
+                    System.err.println("Amazon Accept Cookies button not found. Continuing without clicking it.");
                 }
             }
 
@@ -73,5 +73,6 @@ public class AmazonScraper extends Thread {
 
         // Close the browser
         driver.quit();
+        System.out.println("✔ AmazonScraper thread finished scraping.");
     }
 }

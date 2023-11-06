@@ -61,7 +61,8 @@ public class WalmartScraper extends Thread {
             session.close();
 
             // Close the browser
-            driver.quit();
+            //driver.quit();
+            System.out.println("✔ WalmartScraper finished scraping.");
         }
     }
 }

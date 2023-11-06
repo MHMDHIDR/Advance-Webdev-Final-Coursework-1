@@ -12,14 +12,16 @@ public class ArgosScraper extends Thread {
     @Override
     public void run() {
         int MAX_PAGES = 6;
+
+        // Initialize Hibernate session
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         for (int page = 1; page <= MAX_PAGES; page++) {
             String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
 
             try {
                 Document doc = Jsoup.connect(argosUrl).get();
 
-                // Initialize Hibernate session
-                Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
 
                 // Find and process each product on the page
@@ -46,12 +48,13 @@ public class ArgosScraper extends Thread {
 
                     session.save(phoneCase);
                 }
-
+            } catch (Exception e) {
+                System.out.println("Argos Thread was interrupted: " + e.getMessage());
+            } finally {
                 session.getTransaction().commit(); // Commit the transaction
                 session.close();
-            } catch (Exception e) {
-                System.out.println("Thread was interrupted: " + e.getMessage());
             }
         }
+        System.out.println("ArgosScraper Thread finished scraping.");
     }
 }

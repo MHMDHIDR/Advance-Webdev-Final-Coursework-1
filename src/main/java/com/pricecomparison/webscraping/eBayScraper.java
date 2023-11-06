@@ -12,6 +12,10 @@ public class eBayScraper extends Thread {
     @Override
     public void run() {
         int MAX_PAGES = 3;
+
+        // Initialize Hibernate session
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         for (int page = 1; page <= MAX_PAGES; page++) {
             String ebayUrl = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
 
@@ -19,8 +23,6 @@ public class eBayScraper extends Thread {
                 // Connect to the eBay URL and parse the HTML content
                 Document doc = Jsoup.connect(ebayUrl).get();
 
-                // Initialize Hibernate session
-                Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
 
                 // Find and process each product on the page
@@ -55,12 +57,13 @@ public class eBayScraper extends Thread {
 
                     session.save(phoneCase); // Save the PhoneCase object to the database
                 }
-
+            } catch (Exception e) {
+                System.out.println("eBay Thread was interrupted: " + e.getMessage());
+            } finally {
                 session.getTransaction().commit(); // Commit the transaction
                 session.close();
-            } catch (Exception e) {
-                System.out.println("Thread was interrupted: " + e.getMessage());
             }
         }
+        System.out.println("✔ eBayScraper Thread finished scraping.");
     }
 }

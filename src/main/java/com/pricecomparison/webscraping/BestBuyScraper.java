@@ -13,6 +13,9 @@ public class BestBuyScraper extends Thread {
     public void run() {
         int MAX_PAGES = 5;
 
+        // Initialize Hibernate session
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         for (int page = 1; page <= MAX_PAGES; page++) {
             String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
 
@@ -20,8 +23,6 @@ public class BestBuyScraper extends Thread {
                 // Connect to the Best Buy URL and parse the HTML content
                 Document doc = Jsoup.connect(bestBuyUrl).get();
 
-                // Initialize Hibernate session
-                Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
 
                 // Find and process each product on the page
@@ -48,12 +49,13 @@ public class BestBuyScraper extends Thread {
 
                     session.save(phoneCase);
                 }
-
-                session.getTransaction().commit(); // Commit the transaction
-                session.close();
             } catch (Exception e) {
-                System.out.println("Thread was interrupted: " + e.getMessage());
+                System.out.println("BestBuy Thread was interrupted: " + e.getMessage());
+            } finally {
+                session.getTransaction().commit();
+                session.close();
             }
         }
+        System.out.println("✔ BestBuyScraper Thread finished scraping.");
     }
 }
