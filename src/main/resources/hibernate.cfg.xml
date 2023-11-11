@@ -9,7 +9,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="com.pricecomparison.PhoneCase" />
-        <mapping class="com.pricecomparison.Retailer" />
         <mapping class="com.pricecomparison.PhoneCaseVariation" />
+        <mapping class="com.pricecomparison.PriceComparison" />
     </session-factory>
 </hibernate-configuration>

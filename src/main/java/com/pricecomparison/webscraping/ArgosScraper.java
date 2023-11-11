@@ -1,6 +1,9 @@
 package com.pricecomparison.webscraping;
 
 import com.pricecomparison.PhoneCase;
+import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.HibernateUtil;
 import org.hibernate.Session;
 import org.jsoup.Jsoup;
@@ -9,19 +12,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArgosScraper extends Thread {
+    private static final int MAX_PAGES = 5;
+
     @Override
     public void run() {
-        int MAX_PAGES = 6;
-
-        // Initialize Hibernate session
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        for (int page = 1; page <= MAX_PAGES; page++) {
-            String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
+        try {
+            for (int page = 1; page <= MAX_PAGES; page++) {
+                String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
 
-            try {
                 Document doc = Jsoup.connect(argosUrl).get();
-
                 session.beginTransaction();
 
                 // Find and process each product on the page
@@ -38,23 +39,45 @@ public class ArgosScraper extends Thread {
                         continue; // Skip this product
                     }
 
+                    // Extract color from the product name after the last dash ("-") symbol
+                    int lastDashIndex = productName.lastIndexOf("-");
+                    // If there is no dash, set color to "DefaultColor"
+                    String color = (lastDashIndex != -1) ? productName.substring(lastDashIndex + 1).trim() : "DefaultColor";
+
+                    String productModel = ExtractProductModel.model(productName);
+
                     // Create PhoneCase object and save it to the database
                     PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setName(productName);
-                    phoneCase.setPrice(productPrice);
-                    phoneCase.setDescription(productName);
-                    phoneCase.setWebsiteLink("https://www.argos.co.uk" + productLink);
-                    phoneCase.setProductImageUrl("https://media.4rgos.it/s/Argos/" + productImageURL + "_R_SET");
-
+                    phoneCase.setWebsite("Argos");
+                    phoneCase.setPhoneModel(productModel);
                     session.save(phoneCase);
+
+                    // Create and save PhoneCaseVariation entity
+                    PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
+                    phoneCaseVariation.setPhoneCase(phoneCase);
+                    phoneCaseVariation.setColor(color);
+                    phoneCaseVariation.setImageUrl("https://media.4rgos.it/s/Argos/" + productImageURL + "_R_SET");
+                    session.save(phoneCaseVariation);
+
+                    // Create and save PriceComparison entity
+                    PriceComparison priceComparison = new PriceComparison();
+                    priceComparison.setCaseVariant(phoneCaseVariation);
+                    priceComparison.setPrice(Double.parseDouble(productPrice.substring(1))); // Remove the '£' symbol
+                    priceComparison.setUrl("https://www.argos.co.uk" + productLink);
+                    session.save(priceComparison);
+
+                    // Set PriceComparison in PhoneCaseVariation
+                    phoneCaseVariation.setPriceComparison(priceComparison);
                 }
-            } catch (Exception e) {
-                System.out.println("Argos Thread was interrupted: " + e.getMessage());
-            } finally {
                 session.getTransaction().commit(); // Commit the transaction
+            }
+        } catch (Exception e) {
+            System.out.println("Error scraping Argos => " + e.getMessage());
+        } finally {
+            if (session.isOpen()) {
                 session.close();
             }
         }
-        System.out.println("ArgosScraper Thread finished scraping.");
+        System.out.println("✔ ArgosScraper thread finished scraping.");
     }
 }

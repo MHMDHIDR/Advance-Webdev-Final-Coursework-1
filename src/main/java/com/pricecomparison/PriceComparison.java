@@ -3,20 +3,16 @@ package com.pricecomparison;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "price_comparison")
+@Table(name = "comparison")
 public class PriceComparison {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private PhoneCase phoneCase;
-
-    @ManyToOne
-    @JoinColumn(name = "retailer_id")
-    private Retailer retailer;
+    @OneToOne
+    @JoinColumn(name = "case_variant_id")
+    private PhoneCaseVariation caseVariant;
 
     @Column(name = "price")
     private double price;
@@ -24,5 +20,17 @@ public class PriceComparison {
     @Column(name = "url")
     private String url;
 
-    // Constructors, getters, setters, and other methods
+    // Constructors, getters, setters, and other methods...
+
+    public void setCaseVariant(PhoneCaseVariation caseVariant) {
+        this.caseVariant = caseVariant;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

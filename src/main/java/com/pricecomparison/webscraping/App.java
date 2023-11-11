@@ -10,17 +10,13 @@ import static java.lang.Thread.sleep;
  */
 public class App {
     public static void main(String[] args) {
-        // Create and start the Walmart thread
-        WalmartScraper walmartScraperThread = new WalmartScraper();
-        walmartScraperThread.start();
-
         // Create and start the AmazonScraper thread
         //AmazonScraper amazonScraperThread = new AmazonScraper();
         //amazonScraperThread.start();
 
         // Create and start the eBayScraper thread
-        //eBayScraper ebayScraperThread = new eBayScraper();
-        //ebayScraperThread.start();
+        eBayScraper ebayScraperThread = new eBayScraper();
+        ebayScraperThread.start();
 
         // Create and start the BestBuyScraper thread
         //BestBuyScraper BestBuyScraperThread = new BestBuyScraper();
@@ -31,14 +27,15 @@ public class App {
         //ArgosScraperThread.start();
 
         try {
-            walmartScraperThread.join();
-            //sleep(1000);
             //amazonScraperThread.join();
             //sleep(1000);
-            //ebayScraperThread.join();
+
+            ebayScraperThread.join();
             //sleep(1000);
+
             //BestBuyScraperThread.join();
             //sleep(1000);
+
             //ArgosScraperThread.join();
         } catch (InterruptedException e) {
             System.out.println("Thread was interrupted => " + e.getMessage());

@@ -2,19 +2,13 @@ package com.pricecomparison.util;
 
 public class CurrencyConverter {
     public static String convertToGBP(String productPriceUSD) {
-        String[] priceParts = productPriceUSD.split(" - ");
+        // Extract the numeric part of the price
+        String numericPart = productPriceUSD.replaceAll("[^\\d.]+", "");
 
-        StringBuilder convertedPrice = new StringBuilder();
-        for (int i = 0; i < priceParts.length; i++) {
-            double usdValue = Double.parseDouble(priceParts[i].replaceAll("[^0-9.]+", ""));
-            double gbpValue = usdValue * 0.81;
-            convertedPrice.append("£").append(String.format("%.2f", gbpValue));
+        // Convert to GBP (assuming a simple conversion for demonstration purposes)
+        double gbpRate = 0.81; // Replace with the actual conversion rate
+        double convertedPrice = Double.parseDouble(numericPart) * gbpRate;
 
-            if (priceParts.length > 1 && i < priceParts.length - 1) {
-                convertedPrice.append(" - ");
-            }
-        }
-
-        return convertedPrice.toString();
+        return "£" + String.format("%.2f", convertedPrice);
     }
 }

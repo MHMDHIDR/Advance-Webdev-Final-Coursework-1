@@ -3,7 +3,7 @@ package com.pricecomparison;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "phone_case_variation")
+@Table(name = "cases_variants")
 public class PhoneCaseVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,17 +11,33 @@ public class PhoneCaseVariation {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id") // Make sure it matches the column name in the PhoneCase table
+    @JoinColumn(name = "case_id")
     private PhoneCase phoneCase;
 
     @Column(name = "color")
     private String color;
 
-    @Column(name = "material")
-    private String material;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    @Column(name = "model")
-    private String model;
+    @OneToOne(mappedBy = "caseVariant", cascade = CascadeType.ALL)
+    private PriceComparison priceComparison;
 
-    // Constructors, getters, setters, and other methods
+    // Constructors, getters, setters, and other methods...
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setPhoneCase(PhoneCase phoneCase) {
+        this.phoneCase = phoneCase;
+    }
+
+    public void setPriceComparison(PriceComparison priceComparison) {
+        this.priceComparison = priceComparison;
+    }
 }

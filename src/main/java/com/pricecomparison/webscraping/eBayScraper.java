@@ -1,6 +1,10 @@
 package com.pricecomparison.webscraping;
 
 import com.pricecomparison.PhoneCase;
+import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.CurrencyConverter;
+import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.HibernateUtil;
 import org.hibernate.Session;
 import org.jsoup.Jsoup;
@@ -9,60 +13,70 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class eBayScraper extends Thread {
+    private static final int MAX_PAGES = 3;
+
+    // Initialize Hibernate session outside the run method
+    private final Session session = HibernateUtil.getSessionFactory().openSession();
+
     @Override
     public void run() {
-        int MAX_PAGES = 3;
+        try {
+            for (int page = 1; page <= MAX_PAGES; page++) {
+                String ebayUrl = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
 
-        // Initialize Hibernate session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+                    // Connect to the eBay URL and parse the HTML content
+                    Document doc = Jsoup.connect(ebayUrl).get();
 
-        for (int page = 1; page <= MAX_PAGES; page++) {
-            String ebayUrl = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
+                    session.beginTransaction();
 
-            try {
-                // Connect to the eBay URL and parse the HTML content
-                Document doc = Jsoup.connect(ebayUrl).get();
+                    // Find and process each product on the page
+                    Elements productElements = doc.select(".s-item");
 
-                session.beginTransaction();
+                    for (Element product : productElements) {
+                        String productName = product.select(".s-item__title").text();
+                        String productLink = product.select(".s-item__link").attr("href");
+                        String productPriceUSD = product.select(".s-item__price").text();
+                        String convertedPriceGBP = CurrencyConverter.convertToGBP(productPriceUSD);
+                        Element imageElement = product.select(".s-item__image-wrapper img").first();
+                        String productImageURL = imageElement != null ? imageElement.attr("src") : "";
 
-                // Find and process each product on the page
-                Elements productElements = doc.select(".s-item");
+                        // Check if any of the essential data is missing
+                        if (productName.isEmpty() || productLink.isEmpty() || productPriceUSD.isEmpty()) {
+                            continue; // Skip this product
+                        }
 
-                for (int i = 0; i < productElements.size(); i++) {
-                    // Skip the first element with class ".s-item" because it's not a product just an ad for eBay
-                    if (i == 0) {
-                        continue;
+                        // Extract phone model from the product name
+                        String phoneModel = ExtractProductModel.model(productName);
+
+                        // Create PhoneCase object and save it to the database
+                        PhoneCase phoneCase = new PhoneCase();
+                        phoneCase.setWebsite("eBay");
+                        phoneCase.setPhoneModel(phoneModel);
+                        session.save(phoneCase);
+
+                        // Create and save PhoneCaseVariation entity
+                        PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
+                        phoneCaseVariation.setPhoneCase(phoneCase);
+                        phoneCaseVariation.setColor("DefaultColor"); // You can modify this based on eBay data
+                        phoneCaseVariation.setImageUrl(productImageURL);
+                        session.save(phoneCaseVariation);
+
+                        // Create and save PriceComparison entity with converted price to GBP
+                        PriceComparison priceComparison = new PriceComparison();
+                        priceComparison.setCaseVariant(phoneCaseVariation);
+                        priceComparison.setPrice(Double.parseDouble(convertedPriceGBP.replaceAll("[^\\d.]", "")));
+                        priceComparison.setUrl(productLink);
+                        session.save(priceComparison);
+
+                        // Set PriceComparison in PhoneCaseVariation
+                        phoneCaseVariation.setPriceComparison(priceComparison);
                     }
-
-                    Element product = productElements.get(i);
-
-                    String productName = product.select(".s-item__title").text();
-                    String productLink = product.select(".s-item__link").attr("href");
-                    String productPrice = product.select(".s-item__price").text();
-                    Element imageElement = product.select(".s-item__image-wrapper img").first();
-                    String productImageURL = imageElement.attr("src");
-
-                    // Check if any of the essential data is missing
-                    if (productName.isEmpty() || productLink.isEmpty() || productPrice.isEmpty()) {
-                        continue; // Skip this product
-                    }
-
-                    // Create PhoneCase object and save it to the database
-                    PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setName(productName);
-                    phoneCase.setPrice(productPrice);
-                    phoneCase.setDescription(productName);
-                    phoneCase.setWebsiteLink(productLink);
-                    phoneCase.setProductImageUrl(productImageURL);
-
-                    session.save(phoneCase); // Save the PhoneCase object to the database
-                }
-            } catch (Exception e) {
-                System.out.println("eBay Thread was interrupted: " + e.getMessage());
-            } finally {
-                session.getTransaction().commit(); // Commit the transaction
-                session.close();
+                session.getTransaction().commit();
             }
+        } catch (Exception e) {
+            System.out.println("eBay Thread was interrupted: " + e.getMessage());
+        } finally {
+            session.close(); // Close the session to release resources
         }
         System.out.println("✔ eBayScraper Thread finished scraping.");
     }
