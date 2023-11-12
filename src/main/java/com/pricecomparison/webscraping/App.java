@@ -26,6 +26,10 @@ public class App {
         //ArgosScraper ArgosScraperThread = new ArgosScraper();
         //ArgosScraperThread.start();
 
+        // Create and start the TargetScraper thread
+        //GumtreeScraper GumtreeScraperThread = new GumtreeScraper();
+        //GumtreeScraperThread.start();
+
         try {
             //amazonScraperThread.join();
             //sleep(1000);
@@ -37,6 +41,9 @@ public class App {
             //sleep(1000);
 
             //ArgosScraperThread.join();
+            //sleep(1000);
+
+            //GumtreeScraperThread.join();
         } catch (InterruptedException e) {
             System.out.println("Thread was interrupted => " + e.getMessage());
         }

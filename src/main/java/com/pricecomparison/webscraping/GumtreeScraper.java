@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.ExtractProductPrice;
 import com.pricecomparison.util.HibernateUtil;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AmazonScraper extends Thread {
+public class GumtreeScraper extends Thread {
     @Override
     public void run() {
         // Set up your Java project and configure Selenium
@@ -33,7 +34,7 @@ public class AmazonScraper extends Thread {
 
         // Iterate over multiple pages
         for (int page = 1; page <= 5; page++) {
-            String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
+            String url = "https://www.gumtree.com/search?q=iphone+case&page=" + page;
             driver.get(url);
 
             if (!cookiesAccepted) {
@@ -42,7 +43,7 @@ public class AmazonScraper extends Thread {
             }
 
             // Get all product links on the page
-            List<WebElement> productLinks = driver.findElements(By.cssSelector("a.a-link-normal.s-no-outline"));
+            List<WebElement> productLinks = driver.findElements(By.cssSelector("a.e25keea19[data-q='search-result-anchor']"));
 
             // Collect all product URLs
             List<String> productUrls = new ArrayList<>();
@@ -57,22 +58,21 @@ public class AmazonScraper extends Thread {
                     driver.get(productUrl);
 
                     // Scrape product information
-                    String productName = driver.findElement(By.cssSelector("h1.a-spacing-none span#productTitle")).getText();
+                    String productName = driver.findElement(By.cssSelector("h1.css-4rz76v[data-q='vip-title']")).getText();
                     String productPrice = ExtractProductPrice.price(driver);
-                    String productColour = driver.findElement(By.cssSelector("table tbody tr.po-color td span.po-break-word")).getText();
-                    String productModels = driver.findElement(By.cssSelector("table tbody tr.po-compatible_phone_models td span.po-break-word")).getText();
-                    String productImageURL = driver.findElement(By.cssSelector("span.a-declarative div img#landingImage.a-dynamic-image")).getAttribute("src");
+                    String productModels = ExtractProductModel.model(productName);
+                    String productImageURL = driver.findElement(By.cssSelector("ul li.active.carousel-item[data-testid='slider'] img")).getAttribute("src");
 
                     // Create and save PhoneCase entity
                     PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setWebsite("Amazon");
+                    phoneCase.setWebsite("Gumtree");
                     phoneCase.setPhoneModel(productModels);
                     session.save(phoneCase);
 
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
-                    phoneCaseVariation.setColor(productColour);
+                    phoneCaseVariation.setColor("Click on \"View Details\" to see the color");
                     phoneCaseVariation.setImageUrl(productImageURL);
                     session.save(phoneCaseVariation);
 
@@ -123,11 +123,11 @@ public class AmazonScraper extends Thread {
 
     private void acceptCookies(WebDriver driver) {
         try {
-            WebElement cookiesButton = driver.findElement(By.id("sp-cc-accept"));
+            WebElement cookiesButton = driver.findElement(By.id("onetrust-accept-btn-handler"));
             cookiesButton.click();
-            System.out.println("Amazon Accept Cookies button clicked.");
+            System.out.println("Gumtree Accept Cookies button clicked.");
         } catch (Exception e) {
-            System.err.println("Amazon Accept Cookies button not found. Continuing without clicking it.");
+            System.err.println("Gumtree Accept Cookies button not found. Continuing without clicking it.");
         }
     }
 }

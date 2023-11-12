@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class ExtractProductModel {
     public static String model(String productName) {
         // Use a regex pattern to match the iPhone model(s) in the product name
-        Pattern pattern = Pattern.compile("iPhone\\s(\\d+(?:\\s*Pro\\s*Max|\\s*Pro|\\s*Mini)?(?:\\s*(?:and)?\\s*(?:[\\dXRS]+(?:\\s*Pro\\s*Max|\\s*Pro|\\s*Mini)?)?)?(?:\\s*S)?)");
+        Pattern pattern = Pattern.compile("(iPhone\\s*\\d+\\s*(?:Pro\\s*Max|Pro|Mini)?(?:\\s*[XRS]+(?:\\s*Pro\\s*Max|\\s*Pro|\\s*Mini)?)?(?:\\s*S)?)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(productName);
 
         StringBuilder models = new StringBuilder();
