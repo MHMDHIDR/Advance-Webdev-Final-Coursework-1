@@ -65,7 +65,7 @@ public class BestBuyScraper extends Thread {
                     // Create and save PriceComparison entity with converted price to GBP
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
-                    priceComparison.setPrice(Double.parseDouble(convertedPriceGBP.replaceAll("[^\\d.]", "")));
+                    priceComparison.setPrice(convertedPriceGBP.replaceAll("[^\\d.]", ""));
                     priceComparison.setUrl(productLink);
                     session.save(priceComparison);
 

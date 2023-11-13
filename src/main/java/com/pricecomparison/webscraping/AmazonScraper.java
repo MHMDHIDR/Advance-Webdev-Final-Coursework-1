@@ -79,7 +79,7 @@ public class AmazonScraper extends Thread {
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
-                    priceComparison.setPrice(Double.parseDouble(productPrice.substring(1))); // Remove the '£' symbol
+                    priceComparison.setPrice(productPrice.substring(1)); // Remove the '£' symbol
                     priceComparison.setUrl(productUrl);
 
                     // Set PriceComparison in PhoneCaseVariation

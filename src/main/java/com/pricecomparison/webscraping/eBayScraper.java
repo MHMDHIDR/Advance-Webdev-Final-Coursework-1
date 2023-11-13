@@ -3,7 +3,6 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
-import com.pricecomparison.util.CurrencyConverter;
 import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.HibernateUtil;
 import org.hibernate.Session;
@@ -35,13 +34,12 @@ public class eBayScraper extends Thread {
                     for (Element product : productElements) {
                         String productName = product.select(".s-item__title").text();
                         String productLink = product.select(".s-item__link").attr("href");
-                        String productPriceUSD = product.select(".s-item__price").text();
-                        String convertedPriceGBP = CurrencyConverter.convertToGBP(productPriceUSD);
+                        String productPrice = product.select(".s-item__price").text();
                         Element imageElement = product.select(".s-item__image-wrapper img").first();
                         String productImageURL = imageElement != null ? imageElement.attr("src") : "";
 
                         // Check if any of the essential data is missing
-                        if (productName.isEmpty() || productLink.isEmpty() || productPriceUSD.isEmpty()) {
+                        if (productName.isEmpty() || productLink.isEmpty() || productPrice.isEmpty()) {
                             continue; // Skip this product
                         }
 
@@ -57,14 +55,14 @@ public class eBayScraper extends Thread {
                         // Create and save PhoneCaseVariation entity
                         PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                         phoneCaseVariation.setPhoneCase(phoneCase);
-                        phoneCaseVariation.setColor("DefaultColor"); // You can modify this based on eBay data
+                        phoneCaseVariation.setColor(("Click \"View Details\" to view color options"));
                         phoneCaseVariation.setImageUrl(productImageURL);
                         session.save(phoneCaseVariation);
 
                         // Create and save PriceComparison entity with converted price to GBP
                         PriceComparison priceComparison = new PriceComparison();
                         priceComparison.setCaseVariant(phoneCaseVariation);
-                        priceComparison.setPrice(Double.parseDouble(convertedPriceGBP.replaceAll("[^\\d.]", "")));
+                        priceComparison.setPrice(productPrice);
                         priceComparison.setUrl(productLink);
                         session.save(priceComparison);
 
@@ -74,6 +72,7 @@ public class eBayScraper extends Thread {
                 session.getTransaction().commit();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("eBay Thread was interrupted: " + e.getMessage());
         } finally {
             session.close(); // Close the session to release resources

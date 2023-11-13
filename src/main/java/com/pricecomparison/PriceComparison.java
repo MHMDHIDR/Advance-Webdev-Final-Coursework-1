@@ -15,7 +15,7 @@ public class PriceComparison {
     private PhoneCaseVariation caseVariant;
 
     @Column(name = "price")
-    private double price;
+    private String price;
 
     @Column(name = "url")
     private String url;
@@ -26,7 +26,7 @@ public class PriceComparison {
         this.caseVariant = caseVariant;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
