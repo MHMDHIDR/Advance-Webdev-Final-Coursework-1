@@ -11,39 +11,39 @@ import static java.lang.Thread.sleep;
 public class App {
     public static void main(String[] args) {
         // Create and start the AmazonScraper thread
-        //AmazonScraper amazonScraperThread = new AmazonScraper();
-        //amazonScraperThread.start();
+        AmazonScraper amazonScraperThread = new AmazonScraper();
+        amazonScraperThread.start();
 
         // Create and start the eBayScraper thread
         eBayScraper ebayScraperThread = new eBayScraper();
         ebayScraperThread.start();
 
         // Create and start the BestBuyScraper thread
-        //BestBuyScraper BestBuyScraperThread = new BestBuyScraper();
-        //BestBuyScraperThread.start();
+        BestBuyScraper BestBuyScraperThread = new BestBuyScraper();
+        BestBuyScraperThread.start();
 
         // Create and start the TargetScraper thread
-        //ArgosScraper ArgosScraperThread = new ArgosScraper();
-        //ArgosScraperThread.start();
+        ArgosScraper ArgosScraperThread = new ArgosScraper();
+        ArgosScraperThread.start();
 
         // Create and start the TargetScraper thread
-        //GumtreeScraper GumtreeScraperThread = new GumtreeScraper();
-        //GumtreeScraperThread.start();
+        GumtreeScraper GumtreeScraperThread = new GumtreeScraper();
+        GumtreeScraperThread.start();
 
         try {
-            //amazonScraperThread.join();
-            //sleep(1000);
+            amazonScraperThread.join();
+            sleep(1000);
 
             ebayScraperThread.join();
-            //sleep(1000);
+            sleep(1000);
 
-            //BestBuyScraperThread.join();
-            //sleep(1000);
+            BestBuyScraperThread.join();
+            sleep(1000);
 
-            //ArgosScraperThread.join();
-            //sleep(1000);
+            ArgosScraperThread.join();
+            sleep(1000);
 
-            //GumtreeScraperThread.join();
+            GumtreeScraperThread.join();
         } catch (InterruptedException e) {
             System.out.println("Thread was interrupted => " + e.getMessage());
         }

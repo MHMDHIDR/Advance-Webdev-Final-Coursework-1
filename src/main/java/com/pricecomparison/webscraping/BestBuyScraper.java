@@ -51,7 +51,6 @@ public class BestBuyScraper extends Thread {
 
                     // Create PhoneCase object and save it to the database
                     PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setWebsite("BestBuy");
                     phoneCase.setPhoneModel(phoneModel);
                     session.save(phoneCase);
 

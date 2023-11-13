@@ -65,7 +65,6 @@ public class AmazonScraper extends Thread {
 
                     // Create and save PhoneCase entity
                     PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setWebsite("Amazon");
                     phoneCase.setPhoneModel(productModels);
                     session.save(phoneCase);
 

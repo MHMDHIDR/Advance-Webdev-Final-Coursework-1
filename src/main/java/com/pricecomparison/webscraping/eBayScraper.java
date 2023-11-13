@@ -48,7 +48,6 @@ public class eBayScraper extends Thread {
 
                         // Create PhoneCase object and save it to the database
                         PhoneCase phoneCase = new PhoneCase();
-                        phoneCase.setWebsite("eBay");
                         phoneCase.setPhoneModel(phoneModel);
                         session.save(phoneCase);
 

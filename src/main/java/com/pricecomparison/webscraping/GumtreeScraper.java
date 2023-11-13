@@ -65,7 +65,6 @@ public class GumtreeScraper extends Thread {
 
                     // Create and save PhoneCase entity
                     PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setWebsite("Gumtree");
                     phoneCase.setPhoneModel(productModels);
                     session.save(phoneCase);
 

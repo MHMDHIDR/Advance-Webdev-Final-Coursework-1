@@ -11,18 +11,11 @@ public class PhoneCase {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "website")
-    private String website;
-
     @Column(name = "phone_model")
     private String phoneModel;
 
     @OneToMany(mappedBy = "phoneCase", cascade = CascadeType.ALL)
     private List<PhoneCaseVariation> variations;
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
 
     public void setPhoneModel(String phoneModel) {
         this.phoneModel = phoneModel;
