@@ -1,6 +1,6 @@
 package com.pricecomparison;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cases_variants")

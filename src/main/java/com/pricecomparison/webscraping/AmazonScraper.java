@@ -4,14 +4,13 @@ import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.ExtractProductPrice;
-import com.pricecomparison.util.HibernateUtil;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.ArrayList;
@@ -19,14 +18,18 @@ import java.util.List;
 
 
 public class AmazonScraper extends Thread {
+    private final WebDriver driver;
+    private final SessionFactory sessionFactory;
+
+    // Constructor to inject WebDriver
+    public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
+        this.driver = driver;
+        this.sessionFactory = sessionFactory;
+    }
     @Override
     public void run() {
-        // Set up your Java project and configure Selenium
-        System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
-        WebDriver driver = new ChromeDriver();
-
-        // Initialize Hibernate session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        // Initialize session
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         boolean cookiesAccepted = false;

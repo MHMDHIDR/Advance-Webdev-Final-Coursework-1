@@ -5,9 +5,8 @@ import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.CurrencyConverter;
 import com.pricecomparison.util.ExtractProductModel;
-import com.pricecomparison.util.HibernateUtil;
-
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,11 +14,17 @@ import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
     private static final int MAX_PAGES = 7;
+    private final SessionFactory sessionFactory;
+
+    // Constructor to inject SessionFactory
+    public BestBuyScraper(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void run() {
         // Initialize Hibernate session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
 
         try {
             session.beginTransaction();

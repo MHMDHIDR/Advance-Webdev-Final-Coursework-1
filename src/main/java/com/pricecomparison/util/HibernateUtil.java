@@ -1,26 +1,28 @@
 package com.pricecomparison.util;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
 public class HibernateUtil {
-    private static final SessionFactory sessionFactory = buildSessionFactory();
 
-    private static SessionFactory buildSessionFactory() {
-        try {
-            // Load configuration from hibernate.cfg.xml
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-
-            // Build the session factory
-            return configuration.buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Initial SessionFactory creation failed. " + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
+    @Bean
+    public SessionFactory sessionFactory(DataSource dataSource) {
+        LocalSessionFactoryBuilder sessionFactoryBuilder = new LocalSessionFactoryBuilder(dataSource);
+        sessionFactoryBuilder.scanPackages("com.pricecomparison");
+        sessionFactoryBuilder.addProperties(hibernateProperties());
+        return sessionFactoryBuilder.buildSessionFactory();
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    private Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        return hibernateProperties;
     }
 }

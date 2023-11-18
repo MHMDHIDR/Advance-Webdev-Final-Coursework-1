@@ -1,6 +1,6 @@
 package com.pricecomparison;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -20,7 +20,4 @@ public class PhoneCase {
     public void setPhoneModel(String phoneModel) {
         this.phoneModel = phoneModel;
     }
-
-
-    // Constructors, getters, setters, and other methods
 }

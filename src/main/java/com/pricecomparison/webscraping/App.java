@@ -1,48 +1,34 @@
 package com.pricecomparison.webscraping;
 
-import static java.lang.Thread.sleep;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-/**
- * Web Scraping threads
- * Created by: Mohammed Haydar
- * version: 0.0.1
- * date: 28.10.2023
- */
+
 public class App {
     public static void main(String[] args) {
-        // Create and start the AmazonScraper thread
-        AmazonScraper amazonScraperThread = new AmazonScraper();
+        // Create the Spring context
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // Retrieve the scrapers from the context
+        AmazonScraper amazonScraperThread = context.getBean(AmazonScraper.class);
+        eBayScraper ebayScraperThread = context.getBean(eBayScraper.class);
+        BestBuyScraper BestBuyScraperThread = context.getBean(BestBuyScraper.class);
+        ArgosScraper ArgosScraperThread = context.getBean(ArgosScraper.class);
+        GumtreeScraper GumtreeScraperThread = context.getBean(GumtreeScraper.class);
+
+        // Start the scraper threads
         amazonScraperThread.start();
-
-        // Create and start the eBayScraper thread
-        eBayScraper ebayScraperThread = new eBayScraper();
         ebayScraperThread.start();
-
-        // Create and start the BestBuyScraper thread
-        BestBuyScraper BestBuyScraperThread = new BestBuyScraper();
         BestBuyScraperThread.start();
-
-        // Create and start the TargetScraper thread
-        ArgosScraper ArgosScraperThread = new ArgosScraper();
         ArgosScraperThread.start();
-
-        // Create and start the TargetScraper thread
-        GumtreeScraper GumtreeScraperThread = new GumtreeScraper();
         GumtreeScraperThread.start();
 
+        // Wait for the threads to finish
         try {
             amazonScraperThread.join();
-            sleep(1000);
-
             ebayScraperThread.join();
-            sleep(1000);
-
             BestBuyScraperThread.join();
-            sleep(1000);
-
             ArgosScraperThread.join();
-            sleep(1000);
-
             GumtreeScraperThread.join();
         } catch (InterruptedException e) {
             System.out.println("Thread was interrupted => " + e.getMessage());

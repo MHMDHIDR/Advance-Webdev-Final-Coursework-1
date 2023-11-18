@@ -5,29 +5,30 @@ import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.ExtractProductPrice;
-import com.pricecomparison.util.HibernateUtil;
-
 import org.hibernate.Session;
-
+import org.hibernate.SessionFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class GumtreeScraper extends Thread {
+    private final WebDriver driver;
+    private final SessionFactory sessionFactory;
+
+    // Constructor to inject WebDriver and SessionFactory
+    public GumtreeScraper(WebDriver driver, SessionFactory sessionFactory) {
+        this.driver = driver;
+        this.sessionFactory = sessionFactory;
+    }
     @Override
     public void run() {
-        // Set up your Java project and configure Selenium
-        System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
-        WebDriver driver = new ChromeDriver();
-
         // Initialize Hibernate session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
 
         boolean cookiesAccepted = false;
@@ -89,7 +90,6 @@ public class GumtreeScraper extends Thread {
                     try {
                         Thread.sleep(2000); // Sleep for 2 seconds between iterations
                     } catch (InterruptedException e) {
-                        //e.printStackTrace();
                         System.out.println("Error sleeping thread." + e.getMessage());
                     }
 

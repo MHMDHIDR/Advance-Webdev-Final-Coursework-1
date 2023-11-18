@@ -4,8 +4,8 @@ import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.ExtractProductModel;
-import com.pricecomparison.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,12 +13,18 @@ import org.jsoup.select.Elements;
 
 public class eBayScraper extends Thread {
     private static final int MAX_PAGES = 3;
+    private final SessionFactory sessionFactory;
 
-    // Initialize Hibernate session outside the run method
-    private final Session session = HibernateUtil.getSessionFactory().openSession();
+    // Constructor to inject SessionFactory
+    public eBayScraper(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void run() {
+        // Initialize Hibernate session outside the run method
+        Session session = sessionFactory.openSession();
+
         try {
             for (int page = 1; page <= MAX_PAGES; page++) {
                 String ebayUrl = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
