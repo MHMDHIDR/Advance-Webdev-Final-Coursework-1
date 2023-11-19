@@ -12,7 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class eBayScraper extends Thread {
-    private static final int MAX_PAGES = 3;
+    private static final int MAX_PAGES = 1;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -55,21 +55,21 @@ public class eBayScraper extends Thread {
                         // Create PhoneCase object and save it to the database
                         PhoneCase phoneCase = new PhoneCase();
                         phoneCase.setPhoneModel(phoneModel);
-                        session.save(phoneCase);
+                        session.persist(phoneCase);
 
                         // Create and save PhoneCaseVariation entity
                         PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                         phoneCaseVariation.setPhoneCase(phoneCase);
                         phoneCaseVariation.setColor(("Click \"View Details\" to view color options"));
                         phoneCaseVariation.setImageUrl(productImageURL);
-                        session.save(phoneCaseVariation);
+                        session.persist(phoneCaseVariation);
 
                         // Create and save PriceComparison entity with converted price to GBP
                         PriceComparison priceComparison = new PriceComparison();
                         priceComparison.setCaseVariant(phoneCaseVariation);
                         priceComparison.setPrice(productPrice);
                         priceComparison.setUrl(productLink);
-                        session.save(priceComparison);
+                        session.persist(priceComparison);
 
                         // Set PriceComparison in PhoneCaseVariation
                         phoneCaseVariation.setPriceComparison(priceComparison);

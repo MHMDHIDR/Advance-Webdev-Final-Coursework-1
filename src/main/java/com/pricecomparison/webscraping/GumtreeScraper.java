@@ -67,14 +67,14 @@ public class GumtreeScraper extends Thread {
                     // Create and save PhoneCase entity
                     PhoneCase phoneCase = new PhoneCase();
                     phoneCase.setPhoneModel(productModels);
-                    session.save(phoneCase);
+                    session.persist(phoneCase);
 
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
                     phoneCaseVariation.setColor("Click on \"View Details\" to see the color");
                     phoneCaseVariation.setImageUrl(productImageURL);
-                    session.save(phoneCaseVariation);
+                    session.persist(phoneCaseVariation);
 
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
@@ -85,7 +85,7 @@ public class GumtreeScraper extends Thread {
                     // Set PriceComparison in PhoneCaseVariation
                     phoneCaseVariation.setPriceComparison(priceComparison);
 
-                    session.save(priceComparison);
+                    session.persist(priceComparison);
 
                     try {
                         Thread.sleep(2000); // Sleep for 2 seconds between iterations

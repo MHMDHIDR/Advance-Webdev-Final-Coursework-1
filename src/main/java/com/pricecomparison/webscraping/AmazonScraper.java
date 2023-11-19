@@ -21,6 +21,8 @@ public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
+    private static final int MAX_PAGES = 1;
+
     // Constructor to inject WebDriver
     public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
         this.driver = driver;
@@ -32,17 +34,12 @@ public class AmazonScraper extends Thread {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        boolean cookiesAccepted = false;
-
         // Iterate over multiple pages
-        for (int page = 1; page <= 5; page++) {
+        for (int page = 1; page <= MAX_PAGES; page++) {
             String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
             driver.get(url);
 
-            if (!cookiesAccepted) {
-                acceptCookies(driver);
-                cookiesAccepted = true;
-            }
+            acceptCookies(driver);
 
             // Get all product links on the page
             List<WebElement> productLinks = driver.findElements(By.cssSelector("a.a-link-normal.s-no-outline"));
@@ -60,7 +57,6 @@ public class AmazonScraper extends Thread {
                     driver.get(productUrl);
 
                     // Scrape product information
-                    String productName = driver.findElement(By.cssSelector("h1.a-spacing-none span#productTitle")).getText();
                     String productPrice = ExtractProductPrice.price(driver);
                     String productColour = driver.findElement(By.cssSelector("table tbody tr.po-color td span.po-break-word")).getText();
                     String productModels = driver.findElement(By.cssSelector("table tbody tr.po-compatible_phone_models td span.po-break-word")).getText();
@@ -69,14 +65,14 @@ public class AmazonScraper extends Thread {
                     // Create and save PhoneCase entity
                     PhoneCase phoneCase = new PhoneCase();
                     phoneCase.setPhoneModel(productModels);
-                    session.save(phoneCase);
+                    session.persist(phoneCase);
 
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
                     phoneCaseVariation.setColor(productColour);
                     phoneCaseVariation.setImageUrl(productImageURL);
-                    session.save(phoneCaseVariation);
+                    session.persist(phoneCaseVariation);
 
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
@@ -86,8 +82,7 @@ public class AmazonScraper extends Thread {
 
                     // Set PriceComparison in PhoneCaseVariation
                     phoneCaseVariation.setPriceComparison(priceComparison);
-
-                    session.save(priceComparison);
+                    session.persist(priceComparison);
 
                     try {
                         Thread.sleep(2000); // Sleep for 2 seconds between iterations

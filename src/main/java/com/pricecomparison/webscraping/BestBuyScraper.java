@@ -57,21 +57,21 @@ public class BestBuyScraper extends Thread {
                     // Create PhoneCase object and save it to the database
                     PhoneCase phoneCase = new PhoneCase();
                     phoneCase.setPhoneModel(phoneModel);
-                    session.save(phoneCase);
+                    session.persist(phoneCase);
 
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
                     phoneCaseVariation.setColor(productColor.isEmpty() ? "DefaultColor" : productColor);
                     phoneCaseVariation.setImageUrl(productImageURL);
-                    session.save(phoneCaseVariation);
+                    session.persist(phoneCaseVariation);
 
                     // Create and save PriceComparison entity with converted price to GBP
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
                     priceComparison.setPrice(convertedPriceGBP.replaceAll("[^\\d.]", ""));
                     priceComparison.setUrl(productLink);
-                    session.save(priceComparison);
+                    session.persist(priceComparison);
 
                     // Set PriceComparison in PhoneCaseVariation
                     phoneCaseVariation.setPriceComparison(priceComparison);

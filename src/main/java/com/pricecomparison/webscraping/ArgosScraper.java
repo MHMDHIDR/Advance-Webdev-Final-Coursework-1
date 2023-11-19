@@ -12,7 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArgosScraper extends Thread {
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
