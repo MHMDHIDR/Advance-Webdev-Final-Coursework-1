@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.DatabaseUtil;
 import com.pricecomparison.util.ExtractProductModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArgosScraper extends Thread {
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 5;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -52,24 +53,30 @@ public class ArgosScraper extends Thread {
 
                     String productModel = ExtractProductModel.model(productName);
 
+                    // Check if data exists in the database
+                    if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", "https://www.argos.co.uk" + productLink)) {
+                        System.out.println("Data already exists for URL: " + "https://www.argos.co.uk" + productLink);
+                        continue;
+                    }
+
                     // Create PhoneCase object and save it to the database
                     PhoneCase phoneCase = new PhoneCase();
                     phoneCase.setPhoneModel(productModel);
-                    session.merge(phoneCase);
+                    session.persist(phoneCase);
 
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
                     phoneCaseVariation.setColor(color);
                     phoneCaseVariation.setImageUrl("https://media.4rgos.it/s/Argos/" + productImageURL + "_R_SET");
-                    session.merge(phoneCaseVariation);
+                    session.persist(phoneCaseVariation);
 
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
                     priceComparison.setPrice(productPrice.substring(1)); // Remove the '£' symbol
                     priceComparison.setUrl("https://www.argos.co.uk" + productLink);
-                    session.merge(priceComparison);
+                    session.persist(priceComparison);
 
                     // Set PriceComparison in PhoneCaseVariation
                     phoneCaseVariation.setPriceComparison(priceComparison);

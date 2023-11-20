@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.DatabaseUtil;
 import com.pricecomparison.util.ExtractProductPrice;
 
 import org.hibernate.Session;
@@ -16,18 +17,18 @@ import org.openqa.selenium.WebDriverException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 5;
 
     // Constructor to inject WebDriver
     public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
         this.driver = driver;
         this.sessionFactory = sessionFactory;
     }
+
     @Override
     public void run() {
         // Initialize session
@@ -35,6 +36,7 @@ public class AmazonScraper extends Thread {
         session.beginTransaction();
 
         // Iterate over multiple pages
+        boolean newDataSaved = false;
         for (int page = 1; page <= MAX_PAGES; page++) {
             String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
             driver.get(url);
@@ -52,6 +54,10 @@ public class AmazonScraper extends Thread {
 
             // Iterate through each product URL
             for (String productUrl : productUrls) {
+                if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", productUrl)) {
+                    System.out.println("Data already exists for URL: " + productUrl);
+                    continue;
+                }
                 try {
                     // Navigate to the product page
                     driver.get(productUrl);
@@ -84,10 +90,11 @@ public class AmazonScraper extends Thread {
                     phoneCaseVariation.setPriceComparison(priceComparison);
                     session.persist(priceComparison);
 
+                    newDataSaved = true;
+
                     try {
                         Thread.sleep(2000); // Sleep for 2 seconds between iterations
                     } catch (InterruptedException e) {
-                        //e.printStackTrace();
                         System.out.println("Error sleeping thread." + e.getMessage());
                     }
 
@@ -110,7 +117,11 @@ public class AmazonScraper extends Thread {
         }
 
         // Commit the transaction and close the Hibernate session
-        session.getTransaction().commit();
+        if (newDataSaved) {
+            session.getTransaction().commit();
+        } else {// If no new data was saved, rollback the transaction
+            session.getTransaction().rollback();
+        }
         session.close();
 
         // Close the browser

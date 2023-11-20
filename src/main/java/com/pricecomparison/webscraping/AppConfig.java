@@ -46,6 +46,6 @@ public class AppConfig {
 
     @Bean
     public GumtreeScraper gumtreeScraper(SessionFactory sessionFactory) {
-        return new GumtreeScraper(webDriver(), sessionFactory);
+        return new GumtreeScraper(/*webDriver(),*/ sessionFactory);
     }
 }

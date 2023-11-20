@@ -23,8 +23,6 @@ public class PhoneCaseVariation {
     @OneToOne(mappedBy = "caseVariant", cascade = CascadeType.ALL)
     private PriceComparison priceComparison;
 
-    // Constructors, getters, setters, and other methods...
-
     public void setColor(String color) {
         this.color = color;
     }

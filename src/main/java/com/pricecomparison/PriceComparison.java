@@ -20,8 +20,6 @@ public class PriceComparison {
     @Column(name = "url")
     private String url;
 
-    // Constructors, getters, setters, and other methods...
-
     public void setCaseVariant(PhoneCaseVariation caseVariant) {
         this.caseVariant = caseVariant;
     }
