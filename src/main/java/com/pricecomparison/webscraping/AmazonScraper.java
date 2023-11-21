@@ -21,7 +21,7 @@ public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
 
     // Constructor to inject WebDriver
     public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {

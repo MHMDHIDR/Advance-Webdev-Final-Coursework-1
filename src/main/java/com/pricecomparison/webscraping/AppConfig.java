@@ -25,27 +25,27 @@ public class AppConfig {
     }
 
     @Bean
-    public AmazonScraper amazonScraper(SessionFactory sessionFactory) {
-        return new AmazonScraper(webDriver(), sessionFactory);
+    public AmazonScraper amazonScraper() {
+        return new AmazonScraper(webDriver(), sessionFactory(null));
     }
 
     @Bean
-    public eBayScraper ebayScraper(SessionFactory sessionFactory) {
-        return new eBayScraper(sessionFactory);
+    public eBayScraper ebayScraper() {
+        return new eBayScraper(sessionFactory(null));
     }
 
     @Bean
-    public BestBuyScraper bestBuyScraper(SessionFactory sessionFactory) {
-        return new BestBuyScraper(sessionFactory);
+    public BestBuyScraper bestBuyScraper() {
+        return new BestBuyScraper(sessionFactory(null));
     }
 
     @Bean
-    public ArgosScraper argosScraper(SessionFactory sessionFactory) {
-        return new ArgosScraper(sessionFactory);
+    public ArgosScraper argosScraper() {
+        return new ArgosScraper(sessionFactory(null));
     }
 
     @Bean
-    public GumtreeScraper gumtreeScraper(SessionFactory sessionFactory) {
-        return new GumtreeScraper(/*webDriver(),*/ sessionFactory);
+    public GumtreeScraper gumtreeScraper() {
+        return new GumtreeScraper(sessionFactory(null));
     }
 }
