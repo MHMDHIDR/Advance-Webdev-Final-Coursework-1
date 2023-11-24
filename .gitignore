@@ -36,6 +36,7 @@ build/
 /WebApp/backend/node_modules/
 /WebApp/node_modules/
 /WebApp/backend/.yarn/
+/WebApp/.yarn/
 
 ### Mac OS ###
 .DS_Store
