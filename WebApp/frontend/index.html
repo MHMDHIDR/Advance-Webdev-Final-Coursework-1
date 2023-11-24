@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <title>iPhone Cases Comparison</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <header class="header">
+        <a href="./">
+          <img class="logo" src="assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
+        </a>
+
+        <form class="search">
+          <input type="text" placeholder="Search by your iPhone model" />
+          <button>Search</button>
+        </form>
+      </header>
+      <main class="container">
+        <a v-for="product in products" :key="product.id" class="product" :href="'/model/' + product.id">
+          <div class="product__image">
+            <img :src="product.image" alt="" width="100" height="100" />
+          </div>
+          <div class="product__info">
+            <h2>{{ product.phone_model }}</h2>
+            <p>Price: {{ product.price }}</p>
+            <button class="product__details">Show Details</button>
+          </div>
+        </a>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        products: window.products,
+      },
+      methods: {
+        loadproducts: function () {
+          //i'm just calling the products.json file using the javascript fetch method
+          fetch('products.json')
+            .then(response => response.json())
+            .then(dataFromJSON => (this.products = dataFromJSON))
+        }
+      },
+      created() { // created is called only once when the component is created [when the page is loaded]
+        this.loadproducts()
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3ee7ac54-1c8d-4f52-a5f3-ddefd03f2cdf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/WebApp/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebApp/backend/utils/db.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebApp/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebApp/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/PhoneCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/PhoneCaseVariation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/PriceComparison.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/config/DataSourceConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/util/CurrencyConverter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/util/DatabaseUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/util/ExtractProductModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/util/ExtractProductPrice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/util/HibernateUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/AmazonScraper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/AppConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/ArgosScraper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/BestBuyScraper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/GumtreeScraper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pricecomparison/webscraping/eBayScraper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/beans.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/pricecomparison/webscraping/AppTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="19" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2YcHl206HRxHsqFzz9tVE0EgTy6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/mhmdhidr/Desktop/MHMDHIDR/Middlesex University/CST3130 Advanced Web Development with Big Data/Coursework-1/PriceComparison",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3ee7ac54-1c8d-4f52-a5f3-ddefd03f2cdf" name="Changes" comment="" />
+      <created>1700818094873</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1700818094873</updated>
+      <workItem from="1700818095871" duration="5094000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/WebApp/frontend" />
+    </ignored-roots>
+  </component>
+</project>

@@ -1,0 +1,18 @@
+{
+  "name": "webapp",
+  "description": "iPhone Cases Price Comparison Backend",
+  "packageManager": "yarn@3.5.1",
+  "type": "module",
+  "scripts": {
+    "backend": "cd backend && yarn dev",
+    "frontend": "cd frontend && live-server --port=8080",
+    "start": "concurrently \"yarn backend\" \"yarn frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MHMDHIDR/Advance-Webdev-Final-Coursework-1.git"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
