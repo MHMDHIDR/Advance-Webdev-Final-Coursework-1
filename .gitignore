@@ -33,9 +33,11 @@ build/
 
 ### VS Code ###
 .vscode/
-WebApp/backend/node_modules/
-WebApp/node_modules/
-WebApp/backend/.yarn/
+/WebApp/backend/node_modules/
+/WebApp/node_modules/
+/WebApp/backend/.yarn/
 
 ### Mac OS ###
 .DS_Store
+/.idea/
+
