@@ -1,7 +1,15 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 .container {
@@ -18,7 +26,8 @@ main.container {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 10px;
+  padding: .85rem;
+  margin-bottom: 3rem;
   border-bottom: 1px solid #ccc;
 }
 
@@ -58,13 +67,49 @@ main {
   margin: 0 auto;
 }
 
+.featured {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 2rem 3rem;
+  border: .7rem solid #333;
+}
+
+.featured__text {
+  text-transform: capitalize;
+  max-width: 50%;
+  margin-bottom: 5rem;
+}
+
+.featured__cta {
+  width: fit-content;
+  text-transform: uppercase;
+  font-size: .85em;
+  background-color: #282828;
+  color: #fff;
+  border: 1px solid;
+  padding: 1rem 3rem;
+  cursor: pointer;
+  transition-duration: 300ms;
+}
+.featured__cta:hover {
+  background-color: #404040
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.65rem;
+}
+
 .product {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-decoration: unset;
   border: 1px solid #ccc;
-  margin: 10px;
   padding: 10px;
   text-align: center;
   width: 200px;
@@ -90,3 +135,4 @@ main {
 .product:hover .product__details {
   font-weight: bold;
 }
+

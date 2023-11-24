@@ -23,22 +23,33 @@
           <button>Search</button>
         </form>
       </header>
+
       <main class="container">
+        <section class="featured">
+          <div class="featured__text">
+            <h1>Find the perfect phone case that matches your personality</h1>
+            <span>Best Deals from all stores.</span>
+          </div>
+          <a href="#products" class="featured__cta">Shop Now</a>
+        </section>
+
         <div v-if="products.length === 0" class="loading">
           <img src="assets/loading.gif" alt="Loading iPhone Cases" width="300" height="300" />
         </div>
 
-        <a v-for="product in products" :key="product.id" class="product" :href="'/model/' + product.id">
-          <div class="product__image">
-            <img :src="product.image_url" :alt="product.phone_model" width="100" height="100" />
-          </div>
-          <div class="product__info">
-            <h2>{{ product.phone_model }}</h2>
-            <h4>{{ product.color }}</h4>
-            <!--<p>Price: {{ product.price }}</p>-->
-            <button class="product__details">Show Details</button>
-          </div>
-        </a>
+        <div id="products" class="products">
+          <a v-for="product in products" :key="product.id" class="product" :href="'/model/' + product.id">
+            <div class="product__image">
+              <img :src="product.image_url" :alt="product.phone_model" width="100" height="100" />
+            </div>
+            <div class="product__info">
+              <h2>{{ product.phone_model }}</h2>
+              <h4>{{ product.color }}</h4>
+              <!--<p>Price: {{ product.price }}</p>-->
+              <button class="product__details">Show Details</button>
+            </div>
+          </a>
+        </div>
       </main>
     </div>
   </div>
@@ -53,7 +64,11 @@
         loadProducts: function () {
           fetch('http://localhost:3001/case')
             .then(response => response.json())
-            .then(dataFromJSON => (this.products = dataFromJSON))
+            .then(dataFromJSON => {
+              const randomCases = dataFromJSON.sort(() => 0.5 - Math.random());
+              this.products = randomCases.slice(0, 30);
+            })
+
         }
       },
       created() {
