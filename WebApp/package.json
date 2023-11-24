@@ -6,7 +6,7 @@
   "scripts": {
     "backend": "cd backend && yarn dev",
     "frontend": "cd frontend && live-server --port=8080",
-    "start": "concurrently \"yarn backend\" \"yarn frontend\""
+    "dev": "concurrently \"yarn backend\" \"yarn frontend\""
   },
   "repository": {
     "type": "git",
