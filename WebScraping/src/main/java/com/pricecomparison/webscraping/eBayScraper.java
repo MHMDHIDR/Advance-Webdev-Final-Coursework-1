@@ -1,5 +1,8 @@
 package com.pricecomparison.webscraping;
 
+import com.pricecomparison.PhoneCase;
+import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.DatabaseUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,14 +14,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class eBayScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 5;
 
     public eBayScraper(SessionFactory sessionFactory) {
         this.driver = new ChromeDriver();
@@ -61,15 +63,38 @@ public class eBayScraper extends Thread {
                         String productName = driver.findElement(By.cssSelector("h1.x-item-title__mainTitle .ux-textspans--BOLD")).getText();
                         String productPrice = driver.findElement(By.cssSelector(".x-bin-price__content div span.ux-textspans")).getText();
                         String imageElement = driver.findElement(By.cssSelector("div[data-idx='0'] img")).getAttribute("src");
+                        List<String> phoneModels = extractPhoneModels();
+                        List<String> phoneColours = extractPhoneColours();
 
-                        System.out.println("productUrl: " + productUrl);
-                        System.out.println("Product Name: " + productName);
-                        System.out.println("Product Price: " + productPrice);
-                        System.out.println("Product Image URL: " + imageElement);
-                        System.out.println("Product phoneModels: " + extractPhoneModels());
-                        System.out.println("Product phoneColours: " + extractPhoneColours());
-                        System.out.println("=============================================");
+                        // Initialize session and begin a transaction
+                        session.beginTransaction();
 
+                        // Create PhoneCase object and save it to the database
+                        PhoneCase phoneCase = new PhoneCase();
+                        phoneCase.setPhoneModel(truncateAndJoin(phoneModels, 500));
+                        session.persist(phoneCase);
+
+                        // Create and save PhoneCaseVariation entity for each color
+                        for (String color : phoneColours) {
+                            PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
+                            phoneCaseVariation.setPhoneCase(phoneCase);
+                            phoneCaseVariation.setColor(color);
+                            phoneCaseVariation.setImageUrl(imageElement);
+                            session.persist(phoneCaseVariation);
+
+                            // Create and save PriceComparison entity with converted price to GBP
+                            PriceComparison priceComparison = new PriceComparison();
+                            priceComparison.setCaseVariant(phoneCaseVariation);
+                            priceComparison.setName(productName);
+                            priceComparison.setPrice(productPrice.replace("£", "").trim());
+                            priceComparison.setUrl(productUrl);
+                            session.persist(priceComparison);
+
+                            // Set PriceComparison in PhoneCaseVariation
+                            phoneCaseVariation.setPriceComparison(priceComparison);
+                        }
+
+                        session.getTransaction().commit();
                     } catch (WebDriverException e) {
                         System.out.println(e.getMessage());
                         continue;
@@ -121,21 +146,26 @@ public class eBayScraper extends Thread {
         return defaultList;
     }
 
+    private String truncateAndJoin(List<String> strings, int maxLength) {
+        // Combine the strings and truncate to fit the specified length
+        String combinedString = String.join(", ", strings);
+        return combinedString.length() > maxLength ? combinedString.substring(0, maxLength) : combinedString;
+    }
     private List<String> extractPhoneColours() {
         List<String> colorSelectors = Arrays.asList(
-            ".x-msku__select-box[selectboxlabel='Case Colour']",
-            ".x-msku__select-box[selectboxlabel='Color']"
+                ".x-msku__select-box[selectboxlabel='Case Colour']",
+                ".x-msku__select-box[selectboxlabel='Color']"
         );
         return extractPhoneInfo(colorSelectors, "Clear");
     }
 
     private List<String> extractPhoneModels() {
         List<String> modelsSelectors = Arrays.asList(
-            ".x-msku__select-box[selectboxlabel='iPhone Model']",
-            ".x-msku__select-box[selectboxlabel='Compatible Model']",
-            ".x-msku__select-box[selectboxlabel='Model']"
+                ".x-msku__select-box[selectboxlabel='iPhone Model']",
+                ".x-msku__select-box[selectboxlabel='Compatible Model']",
+                ".x-msku__select-box[selectboxlabel='Model']",
+                ".x-msku__select-box[selectboxlabel='MODEL']"
         );
         return extractPhoneInfo(modelsSelectors, "N/A");
     }
-
 }

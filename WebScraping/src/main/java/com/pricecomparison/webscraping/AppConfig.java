@@ -29,21 +29,21 @@ public class AppConfig {
 //        return new AmazonScraper(webDriver(), sessionFactory(null));
 //    }
 
+//    @Bean
+//    public eBayScraper ebayScraper() {
+//        return new eBayScraper(sessionFactory(null));
+//    }
+
     @Bean
-    public eBayScraper ebayScraper() {
-        return new eBayScraper(sessionFactory(null));
+    public BestBuyScraper bestBuyScraper() {
+        return new BestBuyScraper(sessionFactory(null));
     }
 
-//    @Bean
-//    public BestBuyScraper bestBuyScraper() {
-//        return new BestBuyScraper(sessionFactory(null));
-//    }
-//
 //    @Bean
 //    public ArgosScraper argosScraper() {
 //        return new ArgosScraper(sessionFactory(null));
 //    }
-//
+
 //    @Bean
 //    public GumtreeScraper gumtreeScraper() {
 //        return new GumtreeScraper(sessionFactory(null));
