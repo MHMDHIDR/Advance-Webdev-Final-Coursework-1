@@ -1,95 +1,141 @@
 package com.pricecomparison.webscraping;
 
-import com.pricecomparison.PhoneCase;
-import com.pricecomparison.PhoneCaseVariation;
-import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.DatabaseUtil;
-import com.pricecomparison.util.ExtractProductModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class eBayScraper extends Thread {
-    private static final int MAX_PAGES = 1;
+    private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    // Constructor to inject SessionFactory
+    private static final int MAX_PAGES = 1;
+
     public eBayScraper(SessionFactory sessionFactory) {
+        this.driver = new ChromeDriver();
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public void run() {
-        // Initialize Hibernate session outside the run method
-        Session session = sessionFactory.openSession();
+        // Initialize session
+        try (Session session = sessionFactory.openSession()) {
 
-        try {
             for (int page = 1; page <= MAX_PAGES; page++) {
-                String ebayUrl = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
+                String url = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
+                driver.get(url);
 
-                // Connect to the eBay URL and parse the HTML content
-                Document doc = Jsoup.connect(ebayUrl).get();
+                // Get all product links on the page
+                List<WebElement> productLinks = driver.findElements(By.cssSelector("a.s-item__link"));
 
-                session.beginTransaction();
+                // Collect all product URLs
+                List<String> productUrls = new ArrayList<>();
+                for (WebElement productLink : productLinks) {
+                    productUrls.add(productLink.getAttribute("href"));
+                }
 
-                // Find and process each product on the page
-                Elements productElements = doc.select(".s-item");
+                // Iterate through each product URL
+                for (int i = 1; i < productLinks.size(); i++) {
+                    WebElement productLink = productLinks.get(i);
+                    String productUrl = productLink.getAttribute("href");
 
-                for (Element product : productElements) {
-                    String productName = product.select(".s-item__title").text();
-                    String productLink = product.select(".s-item__link").attr("href");
-                    String productPrice = product.select(".s-item__price").text();
-                    Element imageElement = product.select(".s-item__image-wrapper img").first();
-                    String productImageURL = imageElement != null ? imageElement.attr("src") : "";
-
-                    // Check if any of the essential data is missing
-                    if (productName.isEmpty() || productLink.isEmpty() || productPrice.isEmpty()) {
-                        continue; // Skip this product
-                    }
-
-                    // Check if data exists in the database
-                    if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", productLink)) {
-                        System.out.println("Data already exists for URL: " + productLink);
+                    if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", productUrl)) {
+                        System.out.println("Data already exists for URL: " + productUrl);
                         continue;
                     }
 
-                    // Extract phone model from the product name
-                    String phoneModel = ExtractProductModel.model(productName);
+                    try {
+                        // Navigate to the product page
+                        driver.get(productUrl);
 
-                    // Create PhoneCase object and save it to the database
-                    PhoneCase phoneCase = new PhoneCase();
-                    phoneCase.setPhoneModel(phoneModel);
-                    session.persist(phoneCase);
+                        // Scrape product information
+                        String productName = driver.findElement(By.cssSelector("h1.x-item-title__mainTitle .ux-textspans--BOLD")).getText();
+                        String productPrice = driver.findElement(By.cssSelector(".x-bin-price__content div span.ux-textspans")).getText();
+                        String imageElement = driver.findElement(By.cssSelector("div[data-idx='0'] img")).getAttribute("src");
 
-                    // Create and save PhoneCaseVariation entity
-                    PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
-                    phoneCaseVariation.setPhoneCase(phoneCase);
-                    phoneCaseVariation.setColor(("N/A"));
-                    phoneCaseVariation.setImageUrl(productImageURL);
-                    session.persist(phoneCaseVariation);
+                        System.out.println("productUrl: " + productUrl);
+                        System.out.println("Product Name: " + productName);
+                        System.out.println("Product Price: " + productPrice);
+                        System.out.println("Product Image URL: " + imageElement);
+                        System.out.println("Product phoneModels: " + extractPhoneModels());
+                        System.out.println("Product phoneColours: " + extractPhoneColours());
+                        System.out.println("=============================================");
 
-                    // Create and save PriceComparison entity with converted price to GBP
-                    PriceComparison priceComparison = new PriceComparison();
-                    priceComparison.setCaseVariant(phoneCaseVariation);
-                    priceComparison.setName(productName);
-                    priceComparison.setPrice(productPrice.replaceAll("£", ""));
-                    priceComparison.setUrl(productLink);
-                    session.persist(priceComparison);
+                    } catch (WebDriverException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
 
-                    // Set PriceComparison in PhoneCaseVariation
-                    phoneCaseVariation.setPriceComparison(priceComparison);
+                    // Navigate back to the search results page
+                    driver.navigate().back();
+
+                    // Re-fetch the product links after navigating back
+                    productLinks = driver.findElements(By.cssSelector("a.s-item__link"));
                 }
-                session.getTransaction().commit();
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("eBay Thread was interrupted: " + e.getMessage());
-        } finally {
-            session.close(); // Close the session to release resources
         }
-        System.out.println("✔ eBayScraper Thread finished scraping.");
+
+        // Close the browser
+        driver.quit();
+        System.out.println("✔ eBayScraper thread finished scraping.");
     }
+
+    private List<String> extractPhoneInfo(List<String> selectors, String defaultInfo) {
+        for (String selector : selectors) {
+            try {
+                List<WebElement> selectElements = driver.findElements(By.cssSelector(selector));
+
+                if (!selectElements.isEmpty()) {
+                    List<String> phoneInfo = new ArrayList<>();
+
+                    for (WebElement selectElement : selectElements) {
+                        List<WebElement> optionElements = selectElement.findElements(By.tagName("option"));
+                        for (int j = 1; j < optionElements.size(); j++) {
+                            phoneInfo.add(optionElements.get(j).getText());
+                        }
+                    }
+
+                    return phoneInfo;
+                }
+            } catch (WebDriverException ignored) {}
+        }
+
+        // If none of the selectors match, return the default value
+        List<String> defaultList = new ArrayList<>();
+        defaultList.add(defaultInfo);
+        return defaultList;
+    }
+
+    private List<String> extractPhoneColours() {
+        List<String> colorSelectors = Arrays.asList(
+            ".x-msku__select-box[selectboxlabel='Case Colour']",
+            ".x-msku__select-box[selectboxlabel='Color']"
+        );
+        return extractPhoneInfo(colorSelectors, "Clear");
+    }
+
+    private List<String> extractPhoneModels() {
+        List<String> modelsSelectors = Arrays.asList(
+            ".x-msku__select-box[selectboxlabel='iPhone Model']",
+            ".x-msku__select-box[selectboxlabel='Compatible Model']",
+            ".x-msku__select-box[selectboxlabel='Model']"
+        );
+        return extractPhoneInfo(modelsSelectors, "N/A");
+    }
+
 }

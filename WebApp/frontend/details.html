@@ -80,7 +80,7 @@
                 .then(response => response.json())
                 .then(dataFromJSON => {
                     this.caseDetails = dataFromJSON;
-                    document.title = dataFromJSON.name;
+                    document.title = dataFromJSON.name || 'iPhone Cases Comparison'
                 })
                 .catch(error => console.error('Error fetching case details:', error));
             }
