@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -69,13 +69,14 @@ public class BestBuyScraper extends Thread {
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
-                    phoneCaseVariation.setColor(productColor.isEmpty() ? "DefaultColor" : productColor);
+                    phoneCaseVariation.setColor(productColor.isEmpty() ? "N/A" : productColor);
                     phoneCaseVariation.setImageUrl(productImageURL);
                     session.persist(phoneCaseVariation);
 
                     // Create and save PriceComparison entity with converted price to GBP
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
+                    priceComparison.setName(productName);
                     priceComparison.setPrice(convertedPriceGBP.replaceAll("[^\\d.]", ""));
                     priceComparison.setUrl(productLink);
                     session.persist(priceComparison);

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="./assets/styles.css" />
   <title>iPhone Cases Comparison</title>
 </head>
 
@@ -15,11 +15,13 @@
     <div class="container">
       <header class="header">
         <a href="./">
-          <img class="logo" src="assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
+          <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
         </a>
 
         <form class="search">
-          <input type="text" placeholder="Search by your iPhone model" />
+          <label>
+            <input type="text" placeholder="Search by your iPhone model" />
+          </label>
           <button>Search</button>
         </form>
       </header>
@@ -34,19 +36,18 @@
         </section>
 
         <div v-if="products.length === 0" class="loading">
-          <img src="assets/loading.gif" alt="Loading iPhone Cases" width="300" height="300" />
+          <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="300" height="300" />
         </div>
 
         <div id="products" class="products">
-          <a v-for="product in products" :key="product.id" class="product" :href="'/model/' + product.id">
+          <a v-for="product in products" :key="product.id" class="product" :href="'/details.html?id=' + product.id">
             <div class="product__image">
-              <img :src="product.image_url" :alt="product.phone_model" width="100" height="100" />
+              <img :src="product.image_url" :alt="product.phone_model" width="120" height="200" />
             </div>
             <div class="product__info">
-              <h2>{{ product.phone_model }}</h2>
-              <h4>{{ product.color }}</h4>
-              <!--<p>Price: {{ product.price }}</p>-->
-              <button class="product__details">Show Details</button>
+              <h4 class="product__info--name">{{ product.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
+              <span class="product__info--price">£{{ product.price }}</span>
+              <button class="product__info--details">Show Details</button>
             </div>
           </a>
         </div>
@@ -58,6 +59,7 @@
     new Vue({
       el: '#app',
       data: {
+        MAX_NAME_LENGTH: 60,
         products: []
       },
       methods: {
@@ -66,7 +68,7 @@
             .then(response => response.json())
             .then(dataFromJSON => {
               const randomCases = dataFromJSON.sort(() => 0.5 - Math.random());
-              this.products = randomCases.slice(0, 30);
+              this.products = randomCases.slice(0, 8);
             })
 
         }

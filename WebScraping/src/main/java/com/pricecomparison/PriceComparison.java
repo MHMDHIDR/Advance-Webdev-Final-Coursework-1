@@ -14,6 +14,9 @@ public class PriceComparison {
     @JoinColumn(name = "case_variant_id")
     private PhoneCaseVariation caseVariant;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "price")
     private String price;
 
@@ -24,6 +27,9 @@ public class PriceComparison {
         this.caseVariant = caseVariant;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public void setPrice(String price) {
         this.price = price;
     }

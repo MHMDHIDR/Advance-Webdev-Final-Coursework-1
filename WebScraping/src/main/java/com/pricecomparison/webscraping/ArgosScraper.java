@@ -13,7 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArgosScraper extends Thread {
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -74,6 +74,7 @@ public class ArgosScraper extends Thread {
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
+                    priceComparison.setName(productName);
                     priceComparison.setPrice(productPrice.substring(1)); // Remove the '£' symbol
                     priceComparison.setUrl("https://www.argos.co.uk" + productLink);
                     session.persist(priceComparison);

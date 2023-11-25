@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class GumtreeScraper extends Thread {
     private final SessionFactory sessionFactory;
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
 
     // Constructor to inject WebDriver and SessionFactory
     public GumtreeScraper(SessionFactory sessionFactory) {
@@ -92,7 +92,8 @@ public class GumtreeScraper extends Thread {
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
-                    priceComparison.setPrice(productPrice.substring(1)); // Remove the '£' symbol
+                    priceComparison.setName(productName);
+                    priceComparison.setPrice(productPrice.substring(1));
                     priceComparison.setUrl(productUrl);
 
                     // Set PriceComparison in PhoneCaseVariation
@@ -159,7 +160,7 @@ public class GumtreeScraper extends Thread {
             return matcher.group(1).trim();
         } else {
             // If no dash is found, return default message
-            return "Click on \"View Details\" to see the color";
+            return "N/A";
         }
     }
 }

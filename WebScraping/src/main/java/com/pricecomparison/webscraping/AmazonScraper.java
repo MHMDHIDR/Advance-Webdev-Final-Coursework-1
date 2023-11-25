@@ -21,7 +21,7 @@ public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 5;
+    private static final int MAX_PAGES = 1;
 
     // Constructor to inject WebDriver
     public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
@@ -63,6 +63,7 @@ public class AmazonScraper extends Thread {
                     driver.get(productUrl);
 
                     // Scrape product information
+                    String productName = driver.findElement(By.cssSelector("span#productTitle.a-size-large.product-title-word-break")).getText();
                     String productPrice = ExtractProductPrice.price(driver);
                     String productColour = driver.findElement(By.cssSelector("table tbody tr.po-color td span.po-break-word")).getText();
                     String productModels = driver.findElement(By.cssSelector("table tbody tr.po-compatible_phone_models td span.po-break-word")).getText();
@@ -83,7 +84,8 @@ public class AmazonScraper extends Thread {
                     // Create and save PriceComparison entity
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
-                    priceComparison.setPrice(productPrice.substring(1)); // Remove the '£' symbol
+                    priceComparison.setName(productName);
+                    priceComparison.setPrice(productPrice.substring(1));
                     priceComparison.setUrl(productUrl);
 
                     // Set PriceComparison in PhoneCaseVariation

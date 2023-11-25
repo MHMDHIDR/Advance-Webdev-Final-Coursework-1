@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <title>iPhone Cases Comparison</title>
+</head>
+
+<body>
+<div id="app">
+    <div class="container">
+        <header class="header">
+            <a href="./">
+                <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
+            </a>
+
+            <form class="search">
+                <label>
+                    <input type="text" placeholder="Search by your iPhone model" />
+                </label>
+                <button>Search</button>
+            </form>
+        </header>
+
+        <main>
+            <a href="./index.html" class="back__button">
+                <img src="./assets/back_button.svg" width="50" height="50"  alt="Back to Homepage"/>
+            </a>
+
+            <div v-if="!caseDetails.id" class="loading">
+                <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="400" height="400" />
+            </div>
+
+            <section class="case" v-else>
+                <img class="case__image" :src="caseDetails.image_url" :alt="caseDetails.name" width="auto" height="500" />
+
+                <div class="case__details">
+                    <h2 class="case__details--name">
+                        <strong>Name: </strong>
+                        <span>{{ caseDetails.name }}</span>
+                    </h2>
+                    <p>
+                        <strong>Models: </strong>
+                        <span>{{ caseDetails.phone_model }}</span>
+                    </p>
+                    <p>
+                        <strong>Color: </strong>
+                        <span>{{ caseDetails.color }}</span>
+                    </p>
+                    <p class="case__details--price">
+                        <strong>Price: </strong>
+                        <span>£{{ caseDetails.price }}</span>
+                    </p>
+                    <a class="case__button" :href="caseDetails.url" target="_blank">
+                        See More Details
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            caseDetails: {},
+            products: [],
+            title: ''
+        },
+        methods: {
+            loadCaseDetails: function () {
+                const caseId = new URLSearchParams(window.location.search);
+                //fetch using case ID
+                fetch(`http://localhost:3001/case/${caseId.get('id')}`)
+                .then(response => response.json())
+                .then(dataFromJSON => {
+                    this.caseDetails = dataFromJSON;
+                    document.title = dataFromJSON.name;
+                })
+                .catch(error => console.error('Error fetching case details:', error));
+            }
+        },
+        created() {
+            this.loadCaseDetails();
+        }
+    });
+</script>
+</body>
+
+</html>
