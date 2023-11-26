@@ -1,27 +1,20 @@
 package com.pricecomparison.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CurrencyConverter {
     public static String convertToGBP(String productPriceUSD) {
-        // Extract the numeric part of the price
-        String numericPart = extractNumericPart(productPriceUSD);
+        // Convert to GBP
+        double gbpRate = 0.79;
+        // Extract the numeric part of the price as a double
+        double numericPartDouble = Double.parseDouble(productPriceUSD.replaceAll("[^\\d.]+", ""));
+        // Multiply the numeric part by the rate
+        double convertedPriceGBP = numericPartDouble * gbpRate;
+        // Round the converted price to 2 decimal places
+        convertedPriceGBP = new BigDecimal(convertedPriceGBP).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
-        // Convert to GBP (assuming a simple conversion for demonstration purposes)
-        double gbpRate = 0.81; // Replace with the actual conversion rate
-        double convertedPrice = Double.parseDouble(numericPart) * gbpRate;
-
-        return "£" + String.format("%.2f", convertedPrice);
+        return String.valueOf(convertedPriceGBP);
     }
 
-    private static String extractNumericPart(String input) {
-        // Remove non-numeric characters except for the last dot
-        input = input.replaceAll("[^\\d.]+", "");
-
-        // Handle cases with multiple dots by keeping only the last one
-        int lastDotIndex = input.lastIndexOf('.');
-        if (lastDotIndex != -1) {
-            input = input.substring(0, lastDotIndex) + input.substring(lastDotIndex).replace(".", "");
-        }
-
-        return input;
-    }
 }

@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 6;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -69,7 +69,7 @@ public class BestBuyScraper extends Thread {
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
-                    phoneCaseVariation.setColor(productColor.isEmpty() ? "N/A" : productColor);
+                    phoneCaseVariation.setColor(productColor.isEmpty() ? extractColor(productName) : productColor);
                     phoneCaseVariation.setImageUrl(productImageURL);
                     session.persist(phoneCaseVariation);
 
@@ -97,5 +97,14 @@ public class BestBuyScraper extends Thread {
         }
 
         System.out.println("✔ BestBuyScraper Thread finished scraping.");
+    }
+
+    private String extractColor(String productName) {
+        //get the color from ProductName after the last dash (-) if there is no dash, return the string "N/A"
+        if (productName.contains("-")) {
+            return productName.substring(productName.lastIndexOf("-") + 1).trim();
+        } else {
+            return "N/A";
+        }
     }
 }

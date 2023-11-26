@@ -68,7 +68,7 @@
             .then(response => response.json())
             .then(dataFromJSON => {
               const randomCases = dataFromJSON.sort(() => 0.5 - Math.random());
-              this.products = randomCases.slice(0, 12);
+              this.products = randomCases.slice(0, 20);
             })
 
         }
