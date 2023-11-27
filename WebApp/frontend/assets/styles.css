@@ -242,6 +242,14 @@ main {
   text-wrap: balance;
 }
 
+.case__details--color {
+  display: inline-block;
+  border-radius: 50%;
+  height: 1rem;
+  width: 1rem;
+  vertical-align: text-top;
+}
+
 .case__details p {
   margin-bottom: 8px;
 }

@@ -49,8 +49,13 @@
                     </p>
                     <p>
                         <strong>Color: </strong>
-                        <span>{{ caseDetails.color }}</span>
+                        <span class="case__details--color" :style="{
+                            'border': caseDetails.color === 'Clear' ? '1px solid #000' : 'none',
+                            'background-color': caseDetails.color !== 'Clear' ? caseDetails.color : 'transparent'
+                        }"></span>
+                        <span :style="{'color': caseDetails.color}">{{ caseDetails.color }}</span>
                     </p>
+
                     <p class="case__details--price">
                         <strong>Price: </strong>
                         <span>£{{ caseDetails.price }}</span>
