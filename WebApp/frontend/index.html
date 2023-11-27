@@ -36,7 +36,7 @@
         </section>
 
         <div v-if="products.length === 0" class="loading">
-          <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="300" height="300" />
+          <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="256" height="256" />
         </div>
 
         <div id="products" class="products">
@@ -67,10 +67,9 @@
           fetch('http://localhost:3001/case')
             .then(response => response.json())
             .then(dataFromJSON => {
-              const randomCases = dataFromJSON.sort(() => 0.5 - Math.random());
-              this.products = randomCases.slice(0, 20);
+              const randomCases = dataFromJSON.sort(() => 0.5 - Math.random())
+              this.products = randomCases.slice(0, 20)
             })
-
         }
       },
       created() {

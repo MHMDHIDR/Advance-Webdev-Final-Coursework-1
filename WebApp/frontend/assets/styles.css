@@ -2,6 +2,13 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-blue: #007BFF;
+  --dark-blue: #0069D9;
+  --darker-blue: #004d9f;
+  --primary-green: #52af4b;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -32,13 +39,31 @@ main.container {
   justify-content: space-between;
 }
 
-.header {
+main {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
+  row-gap: .75rem;
+  margin-inline: 2rem;
+}
+
+.loading {
+  margin: 0 auto;
+}
+
+.loading img {
+  width: 20rem;
+  height: 20rem;
+}
+
+/*=== Header ===*/
+.header {
+  align-items: center;
   padding: .85rem;
   border-bottom: 1px solid #ccc;
+}
+
+.logo {
+  margin: 10px;
 }
 
 .search input {
@@ -54,40 +79,23 @@ main.container {
   padding: .5rem .7rem;
   border-radius: .4rem;
   border: 1px solid #777;
-  background-color: #007BFF;
+  background-color: var(--primary-blue);
   color: #fff;
   cursor: pointer;
 }
 
 .search button:hover {
-  background-color: #0069D9;
-}
-
-main {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: .75rem;
-  margin-inline: 2rem;
-}
-
-.logo {
-  margin: 10px;
+  background-color: var(--dark-blue);
 }
 
 .back__button {
   margin-top: 1rem;
 }
 
-.loading {
-  margin: 0 auto;
-}
-
+/*=== Featured ===*/
 .featured {
-  display: flex;
   flex-direction: column;
   width: 100vw;
-  flex-wrap: wrap;
-  justify-content: space-between;
   padding: 2rem 3rem;
   margin: 5rem 0;
   border: .7rem solid #333;
@@ -102,7 +110,7 @@ main {
 
 .featured__text h1 {
   font-size: 1.75em;
-  color: #0069D9;
+  color: var(--primary-blue);
 }
 
 .featured__text span {
@@ -126,6 +134,7 @@ main {
   background-color: #404040
 }
 
+/*=== Products ===*/
 .products {
   scroll-margin-block: 3rem;
   display: flex;
@@ -134,55 +143,63 @@ main {
   gap: 1.65rem;
 }
 
-.product {
+.product,
+.similar-product {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
-  width: 200px;
+  width: clamp(200px, calc(25% - 1.5rem), 250px)
 }
 
-.product__image {
+.product__image,
+.similar-product__image {
   margin-block: auto
 }
 
-.product__image img {
-  height: auto;
+.product__image img,
+.similar-product__image img {
+  width: auto;
   border-radius: .75rem;
 }
 
-.product__info {
+.product__info,
+.similar-product__info {
   display: flex;
   flex-direction: column;
   margin-top: .5rem;
   row-gap: .75rem;
 }
 
-.product__info--name {
-  color: #0069D9;
-  font-weight: bold;
+.product__info--name,
+.similar-product__info--name {
+  color: var(--primary-blue);
 }
 
 .product__info--price,
-.case__details--price {
+.case__details--price,
+.similar-product__info--price {
   font-weight: bold;
-  color: #52af4b;
+  color: var(--primary-green);
 }
 
-.product__info--details {
+.product__info--details,
+.similar-product__info--details {
   cursor: pointer;
   background-color: unset;
-  color: #007BFF;
+  color: var(--primary-blue);
   border: 1px solid;
   padding: 1rem 2rem;
 }
 
-.product:hover .product__info--details {
+.product:hover .product__info--details,
+.similar-product:hover .similar-product__info--details {
   font-weight: bold;
 }
 
+/*=== Case Details ===*/
 .case {
   display: flex;
   justify-content: space-between;
@@ -216,7 +233,7 @@ main {
 }
 
 .case__details--name span {
-  color: #0069D9;
+  color: var(--dark-blue);
 }
 
 .case__details--name {
@@ -230,7 +247,7 @@ main {
 }
 
 .case__button {
-  background-color: #007BFF;
+  background-color: var(--primary-blue);
   color: #fff;
   width: fit-content;
   padding: .75rem 1.5rem;
@@ -241,4 +258,37 @@ main {
 
 .case__button:hover {
   background-color: #0056b3;
+}
+
+.header,
+.featured,
+.similar-cases,
+.similar-products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/*=== Similar Cases ===*/
+.similar-cases {
+  margin-bottom: 2rem;
+}
+
+.similar-products {
+  gap: 1rem;
+}
+
+/*=== Divider ===*/
+.divider {
+  position: relative;
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--darker-blue), transparent);
 }

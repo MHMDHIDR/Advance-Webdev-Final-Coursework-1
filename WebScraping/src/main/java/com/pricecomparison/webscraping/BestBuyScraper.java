@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
-    private static final int MAX_PAGES = 6;
+    private static final int MAX_PAGES = 5;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory

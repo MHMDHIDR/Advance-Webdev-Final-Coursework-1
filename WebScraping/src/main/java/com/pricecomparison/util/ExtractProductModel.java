@@ -17,7 +17,8 @@ public class ExtractProductModel {
                 models.append(", ");
             }
 
-            models.append(matcher.group(1).trim());
+            String matchedModel = matcher.group(1).trim();
+            models.append(matchedModel);
 
             if (matcher.end() < productName.length() && !Character.isLetterOrDigit(productName.charAt(matcher.end()))) {
                 models.append(" ");

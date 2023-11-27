@@ -21,7 +21,7 @@ public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 5;
 
     // Constructor to inject WebDriver
     public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
@@ -90,6 +90,7 @@ public class AmazonScraper extends Thread {
 
                     // Set PriceComparison in PhoneCaseVariation
                     phoneCaseVariation.setPriceComparison(priceComparison);
+
                     session.persist(priceComparison);
 
                     newDataSaved = true;

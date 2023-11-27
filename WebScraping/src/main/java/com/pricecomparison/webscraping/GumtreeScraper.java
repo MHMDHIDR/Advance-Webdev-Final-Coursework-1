@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class GumtreeScraper extends Thread {
     private final SessionFactory sessionFactory;
-    private static final int MAX_PAGES = 1;
+    private static final int MAX_PAGES = 5;
 
     // Constructor to inject WebDriver and SessionFactory
     public GumtreeScraper(SessionFactory sessionFactory) {
@@ -102,7 +102,7 @@ public class GumtreeScraper extends Thread {
                     session.persist(priceComparison);
 
                     try {
-                        Thread.sleep(5000); // Sleep for 2 seconds between iterations
+                        Thread.sleep(2000); // Sleep for 2 seconds between iterations
                     } catch (InterruptedException e) {
                         System.out.println("Error sleeping thread." + e.getMessage());
                     }
