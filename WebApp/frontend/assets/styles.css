@@ -90,6 +90,8 @@ main {
 
 .back__button {
   margin-top: 1rem;
+  display: inline-block;
+  width: 100vw;
 }
 
 /*=== Featured ===*/
@@ -248,6 +250,7 @@ main {
   height: 1rem;
   width: 1rem;
   vertical-align: text-top;
+  margin-inline: 0.25rem;
 }
 
 .case__details p {

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <link rel="icon" href="./assets/favicon.svg" />
     <link rel="stylesheet" href="./assets/styles.css" />
     <title>iPhone Cases Comparison</title>
 </head>
@@ -18,11 +19,11 @@
                 <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
             </a>
 
-            <form class="search">
+            <form class="search" @submit.prevent="redirectSearch">
                 <label>
-                    <input type="text" placeholder="Search by your iPhone model" />
+                    <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
                 </label>
-                <button>Search</button>
+                <button type="submit">Search</button>
             </form>
         </header>
 
@@ -53,7 +54,7 @@
                             'border': caseDetails.color === 'Clear' ? '1px solid #000' : 'none',
                             'background-color': caseDetails.color !== 'Clear' ? caseDetails.color : 'transparent'
                         }"></span>
-                        <span :style="{'color': caseDetails.color}">{{ caseDetails.color }}</span>
+                        <span>{{ caseDetails.color }}</span>
                     </p>
 
                     <p class="case__details--price">
@@ -96,34 +97,54 @@
             caseDetails: {},
             products: [],
             similarCases: [],
-            title: ''
+            searchQuery: '',
+            title: '',
         },
         methods: {
             loadCaseDetails: function () {
-                const caseId = new URLSearchParams(window.location.search);
+                const caseId = new URLSearchParams(window.location.search)
                 //fetch using case ID
                 fetch(`http://localhost:3001/case/${caseId.get('id')}`)
-                .then(response => response.json())
-                .then(dataFromJSON => {
-                    this.caseDetails = dataFromJSON
-                    document.title = dataFromJSON.name || 'iPhone Cases Comparison'
-                    this.loadSimilarCases(caseId.get('id'))
-                })
-                .catch(error => console.error('Error fetching case details:', error))
+                    .then((response) => response.json())
+                    .then((dataFromJSON) => {
+                        this.caseDetails = dataFromJSON;
+                        document.title = dataFromJSON.name || 'iPhone Cases Comparison'
+                        this.loadSimilarCases(this.extractPhoneModel(dataFromJSON.phone_model))
+                    })
+                    .catch((error) => console.error('Error fetching case details:', error))
             },
 
-            loadSimilarCases: function (caseId) {
-                //fetch similar cases using case ID
-                fetch(`http://localhost:3001/case/similar/${caseId}`)
-                    .then(response => response.json())
-                    .then(dataFromJSON => this.similarCases = dataFromJSON)
-                    .catch(error => console.error('Error fetching similar cases:', error)
-                )
-            }
+            loadSimilarCases: function (phoneModel) {
+                //fetch similar cases using phone model
+                fetch(`http://localhost:3001/case/similar/${encodeURIComponent(phoneModel)}`)
+                    .then((response) => response.json())
+                    .then((dataFromJSON) => (this.similarCases = dataFromJSON))
+                    .catch((error) => console.error('Error fetching similar cases:', error));
+            },
+
+            extractPhoneModel: function (fullPhoneModel) {
+                // Split the string by spaces
+                const words = fullPhoneModel.split(' ');
+                // Find the first occurrence of "iPhone"
+                const iPhoneIndex = words.findIndex(word => word === 'iPhone');
+                // If "iPhone" is found, concatenate it with the iPhone model
+                if (iPhoneIndex !== -1 && iPhoneIndex < words.length - 1) {
+                    return words[iPhoneIndex] + ' ' + words[iPhoneIndex + 1];
+                } else {
+                    return '';
+                }
+            },
+
+            redirectSearch: function () {
+                //Save in sessionStorage
+                sessionStorage.setItem('searchQuery', this.searchQuery);
+                //Redirect to search.html to perform search
+                window.location.href = './search.html';
+            },
         },
         created() {
-            this.loadCaseDetails()
-        }
+            this.loadCaseDetails();
+        },
     });
 </script>
 </body>
