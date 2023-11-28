@@ -6,7 +6,7 @@
   --primary-blue: #007BFF;
   --dark-blue: #0069D9;
   --darker-blue: #004d9f;
-  --primary-green: #52af4b;
+  --primary-green: #279b1f;
 }
 
 html {
@@ -185,6 +185,7 @@ main {
 .similar-product__info--price {
   font-weight: bold;
   color: var(--primary-green);
+  font-size: 1.5em;
 }
 
 .product__info--details,
@@ -260,9 +261,9 @@ main {
 .case__button {
   background-color: var(--primary-blue);
   color: #fff;
+  padding: .75rem 4rem;
   width: fit-content;
-  padding: .75rem 1.5rem;
-  border-radius: 5px;
+  border-radius: .2rem;
   display: inline-block;
   margin-top: auto;
 }

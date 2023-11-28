@@ -86,7 +86,7 @@ public class eBayScraper extends Thread {
                             PriceComparison priceComparison = new PriceComparison();
                             priceComparison.setCaseVariant(phoneCaseVariation);
                             priceComparison.setName(productName);
-                            priceComparison.setPrice(productPrice.replace("£", "").trim());
+                            priceComparison.setPrice(productPrice.replace("£", "").replace("each", "").trim());
                             priceComparison.setUrl(productUrl);
                             session.persist(priceComparison);
 
