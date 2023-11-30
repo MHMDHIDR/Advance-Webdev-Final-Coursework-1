@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.Const;
 import com.pricecomparison.util.DatabaseUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,8 +21,6 @@ public class eBayScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
 
-    private static final int MAX_PAGES = 5;
-
     public eBayScraper(SessionFactory sessionFactory) {
         this.driver = new ChromeDriver();
         this.sessionFactory = sessionFactory;
@@ -32,7 +31,7 @@ public class eBayScraper extends Thread {
         // Initialize session
         try (Session session = sessionFactory.openSession()) {
 
-            for (int page = 1; page <= MAX_PAGES; page++) {
+            for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
                 driver.get(url);
 

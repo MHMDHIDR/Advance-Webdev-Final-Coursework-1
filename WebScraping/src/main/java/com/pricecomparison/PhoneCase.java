@@ -20,4 +20,24 @@ public class PhoneCase {
     public void setPhoneModel(String phoneModel) {
         this.phoneModel = phoneModel;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhoneModel() {
+        return phoneModel;
+    }
+
+    public List<PhoneCaseVariation> getVariations() {
+        return variations;
+    }
+
+    public void setVariations(List<PhoneCaseVariation> variations) {
+        this.variations = variations;
+    }
 }

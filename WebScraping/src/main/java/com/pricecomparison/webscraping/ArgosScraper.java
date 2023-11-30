@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.Const;
 import com.pricecomparison.util.DatabaseUtil;
 import com.pricecomparison.util.ExtractProductModel;
 import org.hibernate.Session;
@@ -13,7 +14,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ArgosScraper extends Thread {
-    private static final int MAX_PAGES = 5;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -26,7 +26,7 @@ public class ArgosScraper extends Thread {
         Session session = sessionFactory.openSession();
 
         try {
-            for (int page = 1; page <= MAX_PAGES; page++) {
+            for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
 
                 Document doc = Jsoup.connect(argosUrl).get();

@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.Const;
 import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.ExtractProductPrice;
 import com.pricecomparison.util.DatabaseUtil;
@@ -21,7 +22,6 @@ import java.util.regex.Pattern;
 
 public class GumtreeScraper extends Thread {
     private final SessionFactory sessionFactory;
-    private static final int MAX_PAGES = 5;
 
     // Constructor to inject WebDriver and SessionFactory
     public GumtreeScraper(SessionFactory sessionFactory) {
@@ -40,7 +40,7 @@ public class GumtreeScraper extends Thread {
         boolean cookiesAccepted = false;
 
         // Iterate over multiple pages
-        for (int page = 1; page <= MAX_PAGES; page++) {
+        for (int page = 1; page <= Const.MAX_PAGES; page++) {
             String url = "https://www.gumtree.com/search?q=iphone+case&page=" + page;
             driver.get(url);
 

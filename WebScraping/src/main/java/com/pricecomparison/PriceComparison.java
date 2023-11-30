@@ -17,6 +17,9 @@ public class PriceComparison {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "website")
+    private String website;
+
     @Column(name = "price")
     private String price;
 
@@ -30,6 +33,10 @@ public class PriceComparison {
     public void setName(String name) {
         this.name = name;
     }
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     public void setPrice(String price) {
         this.price = price;
     }

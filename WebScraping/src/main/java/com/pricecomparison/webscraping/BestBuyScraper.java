@@ -3,6 +3,7 @@ package com.pricecomparison.webscraping;
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
+import com.pricecomparison.util.Const;
 import com.pricecomparison.util.CurrencyConverter;
 import com.pricecomparison.util.DatabaseUtil;
 import com.pricecomparison.util.ExtractProductModel;
@@ -14,7 +15,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
-    private static final int MAX_PAGES = 5;
     private final SessionFactory sessionFactory;
 
     // Constructor to inject SessionFactory
@@ -30,7 +30,7 @@ public class BestBuyScraper extends Thread {
         try {
             session.beginTransaction();
 
-            for (int page = 1; page <= MAX_PAGES; page++) {
+            for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
 
                 // Connect to the Best Buy URL and parse the HTML content
