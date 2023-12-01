@@ -4,7 +4,6 @@ import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.Const;
-import com.pricecomparison.util.DatabaseUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.openqa.selenium.By;
@@ -48,11 +47,6 @@ public class eBayScraper extends Thread {
                 for (int i = 1; i < productLinks.size(); i++) {
                     WebElement productLink = productLinks.get(i);
                     String productUrl = productLink.getAttribute("href");
-
-                    if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", productUrl)) {
-                        System.out.println("Data already exists for URL: " + productUrl);
-                        continue;
-                    }
 
                     try {
                         // Navigate to the product page

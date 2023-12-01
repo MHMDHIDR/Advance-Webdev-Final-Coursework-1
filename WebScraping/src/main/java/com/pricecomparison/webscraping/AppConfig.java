@@ -44,8 +44,4 @@ public class AppConfig {
         return new ArgosScraper(sessionFactory(null));
     }
 
-    @Bean
-    public GumtreeScraper gumtreeScraper() {
-        return new GumtreeScraper(sessionFactory(null));
-    }
 }

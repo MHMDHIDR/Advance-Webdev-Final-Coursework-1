@@ -5,7 +5,6 @@ import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.Const;
 import com.pricecomparison.util.CurrencyConverter;
-import com.pricecomparison.util.DatabaseUtil;
 import com.pricecomparison.util.ExtractProductModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -50,12 +49,6 @@ public class BestBuyScraper extends Thread {
                     // Check if any of the essential data is missing
                     if (productName.isEmpty() || productPriceUSD.isEmpty()) {
                         continue; // Skip this product
-                    }
-
-                    // Check if data exists in the database
-                    if (DatabaseUtil.isDataExists(session, "SELECT COUNT(*) FROM PriceComparison WHERE url = :URL", "URL", productLink)) {
-                        System.out.println("Data already exists for URL: " + productLink);
-                        continue;
                     }
 
                     // Extract phone model from the product name
