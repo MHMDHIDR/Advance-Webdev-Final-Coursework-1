@@ -17,6 +17,8 @@ import org.openqa.selenium.WebDriverException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pricecomparison.util.SaveModel;
+
 public class AmazonScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
@@ -66,26 +68,12 @@ public class AmazonScraper extends Thread {
                     String[] models =  getModels(productModels);
                     ArrayList<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
-                        // remove the word "Apple" from the model
-                        model = model.replace("Apple", "").trim();
-
-                        if(model.contains("-") || !model.startsWith("iPhone") || model.equalsIgnoreCase("iphone") || model.matches(".*\\bPro\\b.*\\d.*")) {
+                        if (SaveModel.isFilteredAndChecked(model)) {
                             continue;
                         }
 
-                        List<PhoneCase> caseList = session.createQuery("FROM PhoneCase WHERE phoneModel = :MODEL", PhoneCase.class)
-                                .setParameter("MODEL", model)
-                                .getResultList();
-                        PhoneCase phoneCase = new PhoneCase();
-                        if (caseList.isEmpty()) {
-                            phoneCase.setPhoneModel(model);
-                            session.beginTransaction();
-                            session.persist(phoneCase);
-                            session.getTransaction().commit();
-                        } else {
-                            phoneCase = caseList.get(0);
-                        }
-                        cases.add(phoneCase);
+                        // Create PhoneCase object and save it to the database
+                        SaveModel.save(session, cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();

@@ -5,6 +5,7 @@ import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.Const;
 import com.pricecomparison.util.ExtractProductModel;
+import com.pricecomparison.util.SaveModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jsoup.Jsoup;
@@ -65,19 +66,7 @@ public class ArgosScraper extends Thread {
                             continue;
                         }
 
-                        List<PhoneCase> caseList = session.createQuery("FROM PhoneCase WHERE phoneModel = :MODEL", PhoneCase.class)
-                                .setParameter("MODEL", model)
-                                .getResultList();
-                        PhoneCase phoneCase = new PhoneCase();
-                        if (caseList.isEmpty()) {
-                            phoneCase.setPhoneModel(model);
-                            session.beginTransaction();
-                            session.persist(phoneCase);
-                            session.getTransaction().commit();
-                        } else {
-                            phoneCase = caseList.get(0);
-                        }
-                        cases.add(phoneCase);
+                        SaveModel.save(session, cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
@@ -134,4 +123,5 @@ public class ArgosScraper extends Thread {
         session.close();
         System.out.println("✔ ArgosScraper thread finished scraping.");
     }
+
 }

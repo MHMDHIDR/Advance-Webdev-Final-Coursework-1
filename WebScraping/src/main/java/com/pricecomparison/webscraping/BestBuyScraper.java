@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 public class BestBuyScraper extends Thread {
     private final SessionFactory sessionFactory;
+    private static final String WEBSITE = "BestBuy";
 
     // Constructor to inject SessionFactory
     public BestBuyScraper(SessionFactory sessionFactory) {
@@ -42,9 +43,10 @@ public class BestBuyScraper extends Thread {
                     String productName = product.select("h4.sku-title a").text();
                     String productLink = "https://www.bestbuy.com" + product.select("h4.sku-title a").attr("href");
                     String productPriceUSD = product.select(".priceView-customer-price span[aria-hidden='true']").text();
-                    String convertedPriceGBP = CurrencyConverter.convertToGBP(productPriceUSD);
+                    String convertedPriceGBP = CurrencyConverter.convertToGBP(productPriceUSD).replaceAll("[^\\d.]", "");
                     String productImageURL = product.select("img.product-image").attr("src");
-                    String productColor = product.select("div.variation-info div div.product-variation-header div.hover-name").text();
+                    String findProductColor = product.select("div.variation-info div div.product-variation-header div.hover-name").text();
+                    String productColor = findProductColor.isEmpty() ? extractColor(productName) : findProductColor;
 
                     // Check if any of the essential data is missing
                     if (productName.isEmpty() || productPriceUSD.isEmpty()) {
@@ -62,7 +64,7 @@ public class BestBuyScraper extends Thread {
                     // Create and save PhoneCaseVariation entity
                     PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                     phoneCaseVariation.setPhoneCase(phoneCase);
-                    phoneCaseVariation.setColor(productColor.isEmpty() ? extractColor(productName) : productColor);
+                    phoneCaseVariation.setColor(productColor);
                     phoneCaseVariation.setImageUrl(productImageURL);
                     session.persist(phoneCaseVariation);
 
@@ -70,7 +72,7 @@ public class BestBuyScraper extends Thread {
                     PriceComparison priceComparison = new PriceComparison();
                     priceComparison.setCaseVariant(phoneCaseVariation);
                     priceComparison.setName(productName);
-                    priceComparison.setPrice(convertedPriceGBP.replaceAll("[^\\d.]", ""));
+                    priceComparison.setPrice(convertedPriceGBP);
                     priceComparison.setUrl(productLink);
                     session.persist(priceComparison);
 
