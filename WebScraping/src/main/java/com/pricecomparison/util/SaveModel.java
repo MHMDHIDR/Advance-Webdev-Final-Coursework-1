@@ -48,4 +48,13 @@ public class SaveModel {
         || cleanedModel.matches("(?i).*\\bPromax\\b.*")
         || cleanedModel.matches(".*\\b\\w*Plus\\w*\\b.*");
     }
+
+    public static String[] getModels(String productModels) {
+        String[] models = productModels.split("[,/]");
+        // Trim each model
+        for (int i = 0; i < models.length; i++) {
+            models[i] = models[i].trim();
+        }
+        return models;
+    }
 }

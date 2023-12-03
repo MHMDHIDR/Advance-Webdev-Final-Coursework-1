@@ -55,7 +55,7 @@ public class eBayScraper extends Thread {
                         List<String> phoneColours = extractPhoneColours();
 
                         // Apply model checking
-                        String[] models = getModels(phoneModels.toString());
+                        String[] models = SaveModel.getModels(phoneModels.toString());
                         ArrayList<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
                             if (SaveModel.isFilteredAndChecked(model)) {
@@ -134,16 +134,6 @@ public class eBayScraper extends Thread {
             driver.quit();
             System.out.println("✔ eBayScraper thread finished scraping.");
         }
-    }
-
-
-    private static String[] getModels(String productModels) {
-        String[] models = productModels.split("[,/]");
-        // Trim each model
-        for (int i = 0; i < models.length; i++) {
-            models[i] = models[i].trim();
-        }
-        return models;
     }
 
 

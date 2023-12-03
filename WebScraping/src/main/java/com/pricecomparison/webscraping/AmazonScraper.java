@@ -4,6 +4,7 @@ import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.ExtractProductPrice;
+import com.pricecomparison.util.SaveModel;
 import com.pricecomparison.util.Const;
 
 import org.hibernate.Session;
@@ -17,7 +18,6 @@ import org.openqa.selenium.WebDriverException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pricecomparison.util.SaveModel;
 
 public class AmazonScraper extends Thread {
     private final WebDriver driver;
@@ -65,7 +65,7 @@ public class AmazonScraper extends Thread {
                     String productImageURL = driver.findElement(By.cssSelector("span.a-declarative div img#landingImage.a-dynamic-image")).getAttribute("src");
 
 
-                    String[] models =  getModels(productModels);
+                    String[] models = SaveModel.getModels(productModels);
                     ArrayList<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
                         if (SaveModel.isFilteredAndChecked(model)) {
@@ -117,7 +117,6 @@ public class AmazonScraper extends Thread {
                         session.getTransaction().commit();
                     }
                 } catch (WebDriverException e) {
-                    // Handle WebDriver exception, e.g., log the error
                     System.err.println(e.getMessage());
                     // Navigate back to the search results page
                     continue;
@@ -135,15 +134,6 @@ public class AmazonScraper extends Thread {
         System.out.println("✔ AmazonScraper thread finished scraping.");
     }
 
-
-    private static String[] getModels(String productModels) {
-        String[] models = productModels.split("[,/]");
-        // Trim each model
-        for (int i = 0; i < models.length; i++) {
-            models[i] = models[i].trim();
-        }
-        return models;
-    }
 
     private void acceptCookies(WebDriver driver) {
         try {

@@ -30,7 +30,9 @@ public class ArgosScraper extends Thread {
         Session session = sessionFactory.openSession();
 
         try {
-            for (int page = 1; page <= Const.MAX_PAGES; page++) {
+            // if <= Const.MAX_PAGES is less than or equals to 6 give me Const.MAX_PAGES
+            // otherwise give me 6 argos scraper only has 6 pages
+            for (int page = 1; page <= (Math.min(Const.MAX_PAGES, 6)); page++) {
                 String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
 
                 Document doc = Jsoup.connect(argosUrl).get();
@@ -52,20 +54,12 @@ public class ArgosScraper extends Thread {
                     //Array of models ExtractProductModel.model(productName).replace("Apple", "").trim();
                     String[] models = ExtractProductModel.model(productName).replace("Apple", "").trim().split(",");
                     ArrayList<PhoneCase> cases = new ArrayList<>();
-
                     for (String model : models) {
-                        // remove the word "Apple" from the model
-                        model = model.replace("Apple", "").trim();
-
-                        if (
-                            model.contains("-")
-                            || !model.startsWith("iPhone")
-                            || model.equalsIgnoreCase("iphone")
-                            || model.matches(".*\\bPro\\b.*\\d.*|.*\\bPro\\b.*R.*|.*\\bMax\\b.*R.*|.*\\d.*\\sS.*|.*\\d.*\\sR.*")
-                        ) {
+                        if (SaveModel.isFilteredAndChecked(model)) {
                             continue;
                         }
 
+                        // Create PhoneCase object and save it to the database
                         SaveModel.save(session, cases, model);
                     }
 
