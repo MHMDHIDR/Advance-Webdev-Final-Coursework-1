@@ -57,6 +57,13 @@ public class AmazonScraper extends Thread {
                     // Navigate to the product page
                     driver.get(productUrl);
 
+                    //wait random time between 1 and 3 seconds
+                    try {
+                        Thread.sleep((long) (Math.random() * 2000 + 1000));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     // Scrape product information
                     String productName = driver.findElement(By.cssSelector("span#productTitle.a-size-large.product-title-word-break")).getText();
                     String productPrice = ExtractProductPrice.price(driver);
@@ -112,6 +119,7 @@ public class AmazonScraper extends Thread {
                         priceComparison.setWebsite(WEBSITE);
                         priceComparison.setPrice(productPrice.substring(1));
                         priceComparison.setUrl(productUrl);
+
                         session.beginTransaction();
                         session.merge(priceComparison);
                         session.getTransaction().commit();

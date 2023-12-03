@@ -38,15 +38,15 @@ public class SaveModel {
     //check if model is filtered and checked
     public static boolean isFilteredAndChecked(String cleanedModel) {
         // Check conditions
-        return !cleanedModel.startsWith("iPhone ")
-        || cleanedModel.contains("-")
-        || cleanedModel.equalsIgnoreCase("iphone ")
-        || cleanedModel.contains("...")
-        || cleanedModel.matches(".*\\bPro\\b.*\\d.*|.*\\bPro\\b.*R.*|.*\\bMax\\b.*R.*|.*\\d.*\\sS.*|.*\\d.*\\sR.*")
-        || cleanedModel.matches(".*\\biPhone\\b\\siPhone\\s.*")
-        || cleanedModel.matches(".*\\biPhone\\s\\d+\\s\\d+.*")
-        || cleanedModel.matches("(?i).*\\bPromax\\b.*")
-        || cleanedModel.matches(".*\\b\\w*Plus\\w*\\b.*");
+        return !cleanedModel.startsWith("iPhone ") ||
+        cleanedModel.contains("-") ||
+        cleanedModel.equalsIgnoreCase("iphone ") ||
+        cleanedModel.contains("...") ||
+        cleanedModel.matches(".*\\bPro\\b.*\\d.*|.*\\bPro\\b.*R.*|.*\\bMax\\b.*R.*|.*\\d.*\\sS.*|.*\\d.*\\sR.*") ||
+        cleanedModel.matches(".*\\biPhone\\b\\siPhone\\s.*") ||
+        cleanedModel.matches(".*\\biPhone\\s\\d+\\s\\d+.*") ||
+        cleanedModel.matches("(?i).*\\bPromax\\b.*") ||
+        !cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini");
     }
 
     public static String[] getModels(String productModels) {

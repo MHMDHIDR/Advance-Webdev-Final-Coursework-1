@@ -85,23 +85,22 @@ public class BestBuyScraper extends Thread {
                         String[] models = SaveModel.getModels(productModels);
                         ArrayList<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
-                            if (SaveModel.isFilteredAndChecked(model.trim())) {
-                                continue;
-                            }
+                            //if (SaveModel.isFilteredAndChecked(model)) {
+                            //    continue;
+                            //}
 
                             // Create PhoneCase object and save it to the database
-                            SaveModel.save(session, cases, model.trim());
+                            SaveModel.save(session, cases, model);
                         }
 
                         ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
                         for (PhoneCase phoneCase : cases) {
-                            PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
-
                             List<PhoneCaseVariation> variantList = session.createQuery("FROM PhoneCaseVariation WHERE phoneCase = :MODEL AND color = :COLOR", PhoneCaseVariation.class)
                                     .setParameter("MODEL", phoneCase)
                                     .setParameter("COLOR", productColour)
                                     .getResultList();
 
+                            PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                             if (variantList.isEmpty()) {
                                 phoneCaseVariation.setPhoneCase(phoneCase);
                                 phoneCaseVariation.setColor(productColour);
@@ -110,11 +109,14 @@ public class BestBuyScraper extends Thread {
                                 session.beginTransaction();
                                 session.persist(phoneCaseVariation);
                                 session.getTransaction().commit();
+
                             } else {
                                 phoneCaseVariation = variantList.get(0);
                             }
                             variants.add(phoneCaseVariation);
+                        }
 
+                        for (PhoneCaseVariation phoneCaseVariation: variants) {
                             List<PriceComparison> priceComparisons = session.createQuery("FROM PriceComparison WHERE caseVariant = :MODEL AND website = :WEBSITE", PriceComparison.class)
                                     .setParameter("MODEL", phoneCaseVariation)
                                     .setParameter("WEBSITE", WEBSITE)
@@ -131,7 +133,7 @@ public class BestBuyScraper extends Thread {
                             priceComparison.setUrl(productInPageHref);
 
                             session.beginTransaction();
-                            session.merge(priceComparison);
+                            session.persist(priceComparison);
                             session.getTransaction().commit();
                         }
 

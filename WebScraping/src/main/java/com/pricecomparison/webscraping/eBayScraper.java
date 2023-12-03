@@ -129,7 +129,7 @@ public class eBayScraper extends Thread {
                     System.out.println(e.getMessage());
                 }
             }
-        } finally {
+
             // Close the browser
             driver.quit();
             System.out.println("✔ eBayScraper thread finished scraping.");
