@@ -26,9 +26,9 @@ public class SaveModel {
     }
 
     //filter models from unwanted characters
-    private static String filtered(String filteredModel) {
+    public static String filtered(String filteredModel) {
         return filteredModel
-                .replaceAll("\\[|For Apple|For|]", "")
+                .replaceAll("\\[|For Apple|For|Apple|]", "")
                 .replaceAll("\\([^)]*\\)", "")
                 .replaceAll("6\\.1''|6\\.1\"|5\\.4''|5\\.4\"", "")
                 .replaceAll("\\s+", " ") // Replace multiple spaces with a single space
@@ -37,16 +37,9 @@ public class SaveModel {
 
     //check if model is filtered and checked
     public static boolean isFilteredAndChecked(String cleanedModel) {
-        // Check conditions
-        return !cleanedModel.startsWith("iPhone ") ||
-        cleanedModel.contains("-") ||
-        cleanedModel.equalsIgnoreCase("iphone ") ||
-        cleanedModel.contains("...") ||
-        cleanedModel.matches(".*\\bPro\\b.*\\d.*|.*\\bPro\\b.*R.*|.*\\bMax\\b.*R.*|.*\\d.*\\sS.*|.*\\d.*\\sR.*") ||
-        cleanedModel.matches(".*\\biPhone\\b\\siPhone\\s.*") ||
-        cleanedModel.matches(".*\\biPhone\\s\\d+\\s\\d+.*") ||
-        cleanedModel.matches("(?i).*\\bPromax\\b.*") ||
-        !cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini");
+        cleanedModel = cleanedModel.toLowerCase();
+        return cleanedModel.startsWith("iphone ") && !cleanedModel.contains("-") && !cleanedModel.contains("...") &&
+                cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini");
     }
 
     public static String[] getModels(String productModels) {
