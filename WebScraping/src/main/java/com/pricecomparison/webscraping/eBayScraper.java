@@ -5,8 +5,10 @@ import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.Const;
 import com.pricecomparison.util.SaveModel;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -58,10 +60,11 @@ public class eBayScraper extends Thread {
                         String[] models = SaveModel.getModels(phoneModels.toString());
                         ArrayList<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
-                            if (SaveModel.isFilteredAndChecked(model)) {
+                            model = SaveModel.filtered(model);
+
+                            if (!SaveModel.isFilteredAndChecked(model)) {
                                 continue;
                             }
-
                             // Create PhoneCase object and save it to the database
                             SaveModel.save(session, cases, model);
                         }

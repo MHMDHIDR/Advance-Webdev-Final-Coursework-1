@@ -19,8 +19,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pricecomparison.util.SaveModel.filtered;
-
 public class BestBuyScraper extends Thread {
     private final WebDriver driver;
     private final SessionFactory sessionFactory;
@@ -87,9 +85,8 @@ public class BestBuyScraper extends Thread {
                     String[] models = SaveModel.getModels(productModels);
                     ArrayList<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
-                        model = filtered(model);
-                        System.out.println(model);
-                        System.out.println("Should Continue: " + SaveModel.isFilteredAndChecked(model));
+                        model = SaveModel.filtered(model);
+
                         if (!SaveModel.isFilteredAndChecked(model)) {
                             continue;
                         }
@@ -159,10 +156,6 @@ public class BestBuyScraper extends Thread {
 
     private String extractColor(String productName) {
         //get the color from ProductName after the last dash (-) if there is no dash, return the string "N/A"
-        if (productName.contains("-")) {
-            return productName.substring(productName.lastIndexOf("-") + 1).trim();
-        } else {
-            return "N/A";
-        }
+        return productName.contains("-") ? productName.substring(productName.lastIndexOf("-") + 1).trim() : "N/A";
     }
 }

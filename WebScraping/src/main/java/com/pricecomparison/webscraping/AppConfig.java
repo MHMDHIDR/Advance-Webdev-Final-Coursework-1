@@ -26,7 +26,7 @@ public class AppConfig {
 
     @Bean
     public AmazonScraper amazonScraper() {
-        return new AmazonScraper(webDriver(), sessionFactory(null));
+        return new AmazonScraper(sessionFactory(null));
     }
 
     @Bean

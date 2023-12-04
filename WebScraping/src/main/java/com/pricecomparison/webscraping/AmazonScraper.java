@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,8 @@ public class AmazonScraper extends Thread {
     private static final String WEBSITE = "Amazon";
 
     // Constructor to inject WebDriver
-    public AmazonScraper(WebDriver driver, SessionFactory sessionFactory) {
-        this.driver = driver;
+    public AmazonScraper(SessionFactory sessionFactory) {
+        this.driver = new ChromeDriver();
         this.sessionFactory = sessionFactory;
     }
 
@@ -75,10 +76,11 @@ public class AmazonScraper extends Thread {
                     String[] models = SaveModel.getModels(productModels);
                     ArrayList<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
-                        if (SaveModel.isFilteredAndChecked(model)) {
+                        model = SaveModel.filtered(model);
+
+                        if (!SaveModel.isFilteredAndChecked(model)) {
                             continue;
                         }
-
                         // Create PhoneCase object and save it to the database
                         SaveModel.save(session, cases, model);
                     }

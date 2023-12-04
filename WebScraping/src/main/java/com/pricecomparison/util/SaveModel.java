@@ -38,8 +38,10 @@ public class SaveModel {
     //check if model is filtered and checked
     public static boolean isFilteredAndChecked(String cleanedModel) {
         cleanedModel = cleanedModel.toLowerCase();
-        return cleanedModel.startsWith("iphone ") && !cleanedModel.contains("-") && !cleanedModel.contains("...") &&
-                cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini");
+        return cleanedModel.startsWith("iphone ")
+        && !cleanedModel.contains("-")
+        && !cleanedModel.contains("...")
+        && cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+s|iPhone\\s\\d+c|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini|iPhone\\sx|iPhone\\sxr|iPhone\\sxs|iPhone\\sxs\\smax");
     }
 
     public static String[] getModels(String productModels) {

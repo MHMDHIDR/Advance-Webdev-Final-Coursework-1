@@ -6,8 +6,10 @@ import com.pricecomparison.PriceComparison;
 import com.pricecomparison.util.Const;
 import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.SaveModel;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -42,42 +44,38 @@ public class ArgosScraper extends Thread {
 
                 for (Element product : productElements) {
                     String productName = product.select("div[data-test='component-product-card-title']").text();
-                    String productPrice = product.select("div[data-test='component-product-card-price'] strong").text();
+                    String productPrice = product.select("div[data-test='component-product-card-price'] strong").text().substring(1);// Remove the pound symbol from the price
                     String productLink = product.select("[data-test='component-product-card-textContainer'] a[data-test='component-product-card-title-link']").attr("href");
                     String productImageURL = product.select("[data-test='component-product-card']").attr("data-product-id");
 
                     // Extract color from the product name after the last dash ("-") symbol
                     int lastDashIndex = productName.lastIndexOf("-");
                     // If there is no dash, set color to "DefaultColor"
-                    String color = (lastDashIndex != -1) ? productName.substring(lastDashIndex + 1).trim() : "N/A";
+                    String productColour = (lastDashIndex != -1) ? productName.substring(lastDashIndex + 1).trim() : "clear";
 
-                    //Array of models ExtractProductModel.model(productName).replace("Apple", "").trim();
                     String[] models = ExtractProductModel.model(productName).replace("Apple", "").trim().split(",");
                     ArrayList<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
-                        if (SaveModel.isFilteredAndChecked(model)) {
+                        model = SaveModel.filtered(model);
+
+                        if (!SaveModel.isFilteredAndChecked(model)) {
                             continue;
                         }
-
                         // Create PhoneCase object and save it to the database
                         SaveModel.save(session, cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
                     for (PhoneCase phoneCase : cases) {
-                        // Skip if color is "N/A"
-                        if ("N/A".equals(color)) {
-                            continue;
-                        }
-
                         List<PhoneCaseVariation> variantList = session.createQuery("FROM PhoneCaseVariation WHERE phoneCase = :MODEL AND color = :COLOR", PhoneCaseVariation.class)
                                 .setParameter("MODEL", phoneCase)
-                                .setParameter("COLOR", color)
+                                .setParameter("COLOR", productColour)
                                 .getResultList();
+
                         PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
                         if (variantList.isEmpty()) {
                             phoneCaseVariation.setPhoneCase(phoneCase);
-                            phoneCaseVariation.setColor(color);
+                            phoneCaseVariation.setColor(productColour);
                             phoneCaseVariation.setImageUrl("https://media.4rgos.it/s/Argos/" + productImageURL);
 
                             session.beginTransaction();
@@ -90,11 +88,12 @@ public class ArgosScraper extends Thread {
                         variants.add(phoneCaseVariation);
                     }
 
-                    for (PhoneCaseVariation phoneCaseVariation : variants) {
+                    for (PhoneCaseVariation phoneCaseVariation: variants) {
                         List<PriceComparison> priceComparisons = session.createQuery("FROM PriceComparison WHERE caseVariant = :MODEL AND website = :WEBSITE", PriceComparison.class)
                                 .setParameter("MODEL", phoneCaseVariation)
                                 .setParameter("WEBSITE", WEBSITE)
                                 .getResultList();
+
                         PriceComparison priceComparison = new PriceComparison();
                         if (!priceComparisons.isEmpty()) {
                             priceComparison = priceComparisons.get(0);
@@ -102,10 +101,11 @@ public class ArgosScraper extends Thread {
                         priceComparison.setCaseVariant(phoneCaseVariation);
                         priceComparison.setName(productName);
                         priceComparison.setWebsite(WEBSITE);
-                        priceComparison.setPrice(productPrice.substring(1));
+                        priceComparison.setPrice(productPrice);
                         priceComparison.setUrl("https://www.argos.co.uk" + productLink);
+
                         session.beginTransaction();
-                        session.merge(priceComparison);
+                        session.persist(priceComparison);
                         session.getTransaction().commit();
                     }
                 }
