@@ -20,20 +20,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BestBuyScraper extends Thread {
-    private final WebDriver driver;
-    private final SessionFactory sessionFactory;
+    private WebDriver driver;
+    private SessionFactory sessionFactory;
     private static final String WEBSITE = "BestBuy";
 
     // Constructor to inject SessionFactory
-    public BestBuyScraper(SessionFactory sessionFactory) {
+    public BestBuyScraper() {
         this.driver = new ChromeDriver();
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public void run() {
         // Initialize session
         Session session = sessionFactory.openSession();
+        SaveModel saveModel = new SaveModel();
 
         for (int page = 1; page <= Const.MAX_PAGES; page++) {
             String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
@@ -91,7 +91,7 @@ public class BestBuyScraper extends Thread {
                             continue;
                         }
                         // Create PhoneCase object and save it to the database
-                        SaveModel.save(session, cases, model);
+                        saveModel.save(cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
@@ -157,5 +157,21 @@ public class BestBuyScraper extends Thread {
     private String extractColor(String productName) {
         //get the color from ProductName after the last dash (-) if there is no dash, return the string "N/A"
         return productName.contains("-") ? productName.substring(productName.lastIndexOf("-") + 1).trim() : "N/A";
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 }

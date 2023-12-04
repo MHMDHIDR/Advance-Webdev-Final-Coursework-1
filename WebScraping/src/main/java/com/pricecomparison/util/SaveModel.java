@@ -2,12 +2,16 @@ package com.pricecomparison.util;
 
 import com.pricecomparison.PhoneCase;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SaveModel {
-    public static void save(Session session, ArrayList<PhoneCase> cases, String model) {
+    SessionFactory sessionFactory;
+
+    public void save(ArrayList<PhoneCase> cases, String model) {
+        Session session = sessionFactory.getCurrentSession();
         String filteredModel = filtered(model).toLowerCase();
 
         List<PhoneCase> caseList = session.createQuery("FROM PhoneCase WHERE phoneModel = :MODEL", PhoneCase.class)
@@ -23,6 +27,8 @@ public class SaveModel {
             phoneCase = caseList.get(0);
         }
         cases.add(phoneCase);
+
+        session.close();
     }
 
     //filter models from unwanted characters
@@ -51,5 +57,9 @@ public class SaveModel {
             models[i] = models[i].trim();
         }
         return models;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

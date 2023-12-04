@@ -14,22 +14,29 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArgosScraper extends Thread {
-    private final SessionFactory sessionFactory;
+
+    private SaveModel saveModel;
+    private WebDriver driver;
+    private SessionFactory sessionFactory;
     private static final String WEBSITE = "Argos";
 
     // Constructor to inject SessionFactory
-    public ArgosScraper(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public ArgosScraper() {
+        this.driver = new ChromeDriver();
     }
 
     @Override
     public void run() {
+        // Initialize session
         Session session = sessionFactory.openSession();
+        SaveModel saveModel = new SaveModel();
 
         try {
             // if <= Const.MAX_PAGES is less than or equals to 6 give me Const.MAX_PAGES
@@ -62,7 +69,7 @@ public class ArgosScraper extends Thread {
                             continue;
                         }
                         // Create PhoneCase object and save it to the database
-                        SaveModel.save(session, cases, model);
+                        saveModel.save(cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
@@ -118,4 +125,27 @@ public class ArgosScraper extends Thread {
         System.out.println("✔ ArgosScraper thread finished scraping.");
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public SaveModel getSaveModel() {
+        return saveModel;
+    }
+
+    public void setSaveModel(SaveModel saveModel) {
+        this.saveModel = saveModel;
+    }
 }

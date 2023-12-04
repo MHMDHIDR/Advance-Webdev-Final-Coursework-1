@@ -1,5 +1,6 @@
 package com.pricecomparison.util;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import java.util.Properties;
 
 @Configuration
 public class HibernateUtil {
+
 
     @Bean
     public SessionFactory sessionFactory(DataSource dataSource) {
@@ -24,5 +26,14 @@ public class HibernateUtil {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         return hibernateProperties;
+    }
+
+    @Bean
+    public static DataSource getDataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("pricecomparison_db");
+        dataSource.setUsername("root");
+        dataSource.setPassword("MohAmed_33454030");
+        return dataSource;
     }
 }

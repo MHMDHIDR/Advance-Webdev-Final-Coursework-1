@@ -20,19 +20,22 @@ import java.util.Arrays;
 import java.util.List;
 
 public class eBayScraper extends Thread {
-    private final WebDriver driver;
-    private final SessionFactory sessionFactory;
+    private WebDriver driver;
+    private SessionFactory sessionFactory;
     private static final String WEBSITE = "eBay";
 
-    public eBayScraper(SessionFactory sessionFactory) {
+    // Constructor to inject SessionFactory
+    public eBayScraper() {
         this.driver = new ChromeDriver();
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public void run() {
         // Initialize session
-        try (Session session = sessionFactory.openSession()) {
+        Session session = sessionFactory.openSession();
+        SaveModel saveModel = new SaveModel();
+
+        try {
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.ebay.co.uk/sch/i.html?_nkw=iPhone+case&_pgn=" + page;
                 driver.get(url);
@@ -66,7 +69,8 @@ public class eBayScraper extends Thread {
                                 continue;
                             }
                             // Create PhoneCase object and save it to the database
-                            SaveModel.save(session, cases, model);
+                            //SaveModel.save(session, cases, model);
+                            saveModel.save(cases, model);
                         }
 
 
@@ -136,6 +140,10 @@ public class eBayScraper extends Thread {
             // Close the browser
             driver.quit();
             System.out.println("✔ eBayScraper thread finished scraping.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
         }
     }
 
@@ -183,5 +191,21 @@ public class eBayScraper extends Thread {
         List<String> defaultList = new ArrayList<>();
         defaultList.add(defaultInfo);
         return defaultList;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 }

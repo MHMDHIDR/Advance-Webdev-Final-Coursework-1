@@ -10,16 +10,7 @@ public class App {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         // Retrieve the scrapers from the context
-        //AmazonScraper amazonScraperThread = context.getBean(AmazonScraper.class);
-        //eBayScraper ebayScraperThread = context.getBean(eBayScraper.class);
-        //ArgosScraper ArgosScraperThread = context.getBean(ArgosScraper.class);
-        BestBuyScraper BestBuyScraperThread = context.getBean(BestBuyScraper.class);
-
-
-        // Start the scraper threads
-        //amazonScraperThread.start();
-        //ebayScraperThread.start();
-        //ArgosScraperThread.start();
-        BestBuyScraperThread.start();
+        ScraperManager scraperManager= context.getBean(ScraperManager.class);
+        scraperManager.startScraping();
     }
 }

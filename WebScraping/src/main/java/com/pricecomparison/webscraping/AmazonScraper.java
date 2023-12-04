@@ -21,20 +21,21 @@ import java.util.List;
 
 
 public class AmazonScraper extends Thread {
-    private final WebDriver driver;
-    private final SessionFactory sessionFactory;
+    private WebDriver driver;
+    private SessionFactory sessionFactory;
     private static final String WEBSITE = "Amazon";
 
     // Constructor to inject WebDriver
-    public AmazonScraper(SessionFactory sessionFactory) {
+    public AmazonScraper() {
         this.driver = new ChromeDriver();
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public void run() {
         // Initialize session
         Session session = sessionFactory.openSession();
+        SaveModel saveModel = new SaveModel();
+
         // Iterate over multiple pages
         for (int page = 1; page <= Const.MAX_PAGES; page++) {
             String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
@@ -82,7 +83,7 @@ public class AmazonScraper extends Thread {
                             continue;
                         }
                         // Create PhoneCase object and save it to the database
-                        SaveModel.save(session, cases, model);
+                        saveModel.save(cases, model);
                     }
 
                     ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
@@ -153,5 +154,21 @@ public class AmazonScraper extends Thread {
         } catch (Exception e) {
             System.err.println("Amazon Cookies Not found. Continuing without clicking it.");
         }
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 }
