@@ -10,7 +10,7 @@ public class App {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         // Retrieve the scrapers from the context
-        ScraperManager scraperManager= context.getBean(ScraperManager.class);
+        ScraperManager scraperManager = (ScraperManager) context.getBean("scraperManager");
         scraperManager.startScraping();
     }
 }
