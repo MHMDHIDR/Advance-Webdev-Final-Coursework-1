@@ -38,4 +38,16 @@ public class PhoneCaseVariation {
     public void setPriceComparison(PriceComparison priceComparison) {
         this.priceComparison = priceComparison;
     }
+
+    public String getId() {
+        return String.valueOf(id);
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

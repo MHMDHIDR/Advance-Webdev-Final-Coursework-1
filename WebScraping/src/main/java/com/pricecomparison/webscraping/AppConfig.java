@@ -24,24 +24,24 @@ public class AppConfig {
         return new HibernateUtil().sessionFactory(dataSource);
     }
 
-    @Bean
-    public AmazonScraper amazonScraper() {
-        return new AmazonScraper(sessionFactory(null));
-    }
+//    @Bean
+//    public AmazonScraper amazonScraper() {
+//        return new AmazonScraper(sessionFactory(null));
+//    }
 
-    @Bean
-    public eBayScraper ebayScraper() {
-        return new eBayScraper(sessionFactory(null));
-    }
+//    @Bean
+//    public eBayScraper ebayScraper() {
+//        return new eBayScraper(sessionFactory(null));
+//    }
 
     @Bean
     public BestBuyScraper bestBuyScraper() {
         return new BestBuyScraper(sessionFactory(null));
     }
 
-    @Bean
-    public ArgosScraper argosScraper() {
-        return new ArgosScraper(sessionFactory(null));
-    }
+//    @Bean
+//    public ArgosScraper argosScraper() {
+//        return new ArgosScraper(sessionFactory(null));
+//    }
 
 }

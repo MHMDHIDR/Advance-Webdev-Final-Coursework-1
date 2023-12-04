@@ -28,6 +28,9 @@ public class PhoneCase {
     public void setId(int id) {
         this.id = id;
     }
+    public String getColor() {
+        return variations.get(0).getColor();
+    }
 
     public String getPhoneModel() {
         return phoneModel;
@@ -40,4 +43,6 @@ public class PhoneCase {
     public void setVariations(List<PhoneCaseVariation> variations) {
         this.variations = variations;
     }
+
+
 }

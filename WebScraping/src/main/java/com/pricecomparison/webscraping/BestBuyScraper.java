@@ -53,7 +53,7 @@ public class BestBuyScraper extends Thread {
                     driver.get(productInPageHref);
 
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep((long) (Math.random() * 500 + 1000));
                     } catch (InterruptedException e) {
                         System.out.println(e.getMessage());
                     }
@@ -117,7 +117,7 @@ public class BestBuyScraper extends Thread {
                         variants.add(phoneCaseVariation);
                     }
 
-                    for (PhoneCaseVariation phoneCaseVariation: variants) {
+                    for (PhoneCaseVariation phoneCaseVariation : variants) {
                         List<PriceComparison> priceComparisons = session.createQuery("FROM PriceComparison WHERE caseVariant = :MODEL AND website = :WEBSITE", PriceComparison.class)
                                 .setParameter("MODEL", phoneCaseVariation)
                                 .setParameter("WEBSITE", WEBSITE)

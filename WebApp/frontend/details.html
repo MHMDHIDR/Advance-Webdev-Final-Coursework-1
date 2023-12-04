@@ -40,14 +40,14 @@
                 <img class="case__image" :src="caseDetails.image_url" :alt="caseDetails.name" width="auto" height="500" />
 
                 <div class="case__details">
-                    <h2 class="case__details--name">
-                        <strong>Name: </strong>
-                        <span>{{ caseDetails.name }}</span>
-                    </h2>
-                    <p>
+                    <h2>
                         <strong>Models: </strong>
                         <span>{{ caseDetails.phone_model }}</span>
-                    </p>
+                    </h2>
+                    <div class="case__details--name">
+                        <h2>Description: </h2>
+                        <span>{{ caseDetails.name }}</span>
+                    </div>
                     <p>
                         <strong>Color: </strong>
                         <span class="case__details--color" :style="{
@@ -56,33 +56,81 @@
                         }"></span>
                         <span>{{ caseDetails.color }}</span>
                     </p>
-
-                    <p class="case__details--price">
-                        <strong>Price: </strong>
-                        <span>£{{ caseDetails.price }}</span>
-                    </p>
-                    <a class="case__button" :href="caseDetails.url" target="_blank">
-                        <strong>BUY NOW</strong>
-                    </a>
                 </div>
             </section>
 
             <div class="divider"></div>
 
             <!-- Similar iPhone Cases -->
-            <section class="similar-cases" v-if="similarCases.length">
-                <h2>Similar iPhone Cases</h2>
+            <section class="similar-cases"> <!-- v-if="similarCases.length" -->
                 <div class="similar-products">
-                    <a v-for="similarCase in similarCases" :key="similarCase.id" class="similar-product" :href="'/details.html?id=' + similarCase.id" :title="similarCase.name">
+                    <h2>View Prices</h2>
+                    <div class="similar-product" >
                         <div class="similar-product__image">
-                            <img :src="similarCase.image_url" :alt="similarCase.name" width="120" height="200" />
+                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
                         </div>
                         <div class="similar-product__info">
-                            <h4 class="similar-product__info--name">{{ similarCase.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
-                            <span class="similar-product__info--price">£{{ similarCase.price }}</span>
-                            <button class="similar-product__info--details">Show Details</button>
+                            <a class="similar-product__info--name" href="/details.html?id=1">
+                                <strong>CASE NAME</strong>
+                            </a>
+                            <div class="similar-product__info--buy">
+                                <span class="similar-product__info--price">£10</span>
+                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
+                            </div>
                         </div>
-                    </a>
+                    </div>
+                    <div class="similar-product" >
+                        <div class="similar-product__image">
+                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
+                        </div>
+                        <div class="similar-product__info">
+                            <a class="similar-product__info--name" href="/details.html?id=1">
+                                <strong>CASE NAME</strong>
+                            </a>
+                            <div class="similar-product__info--buy">
+                                <span class="similar-product__info--price">£10</span>
+                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="similar-product" >
+                        <div class="similar-product__image">
+                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
+                        </div>
+                        <div class="similar-product__info">
+                            <a class="similar-product__info--name" href="/details.html?id=1">
+                                <strong>CASE NAME</strong>
+                            </a>
+                            <div class="similar-product__info--buy">
+                                <span class="similar-product__info--price">£10</span>
+                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="similar-product" >
+                        <div class="similar-product__image">
+                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
+                        </div>
+                        <div class="similar-product__info">
+                            <a class="similar-product__info--name" href="/details.html?id=1">
+                                <strong>CASE NAME</strong>
+                            </a>
+                            <div class="similar-product__info--buy">
+                                <span class="similar-product__info--price">£10</span>
+                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <a v-for="similarCase in similarCases" :key="similarCase.id" class="similar-product" :href="'/details.html?id=' + similarCase.id" :title="similarCase.name">-->
+<!--                        <div class="similar-product__image">-->
+<!--                            <img :src="similarCase.image_url" :alt="similarCase.name" width="120" height="200" />-->
+<!--                        </div>-->
+<!--                        <div class="similar-product__info">-->
+<!--                            <h4 class="similar-product__info&#45;&#45;name">{{ similarCase.name.substring(0, MAX_NAME_LENGTH) + '...' }h4>-->
+<!--                            <span class="similar-product__info&#45;&#45;price">£{{ similarCase.price }}</span>-->
+<!--                            <button class="similar-product__info&#45;&#45;details">Show Details</button>-->
+<!--                        </div>-->
+<!--                    </a>-->
                 </div>
             </section>
         </main>
