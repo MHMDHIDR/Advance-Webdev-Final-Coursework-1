@@ -1,134 +1,117 @@
-//package com.pricecomparison.webscraping;
-//
-//import com.pricecomparison.PhoneCase;
-//import com.pricecomparison.PhoneCaseVariation;
-//import com.pricecomparison.util.Const;
-//import com.pricecomparison.util.CurrencyConverter;
-//
-//import org.openqa.selenium.By;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.WebDriverException;
-//import org.openqa.selenium.chrome.ChromeDriver;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class BestBuyScraper extends Thread {
-//    private WebDriver driver;
-//    private SaveCase saveCase;
-//    private static final String WEBSITE = "BestBuy";
-//
-//    // Constructor to inject SessionFactory
-//    public BestBuyScraper() {
-//        this.driver = new ChromeDriver();
-//    }
-//
-//    @Override
-//    public void run() {
-//        for (int page = 1; page <= Const.MAX_PAGES; page++) {
-//            String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
-//            driver.get(bestBuyUrl);
-//
-//            // Find and process each product on the page
-//            List<WebElement> productLinks = driver.findElements(By.cssSelector(".sku-item[data-sku-id] .column-left a[tabindex]"));
-//
-//            // Collect all product URLs
-//            List<String> productInPageHrefs = new ArrayList<>();
-//            for (WebElement productLink : productLinks) {
-//                productInPageHrefs.add(productLink.getAttribute("href"));
-//            }
-//
-//            for (String productInPageHref : productInPageHrefs) {
-//                try {
-//                    driver.get(productInPageHref);
-//
-//                    try {
-//                        Thread.sleep((long) (Math.random() * 500 + 1000));
-//                    } catch (InterruptedException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-//
-//                    String productName = driver.findElement(By.cssSelector(".sku-title h1.heading-5")).getText();
-//                    String productPriceUSD = driver.findElement(By.cssSelector(".priceView-customer-price span[aria-hidden='true']")).getText();
-//                    String productPrice = CurrencyConverter.convertToGBP(productPriceUSD).replaceAll("[^\\d.]", "");
-//                    String productImageURL = driver.findElement(By.cssSelector(".primary-button img")).getAttribute("src");
-//                    String productModels = "";
-//                    String productColour = "";
-//
-//                    // Click on productSpecifications button
-//                    WebElement specificationsButton = driver.findElement(By.cssSelector("button.specifications-drawer-btn[data-testid]"));
-//                    if (specificationsButton != null) {
-//                        specificationsButton.click();
-//
-//                        try { Thread.sleep((long) (Math.random() * 1000 + 500)); }
-//                        catch (InterruptedException e) { System.out.println(e.getMessage()); }
-//
-//                        try {
-//                            productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
-//                            productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
-//                        } catch (org.openqa.selenium.NoSuchElementException e) {
-//                            productModels = "N/A";
-//                            productColour = extractColor(productName);
-//                        }
-//                    }
-//
-//                    String[] models = SaveCase.getModels(productModels);
-//                    ArrayList<PhoneCase> cases = new ArrayList<>();
-//                    for (String model : models) {
-//                        model = SaveCase.filtered(model);
-//
-//                        if (!SaveCase.isFilteredAndChecked(model)) {
-//                            continue;
-//                        }
-//                        // Create PhoneCase object and save it to the database
-//                        saveCase.saveCase(cases, model);
-//                    }
-//
-//                    ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
-//                    for (PhoneCase phoneCase : cases) {
-//                        // Create PhoneCase object and save it to the database
-//                        saveCase.saveVariant(variants, phoneCase, productColour, productImageURL);
-//                    }
-//
-//                    for (PhoneCaseVariation phoneCaseVariation : variants) {
-//                        // Create PhoneCase object and save it to the database
-//                        saveCase.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productInPageHref);
-//                    }
-//
-//                } catch (WebDriverException e) {
-//                    System.err.println(e.getMessage());
-//                    continue;
-//                }
-//
-//                driver.navigate().back();
-//            }
-//        }
-//
-//
-//        // Close the browser
-//        driver.quit();
-//        System.out.println("✔ BestBuyScraper Thread finished scraping.");
-//    }
-//
-//    private String extractColor(String productName) {
-//        //get the color from ProductName after the last dash (-) if there is no dash, return the string "N/A"
-//        return productName.contains("-") ? productName.substring(productName.lastIndexOf("-") + 1).trim() : "N/A";
-//    }
-//
-//    public SaveCase getSaveModel() {
-//        return saveCase;
-//    }
-//
-//    public void setSaveModel(SaveCase saveCase) {
-//        this.saveCase = saveCase;
-//    }
-//
-//    public WebDriver getDriver() {
-//        return driver;
-//    }
-//
-//    public void setDriver(WebDriver driver) {
-//        this.driver = driver;
-//    }
-//}
+package com.pricecomparison.webscraping;
+
+import com.pricecomparison.PhoneCase;
+import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.util.Const;
+import com.pricecomparison.util.CurrencyConverter;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriverException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BestBuyScraper extends WebScrapper {
+    private static final String WEBSITE = "BestBuy";
+
+    @Override
+    public void run() {
+        // Initialize the WebDriver
+        WebDriver driver = getDriver();
+
+        try {
+            for (int page = 1; page <= Const.MAX_PAGES; page++) {
+                String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
+                driver.get(bestBuyUrl);
+
+                // Find and process each product on the page
+                List<WebElement> productLinks = driver.findElements(By.cssSelector(".sku-item[data-sku-id] .column-left a[tabindex]"));
+
+                // Collect all product URLs
+                List<String> productInPageHrefs = new ArrayList<>();
+                for (WebElement productLink : productLinks) {
+                    productInPageHrefs.add(productLink.getAttribute("href"));
+                }
+
+                for (String productInPageHref : productInPageHrefs) {
+                    try {
+                        driver.get(productInPageHref);
+
+                        // Sleep randomly for 1-1.5 seconds
+                        try {
+                            Thread.sleep((long) (Math.random() * 500 + 1000));
+                        } catch (InterruptedException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        String productName = driver.findElement(By.cssSelector(".sku-title h1.heading-5")).getText();
+                        String productPriceUSD = driver.findElement(By.cssSelector(".priceView-customer-price span[aria-hidden='true']")).getText();
+                        String productPrice = CurrencyConverter.convertToGBP(productPriceUSD).replaceAll("[^\\d.]", "");
+                        String productImageURL = driver.findElement(By.cssSelector(".primary-button img")).getAttribute("src");
+                        String productModels = "";
+                        String productColour = "";
+
+                        // Click on productSpecifications button
+                        WebElement specificationsButton = driver.findElement(By.cssSelector("button.specifications-drawer-btn[data-testid]"));
+                        if (specificationsButton != null) {
+                            specificationsButton.click();
+
+                            try { Thread.sleep((long) (Math.random() * 1000 + 500)); }
+                            catch (InterruptedException e) { System.out.println(e.getMessage()); }
+
+                            try {
+                                productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
+                                productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
+                            } catch (org.openqa.selenium.NoSuchElementException e) {
+                                productModels = "N/A";
+                                productColour = extractColor(productName);
+                            }
+                        }
+
+                        String[] models = caseDao.getModels(productModels);
+                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        for (String model : models) {
+                            model = caseDao.filtered(model);
+
+                            if (!caseDao.isFilteredAndChecked(model)) {
+                                continue;
+                            }
+                            // Create PhoneCase object and save it to the database
+                            caseDao.saveCase(cases, model);
+                        }
+
+                        ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
+                        for (PhoneCase phoneCase : cases) {
+                            // Create PhoneCase object and save it to the database
+                            caseDao.saveVariant(variants, phoneCase, productColour, productImageURL);
+                        }
+
+                        for (PhoneCaseVariation phoneCaseVariation : variants) {
+                            // Create PhoneCase object and save it to the database
+                            caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productInPageHref);
+                        }
+
+                    } catch (WebDriverException e) {
+                        System.err.println(e.getMessage());
+                        continue;
+                    }
+
+                    driver.navigate().back();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+
+        System.out.println("✔ BestBuyScraper Thread finished scraping.");
+    }
+
+    private String extractColor(String productName) {
+        //get the color from ProductName after the last dash (-) if there is no dash, return the string "N/A"
+        return productName.contains("-") ? productName.substring(productName.lastIndexOf("-") + 1).trim() : "N/A";
+    }
+}

@@ -8,12 +8,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.boot.MetadataSources;
+import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CaseDao {
     private SessionFactory sessionFactory;
+    private WebDriver driver;
 
     public void init() {
         try {

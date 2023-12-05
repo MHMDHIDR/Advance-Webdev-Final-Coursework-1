@@ -3,7 +3,7 @@ package com.pricecomparison.webscraping;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class WebScrapper extends Thread{
+public class WebScrapper extends Thread {
     CaseDao caseDao;
 
     public CaseDao getCaseDao() {

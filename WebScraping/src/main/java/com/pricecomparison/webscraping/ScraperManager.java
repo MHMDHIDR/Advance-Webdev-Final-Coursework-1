@@ -6,7 +6,7 @@ public class ScraperManager {
     ArrayList<WebScrapper> scraperList;
 
     public void startScraping(){
-        for(WebScrapper scraper : scraperList){
+        for(WebScrapper scraper : scraperList) {
             scraper.start();
         }
     }

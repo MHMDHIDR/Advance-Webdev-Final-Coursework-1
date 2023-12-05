@@ -23,7 +23,7 @@ public class ArgosScraper extends WebScrapper {
     public void run() {
         System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
         // Initialize the WebDriver
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = getDriver();
 
         try {
             // if <= Const.MAX_PAGES is less than or equals to 4 give me Const.MAX_PAGES
