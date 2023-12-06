@@ -51,16 +51,23 @@ public class BestBuyScraper extends WebScrapper {
                         String productModels = "";
                         String productColour = "";
 
-                        try { Thread.sleep(2000); }
+                        try { Thread.sleep(1000); }
                         catch (InterruptedException e) { e.printStackTrace(); }
 
+                        // Click on productSpecifications button to get the productModels and productColour
                         jsExecutor.executeScript("document.querySelector('button.specifications-drawer-btn[data-testid]').click()");
+
                         try {
+                            Thread.sleep(2000);
+                            System.out.println("Got model and color from specifications");
                             productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
                             productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
-                        } catch (org.openqa.selenium.NoSuchElementException e) {
-                            productModels = "N/A";
+                        } catch (org.openqa.selenium.NoSuchElementException error) {
+                            System.err.println("--Got the Color from ProductName--");
+                            productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
                             productColour = extractColor(productName);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
 
                         System.out.println("Product URL: " + productInPageHref);
@@ -69,46 +76,31 @@ public class BestBuyScraper extends WebScrapper {
                         System.out.println("productImageURL: " + productImageURL);
                         System.out.println("productModels: " + productModels);
                         System.out.println("productColour: " + productColour);
+                        System.out.println("--------------------------------");
 
-                        // Click on productSpecifications button
-//                        WebElement specificationsButton = driver.findElement(By.cssSelector("button.specifications-drawer-btn[data-testid]"));
-//                        if (specificationsButton != null) {
-//                            specificationsButton.click();
-//
-//                            try { Thread.sleep((long) (Math.random() * 1000 + 500)); }
-//                            catch (InterruptedException e) { System.out.println(e.getMessage()); }
-//
-//                            try {
-//                                productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
-//                                productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
-//                            } catch (org.openqa.selenium.NoSuchElementException e) {
-//                                productModels = "N/A";
-//                                productColour = extractColor(productName);
-//                            }
-//                        }
-//
-//                        String[] models = caseDao.getModels(productModels);
-//                        ArrayList<PhoneCase> cases = new ArrayList<>();
-//                        for (String model : models) {
-//                            model = caseDao.filtered(model);
-//
-//                            if (!caseDao.isFilteredAndChecked(model)) {
-//                                continue;
-//                            }
-//                            // Create PhoneCase object and save it to the database
-//                            caseDao.saveCase(cases, model);
-//                        }
-//
-//                        ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
-//                        for (PhoneCase phoneCase : cases) {
-//                            // Create PhoneCase object and save it to the database
-//                            caseDao.saveVariant(variants, phoneCase, productColour, productImageURL);
-//                        }
-//
-//                        for (PhoneCaseVariation phoneCaseVariation : variants) {
-//                            // Create PhoneCase object and save it to the database
-//                            caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productInPageHref);
-//                        }
+
+                        String[] models = caseDao.getModels(productModels);
+                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        for (String model : models) {
+                            model = caseDao.filtered(model);
+
+                            if (!caseDao.isFilteredAndChecked(model)) {
+                                continue;
+                            }
+                            // Create PhoneCase object and save it to the database
+                            caseDao.saveCase(cases, model);
+                        }
+
+                        ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
+                        for (PhoneCase phoneCase : cases) {
+                            // Create PhoneCase object and save it to the database
+                            caseDao.saveVariant(variants, phoneCase, productColour, productImageURL);
+                        }
+
+                        for (PhoneCaseVariation phoneCaseVariation : variants) {
+                            // Create PhoneCase object and save it to the database
+                            caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productInPageHref);
+                        }
 
                     } catch (WebDriverException e) {
                         System.err.println(e.getMessage());
