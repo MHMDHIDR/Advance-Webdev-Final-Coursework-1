@@ -13,10 +13,11 @@ public class AppConfig {
     public ScraperManager scraperManager() {
         ScraperManager scraperManager = new ScraperManager();
         ArrayList<WebScrapper> scraperList = new ArrayList<>();;
-        //scraperList.add(amazonScraper());
+        scraperList.add(amazonScraper());
         //scraperList.add(argosScraper());
         //scraperList.add(eBayScraper());
-        scraperList.add(bestBuyScraper());
+        //scraperList.add(bestBuyScraper());
+        //scraperList.add(GumtreeScraper());
         scraperManager.setScraperList(scraperList);
         return scraperManager;
     }
@@ -47,6 +48,13 @@ public class AppConfig {
         BestBuyScraper bestBuyScrape = new BestBuyScraper();
         bestBuyScrape.setCaseDao(caseDao());
         return bestBuyScrape;
+    }
+
+    @Bean
+    public GumtreeScraper gumtreeScraper() {
+        GumtreeScraper gumtreeScraper = new GumtreeScraper();
+        gumtreeScraper.setCaseDao(caseDao());
+        return gumtreeScraper;
     }
 
     @Bean

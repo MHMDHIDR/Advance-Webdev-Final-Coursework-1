@@ -45,6 +45,15 @@ public class eBayScraper extends WebScrapper {
                         List<String> phoneModels = extractPhoneModels();
                         List<String> phoneColours = extractPhoneColours();
 
+                        caseDao.printData(
+                            productUrl,
+                            productName,
+                            productPrice,
+                            imageElement,
+                            phoneModels.toString(),
+                            phoneColours.toString()
+                        );
+
                         // Apply model checking
                         String[] models = caseDao.getModels(phoneModels.toString());
                         ArrayList<PhoneCase> cases = new ArrayList<>();

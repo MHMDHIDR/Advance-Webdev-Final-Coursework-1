@@ -70,13 +70,14 @@ public class BestBuyScraper extends WebScrapper {
                             e.printStackTrace();
                         }
 
-                        System.out.println("Product URL: " + productInPageHref);
-                        System.out.println("Product Name: " + productName);
-                        System.out.println("productPrice: " + productPrice);
-                        System.out.println("productImageURL: " + productImageURL);
-                        System.out.println("productModels: " + productModels);
-                        System.out.println("productColour: " + productColour);
-                        System.out.println("--------------------------------");
+                        caseDao.printData(
+                            productInPageHref,
+                            productName,
+                            productPrice,
+                            productImageURL,
+                            productModels,
+                            productColour
+                        );
 
 
                         String[] models = caseDao.getModels(productModels);

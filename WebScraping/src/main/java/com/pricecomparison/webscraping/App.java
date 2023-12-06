@@ -12,5 +12,16 @@ public class App {
         // Retrieve the scrapers from the context
         ScraperManager scraperManager = (ScraperManager) context.getBean("scraperManager");
         scraperManager.startScraping();
+
+        // Retrieve the scrapers from the context
+        //AmazonScraper amazonScraper = context.getBean(AmazonScraper.class);
+        //amazonScraper.start();
+
+//        try {
+//            amazonScraper.join();
+//        } catch (InterruptedException e) {
+//            System.out.println("Thread was interrupted => " + e.getMessage());
+//        }
+
     }
 }

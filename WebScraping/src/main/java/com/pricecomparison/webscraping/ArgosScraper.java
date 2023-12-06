@@ -14,13 +14,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ArgosScraper extends WebScrapper {
     private static final String WEBSITE = "Argos";
 
     @Override
     public void run() {
-        //System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
         // Initialize the WebDriver
         WebDriver driver = getDriver();
 
@@ -66,6 +66,15 @@ public class ArgosScraper extends WebScrapper {
                     int lastDashIndex = productName.lastIndexOf("-");
                     // If there is no dash, set color to "DefaultColor"
                     String productColour = (lastDashIndex != -1) ? productName.substring(lastDashIndex + 1).trim() : "clear";
+
+                    caseDao.printData(
+                        argosUrl,
+                        productName,
+                        productPrice,
+                        productImageURL,
+                        Arrays.toString(ExtractProductModel.model(productName).replace("Apple", "").trim().split(",")),
+                        productColour
+                    );
 
                     String[] models = ExtractProductModel.model(productName).replace("Apple", "").trim().split(",");
                     ArrayList<PhoneCase> cases = new ArrayList<>();

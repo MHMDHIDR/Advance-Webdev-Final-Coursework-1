@@ -95,7 +95,7 @@ public class CaseDao {
         priceComparison.setCaseVariant(phoneCaseVariation);
         priceComparison.setName(productName);
         priceComparison.setWebsite(Website);
-        priceComparison.setPrice(productPrice.substring(1));
+        priceComparison.setPrice(productPrice);
         priceComparison.setUrl(productUrl);
 
         try {
@@ -141,5 +141,15 @@ public class CaseDao {
             models[i] = models[i].trim();
         }
         return models;
+    }
+
+    public void printData(String productUrl, String productName, String productPrice, String productImageURL, String productModels, String productColour) {
+        System.out.println("Product URL: " + productUrl);
+        System.out.println("Product Name: " + productName);
+        System.out.println("productPrice: " + productPrice);
+        System.out.println("productImageURL: " + productImageURL);
+        System.out.println("productModels: " + productModels);
+        System.out.println("productColour: " + productColour);
+        System.out.println("--------------------------------");
     }
 }
