@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +68,7 @@ public class eBayScraper extends WebScrapper {
 
                             for (PhoneCaseVariation phoneCaseVariation: variants) {
                                 // Create PhoneCase object and save it to the database
-                                caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice.substring(1), productUrl);
+                                caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productUrl);
                             }
                         }
                     } catch (WebDriverException e) {

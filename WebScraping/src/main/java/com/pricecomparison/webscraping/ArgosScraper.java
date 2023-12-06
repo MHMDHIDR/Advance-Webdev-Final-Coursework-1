@@ -12,7 +12,6 @@ import org.jsoup.select.Elements;
 //Using Selenium to execute JavaScript
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 
@@ -21,13 +20,14 @@ public class ArgosScraper extends WebScrapper {
 
     @Override
     public void run() {
-        System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/mhmdhidr/chromedriver/chromedriver");
         // Initialize the WebDriver
         WebDriver driver = getDriver();
 
         try {
             // if <= Const.MAX_PAGES is less than or equals to 4 give me Const.MAX_PAGES
-            // otherwise give me 6 argos scraper only has 4 pages
+            // otherwise give me 4 argos scraper only has 4 pages because I don't have
+            // more phone cases after page 4
             for (int page = 1; page <= (Math.min(Const.MAX_PAGES, 4)); page++) {
                 String argosUrl = "https://www.argos.co.uk/search/iphone-case/opt/page:" + page;
                 // if <= Const.MAX_PAGES is less than or equals to 6 give me Const.MAX_PAGES

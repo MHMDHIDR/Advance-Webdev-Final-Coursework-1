@@ -59,9 +59,10 @@ public class CaseDao {
     public void saveVariant(ArrayList<PhoneCaseVariation> variants, PhoneCase phoneCase, String color, String imgUrl) {
         Session session = sessionFactory.openSession();
 
-        List<PhoneCaseVariation> variantList = session.createQuery("FROM PhoneCaseVariation WHERE phoneCase = :MODEL AND color = :COLOR", PhoneCaseVariation.class)
+        List<PhoneCaseVariation> variantList = session.createQuery("FROM PhoneCaseVariation WHERE phoneCase = :MODEL AND color = :COLOR AND imageUrl = :IMAGE_URL", PhoneCaseVariation.class)
                 .setParameter("MODEL", phoneCase)
                 .setParameter("COLOR", color)
+                .setParameter("IMAGE_URL", imgUrl)
                 .getResultList();
         PhoneCaseVariation phoneCaseVariation = new PhoneCaseVariation();
         if (variantList.isEmpty()) {
@@ -97,9 +98,17 @@ public class CaseDao {
         priceComparison.setPrice(productPrice.substring(1));
         priceComparison.setUrl(productUrl);
 
-        session.beginTransaction();
-        session.merge(priceComparison);
-        session.getTransaction().commit();
+        try {
+            session.beginTransaction();
+            session.persist(priceComparison); //try to use merge
+            session.getTransaction().commit();
+        }
+        // org.hibernate.exception.DataException is thrown when the
+        // url is too long to be stored in the database
+        catch (org.hibernate.exception.DataException e) {
+            System.err.println(e.getMessage());
+            session.getTransaction().rollback(); //rollback the transaction
+        }
 
         session.close();
     }
@@ -120,7 +129,9 @@ public class CaseDao {
         return cleanedModel.startsWith("iphone ")
                 && !cleanedModel.contains("-")
                 && !cleanedModel.contains("...")
-                && cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+s|iPhone\\s\\d+c|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini|iPhone\\sx|iPhone\\sxr|iPhone\\sxs|iPhone\\sxs\\smax");
+                //this should match iPhone [number], iPhone [number]s, iPhone [number]c, iPhone [number] Pro, iPhone [number] Plus
+                // iPhone [number] Pro Max, iPhone [number] Mini, iPhone x, iPhone xr, iPhone xs, iPhone xs max, iPhone se
+                && cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+s|iPhone\\s\\d+c|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini|iPhone\\sx|iPhone\\sxr|iPhone\\sxs|iPhone\\sxs\\smax|iPhone\\sse");
     }
 
     public String[] getModels(String productModels) {

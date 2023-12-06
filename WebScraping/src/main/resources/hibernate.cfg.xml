@@ -5,8 +5,8 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pricecomparison_db</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">MohAmed_33454030</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--<property name="hibernate.transaction.jta.platform">org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator</property>-->
 
         <mapping class="com.pricecomparison.PhoneCase" />
         <mapping class="com.pricecomparison.PhoneCaseVariation" />

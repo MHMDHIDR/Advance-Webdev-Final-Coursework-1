@@ -13,9 +13,9 @@ public class AppConfig {
     public ScraperManager scraperManager() {
         ScraperManager scraperManager = new ScraperManager();
         ArrayList<WebScrapper> scraperList = new ArrayList<>();;
-        scraperList.add(amazonScraper());
-        scraperList.add(argosScraper());
-        scraperList.add(eBayScraper());
+        //scraperList.add(amazonScraper());
+        //scraperList.add(argosScraper());
+        //scraperList.add(eBayScraper());
         scraperList.add(bestBuyScraper());
         scraperManager.setScraperList(scraperList);
         return scraperManager;

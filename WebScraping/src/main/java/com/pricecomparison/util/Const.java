@@ -1,5 +1,5 @@
 package com.pricecomparison.util;
 
 public class Const {
-    public static final int MAX_PAGES = 10;
+    public static final int MAX_PAGES = 2;
 }
