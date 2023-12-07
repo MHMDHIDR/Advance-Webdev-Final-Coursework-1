@@ -26,6 +26,6 @@ public class ExtractProductModel {
         }
 
         // If no matches are found, return the original name
-        return models.length() > 0 ? models.toString() : productName.trim();
+        return models.length() > 0 ? models.toString().toLowerCase() : productName.trim().toLowerCase();
     }
 }

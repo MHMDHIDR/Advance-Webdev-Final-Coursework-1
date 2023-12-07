@@ -2,16 +2,16 @@ package com.pricecomparison.webscraping;
 
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.Const;
-import com.pricecomparison.util.CurrencyConverter;
 
 import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BestBuyScraper extends WebScrapper {
-    private static final String WEBSITE = "BestBuy";
+public class BackmarketScraper extends WebScrapper {
+    private static final String WEBSITE = "Backmarket";
 
     @Override
     public void run() {
@@ -20,12 +20,14 @@ public class BestBuyScraper extends WebScrapper {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
         try {
+            // Iterate over multiple pages
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
-                String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
-                driver.get(bestBuyUrl);
+                String url = "https://www.backmarket.co.uk/en-gb/search?q=iphone_case&page=" + page;
+                driver.get(url);
+                acceptCookies(driver);
 
                 // Find and process each product on the page
-                List<WebElement> productLinks = driver.findElements(By.cssSelector(".sku-item[data-sku-id] .column-left a[tabindex]"));
+                List<WebElement> productLinks = driver.findElements(By.cssSelector(".productCard a"));
 
                 // Collect all product URLs
                 List<String> productUrls = new ArrayList<>();
@@ -33,21 +35,24 @@ public class BestBuyScraper extends WebScrapper {
                     productUrls.add(productLink.getAttribute("href"));
                 }
 
+                // Iterate through each product URL
                 for (String productUrl : productUrls) {
                     try {
+                        // Navigate to the product page
                         driver.get(productUrl);
+                        acceptCookies(driver);
 
-                        // Sleep randomly for 1-1.5 seconds
+                        // Sleep randomly for 1-2.5 seconds
                         try {
-                            Thread.sleep((long) (Math.random() * 500 + 1000));
+                            Thread.sleep((long) (Math.random() * 1500 + 1000));
                         } catch (InterruptedException e) {
                             System.out.println(e.getMessage());
                         }
 
-                        String productName = driver.findElement(By.cssSelector(".sku-title h1.heading-5")).getText();
-                        String productPriceUSD = driver.findElement(By.cssSelector(".priceView-customer-price span[aria-hidden='true']")).getText();
-                        String productPrice = CurrencyConverter.convertToGBP(productPriceUSD).replaceAll("[^\\d.]", "");
-                        String productImageURL = driver.findElement(By.cssSelector(".primary-button img")).getAttribute("src");
+                        // Scrape product information
+                        String productName = driver.findElement(By.cssSelector(".justify-between.mb-5.md\\:flex > h1")).getText();
+                        String productPrice = driver.findElement(By.cssSelector("[data-test='normal-price']:not(.text-primary)")).getText().replace("£", "");
+                        String productImageURL = "https://www.backmarket.co.uk"+ driver.findElement(By.cssSelector("li:nth-child(1) > img")).getAttribute("src");
                         String productModels = "";
                         String productColour = "";
 
@@ -55,16 +60,17 @@ public class BestBuyScraper extends WebScrapper {
                         catch (InterruptedException e) { e.printStackTrace(); }
 
                         // Click on productSpecifications button to get the productModels and productColour
-                        jsExecutor.executeScript("document.querySelector('button.specifications-drawer-btn[data-testid]').click()");
+                        jsExecutor.executeScript("document.querySelector('.max-w-full div:nth-child(4) li:nth-child(1) > button').click()");
 
                         try {
                             Thread.sleep(2000);
                             System.out.println("Got model and color from specifications");
-                            productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
-                            productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
+                            productModels = driver.findElement(By.cssSelector("li:nth-child(1) .text-right .whitespace-nowrap")).getText().replace("Pack Case", "");
+                            productModels = !productModels.toLowerCase().startsWith("iphone") ? ExtractProductModel.model(productModels) : productModels;
+                            productColour = driver.findElement(By.cssSelector("li:nth-child(2) .text-right .whitespace-nowrap")).getText();
                         } catch (org.openqa.selenium.NoSuchElementException error) {
                             System.err.println("--Got the Color from ProductName--");
-                            productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
+                            productModels = ExtractProductModel.model(productName);
                             productColour = extractColor(productName);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -78,7 +84,6 @@ public class BestBuyScraper extends WebScrapper {
                             productModels,
                             productColour
                         );
-
 
                         String[] models = caseDao.getModels(productModels);
                         ArrayList<PhoneCase> cases = new ArrayList<>();
@@ -104,11 +109,12 @@ public class BestBuyScraper extends WebScrapper {
                         }
 
                     } catch (WebDriverException e) {
-                        System.err.println(e.getMessage());
-                        continue;
+                        e.printStackTrace();
+                        continue; // Skip the rest of the loop and move to the next iteration
                     }
 
-                    driver.navigate().back();
+                    // Navigate back to the search results page
+                    //driver.navigate().back();
                 }
             }
         } catch (Exception e) {
@@ -117,7 +123,17 @@ public class BestBuyScraper extends WebScrapper {
             driver.quit();
         }
 
-        System.out.println("✔ BestBuyScraper Thread finished scraping.");
+        System.out.println("✔ BackmarketScraper thread finished scraping.");
+    }
+
+    private void acceptCookies(WebDriver driver) {
+        try {
+            WebElement cookiesButton = driver.findElement(By.cssSelector("[data-qa=\"accept-cta\"]"));
+            cookiesButton.click();
+            System.out.println("BackMarket Accept Cookies button clicked.");
+        } catch (Exception e) {
+            System.err.println("BackMarket Accept Cookies button not found. Continuing without clicking it.");
+        }
     }
 
     /**

@@ -144,12 +144,12 @@ public class CaseDao {
     }
 
     public void printData(String productUrl, String productName, String productPrice, String productImageURL, String productModels, String productColour) {
-        System.out.println("Product URL: " + productUrl);
-        System.out.println("Product Name: " + productName);
-        System.out.println("productPrice: " + productPrice);
-        System.out.println("productImageURL: " + productImageURL);
-        System.out.println("productModels: " + productModels);
-        System.out.println("productColour: " + productColour);
-        System.out.println("--------------------------------");
+        System.out.println("Product URL: " + productUrl + "\n" +
+                "Product Name: " + productName + "\n" +
+                "productPrice: " + productPrice + "\n" +
+                "productImageURL: " + productImageURL + "\n" +
+                "productModels: " + productModels + "\n" +
+                "productColour: " + productColour + "\n" +
+        "-------------------------------------------------------------");
     }
 }

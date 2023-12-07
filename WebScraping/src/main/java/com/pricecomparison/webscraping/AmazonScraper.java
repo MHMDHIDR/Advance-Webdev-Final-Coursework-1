@@ -85,7 +85,6 @@ public class AmazonScraper extends WebScrapper {
                             caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productUrl);
                         }
                     } catch (WebDriverException e) {
-                        // Handle WebDriver exception, e.g., log the error
                         System.err.println(e.getMessage());
                         // Navigate back to the search results page
                         continue;

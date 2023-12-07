@@ -13,11 +13,11 @@ public class AppConfig {
     public ScraperManager scraperManager() {
         ScraperManager scraperManager = new ScraperManager();
         ArrayList<WebScrapper> scraperList = new ArrayList<>();;
-        scraperList.add(amazonScraper());
+        //scraperList.add(amazonScraper());
         //scraperList.add(argosScraper());
         //scraperList.add(eBayScraper());
-        //scraperList.add(bestBuyScraper());
-        //scraperList.add(GumtreeScraper());
+        scraperList.add(bestBuyScraper());
+        //scraperList.add(backmarketScraper());
         scraperManager.setScraperList(scraperList);
         return scraperManager;
     }
@@ -38,23 +38,23 @@ public class AppConfig {
 
     @Bean
     public eBayScraper eBayScraper() {
-        eBayScraper bestBuyScrape = new eBayScraper();
-        bestBuyScrape.setCaseDao(caseDao());
-        return bestBuyScrape;
+        eBayScraper bestBuyScraper = new eBayScraper();
+        bestBuyScraper.setCaseDao(caseDao());
+        return bestBuyScraper;
     }
 
     @Bean
     public BestBuyScraper bestBuyScraper() {
-        BestBuyScraper bestBuyScrape = new BestBuyScraper();
-        bestBuyScrape.setCaseDao(caseDao());
-        return bestBuyScrape;
+        BestBuyScraper bestBuyScraper = new BestBuyScraper();
+        bestBuyScraper.setCaseDao(caseDao());
+        return bestBuyScraper;
     }
 
     @Bean
-    public GumtreeScraper gumtreeScraper() {
-        GumtreeScraper gumtreeScraper = new GumtreeScraper();
-        gumtreeScraper.setCaseDao(caseDao());
-        return gumtreeScraper;
+    public BackmarketScraper backmarketScraper() {
+        BackmarketScraper backmarketScraper = new BackmarketScraper();
+        backmarketScraper.setCaseDao(caseDao());
+        return backmarketScraper;
     }
 
     @Bean
