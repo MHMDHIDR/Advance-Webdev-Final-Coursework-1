@@ -41,7 +41,7 @@
 
                 <div class="case__details">
                     <h2>
-                        <strong>Models: </strong>
+                        <strong>Model: </strong>
                         <span>{{ caseDetails.phone_model }}</span>
                     </h2>
                     <div class="case__details--name">
@@ -62,75 +62,26 @@
             <div class="divider"></div>
 
             <!-- Similar iPhone Cases -->
-            <section class="similar-cases"> <!-- v-if="similarCases.length" -->
+            <section class="similar-cases" v-if="similarCases.length">
                 <div class="similar-products">
-                    <h2>View Prices</h2>
-                    <div class="similar-product" >
+                    <h2>Prices for the same model</h2>
+                    <div class="similar-product" v-for="similarCase in similarCases" :key="similarCase.id">
+                        <div class="similar-product__website">
+                            <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.svg' " :alt="similarCase.website" :title="similarCase.website" width="auto" height="50" />
+                        </div>
                         <div class="similar-product__image">
-                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
+                            <img :src="similarCase.image_url" :alt="similarCase.name" width="auto" height="50" />
                         </div>
                         <div class="similar-product__info">
-                            <a class="similar-product__info--name" href="/details.html?id=1">
-                                <strong>CASE NAME</strong>
+                            <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
+                                <strong>{{ similarCase.name.split('Case')[0] }} Case</strong>
                             </a>
                             <div class="similar-product__info--buy">
-                                <span class="similar-product__info--price">£10</span>
-                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
+                                <span class="similar-product__info--price">£{{ similarCase.price }}</span>
+                                <a class="similar-product__info--button case__button" :href="similarCase.url" target="_blank">Buy!</a>
                             </div>
                         </div>
                     </div>
-                    <div class="similar-product" >
-                        <div class="similar-product__image">
-                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
-                        </div>
-                        <div class="similar-product__info">
-                            <a class="similar-product__info--name" href="/details.html?id=1">
-                                <strong>CASE NAME</strong>
-                            </a>
-                            <div class="similar-product__info--buy">
-                                <span class="similar-product__info--price">£10</span>
-                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="similar-product" >
-                        <div class="similar-product__image">
-                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
-                        </div>
-                        <div class="similar-product__info">
-                            <a class="similar-product__info--name" href="/details.html?id=1">
-                                <strong>CASE NAME</strong>
-                            </a>
-                            <div class="similar-product__info--buy">
-                                <span class="similar-product__info--price">£10</span>
-                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="similar-product" >
-                        <div class="similar-product__image">
-                            <img src="https://picsum.photos/120/200" alt="CASE NAME" width="50" height="50" />
-                        </div>
-                        <div class="similar-product__info">
-                            <a class="similar-product__info--name" href="/details.html?id=1">
-                                <strong>CASE NAME</strong>
-                            </a>
-                            <div class="similar-product__info--buy">
-                                <span class="similar-product__info--price">£10</span>
-                                <a class="similar-product__info--button case__button" href="/details.html?id=1">Buy!</a>
-                            </div>
-                        </div>
-                    </div>
-<!--                    <a v-for="similarCase in similarCases" :key="similarCase.id" class="similar-product" :href="'/details.html?id=' + similarCase.id" :title="similarCase.name">-->
-<!--                        <div class="similar-product__image">-->
-<!--                            <img :src="similarCase.image_url" :alt="similarCase.name" width="120" height="200" />-->
-<!--                        </div>-->
-<!--                        <div class="similar-product__info">-->
-<!--                            <h4 class="similar-product__info&#45;&#45;name">{{ similarCase.name.substring(0, MAX_NAME_LENGTH) + '...' }h4>-->
-<!--                            <span class="similar-product__info&#45;&#45;price">£{{ similarCase.price }}</span>-->
-<!--                            <button class="similar-product__info&#45;&#45;details">Show Details</button>-->
-<!--                        </div>-->
-<!--                    </a>-->
                 </div>
             </section>
         </main>
@@ -150,23 +101,25 @@
         },
         methods: {
             loadCaseDetails: function () {
-                const caseId = new URLSearchParams(window.location.search)
-                //fetch using case ID
-                fetch(`http://localhost:3001/case/${caseId.get('id')}`)
+                const caseId = new URLSearchParams(window.location.search).get('id');
+                // fetch using case ID
+                fetch(`http://localhost:3001/case/${caseId}`)
                     .then((response) => response.json())
                     .then((dataFromJSON) => {
                         this.caseDetails = dataFromJSON;
-                        document.title = dataFromJSON.name || 'iPhone Cases Comparison'
-                        this.loadSimilarCases(this.extractPhoneModel(dataFromJSON.phone_model))
+                        document.title = dataFromJSON.name || 'iPhone Cases Comparison';
+                        this.loadSimilarCases(caseId);
                     })
-                    .catch((error) => console.error('Error fetching case details:', error))
+                    .catch((error) => console.error('Error fetching case details:', error));
             },
 
-            loadSimilarCases: function (phoneModel) {
-                //fetch similar cases using phone model
-                fetch(`http://localhost:3001/case/similar/${encodeURIComponent(phoneModel)}`)
+            loadSimilarCases: function (caseId) {
+                // fetch similar cases using the new endpoint with caseId
+                fetch(`http://localhost:3001/case/similar/${caseId}`)
                     .then((response) => response.json())
-                    .then((dataFromJSON) => (this.similarCases = dataFromJSON))
+                    .then((dataFromJSON) => {
+                        return this.similarCases = dataFromJSON
+                    })
                     .catch((error) => console.error('Error fetching similar cases:', error));
             },
 

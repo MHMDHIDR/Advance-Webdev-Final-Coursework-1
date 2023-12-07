@@ -52,7 +52,7 @@ public class BackmarketScraper extends WebScrapper {
                         // Scrape product information
                         String productName = driver.findElement(By.cssSelector(".justify-between.mb-5.md\\:flex > h1")).getText();
                         String productPrice = driver.findElement(By.cssSelector("[data-test='normal-price']:not(.text-primary)")).getText().replace("£", "");
-                        String productImageURL = "https://www.backmarket.co.uk"+ driver.findElement(By.cssSelector("li:nth-child(1) > img")).getAttribute("src");
+                        String productImageURL = driver.findElement(By.cssSelector("li:nth-child(1) > img")).getAttribute("src");
                         String productModels = "";
                         String productColour = "";
 
@@ -67,11 +67,13 @@ public class BackmarketScraper extends WebScrapper {
                             System.out.println("Got model and color from specifications");
                             productModels = driver.findElement(By.cssSelector("li:nth-child(1) .text-right .whitespace-nowrap")).getText().replace("Pack Case", "");
                             productModels = !productModels.toLowerCase().startsWith("iphone") ? ExtractProductModel.model(productModels) : productModels;
+
                             productColour = driver.findElement(By.cssSelector("li:nth-child(2) .text-right .whitespace-nowrap")).getText();
+                            productColour = productColour.equals("Transparent") ? "Clear" : productColour;
                         } catch (org.openqa.selenium.NoSuchElementException error) {
                             System.err.println("--Got the Color from ProductName--");
                             productModels = ExtractProductModel.model(productName);
-                            productColour = extractColor(productName);
+                            productColour = extractColor(productName).equals("Transparent") ? "Clear" : extractColor(productName);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

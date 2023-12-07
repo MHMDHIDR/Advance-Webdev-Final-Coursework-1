@@ -1,6 +1,6 @@
 import pool from '../../utils/db.js'
 export const getCaseById =  async (req, res) => {
-    const caseId = req.params.id
+    const { id: caseId } = req.params
 
     try {
         // Your query to get details of a specific case by ID

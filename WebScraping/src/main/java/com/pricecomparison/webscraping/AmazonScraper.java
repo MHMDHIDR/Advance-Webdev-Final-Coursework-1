@@ -49,6 +49,7 @@ public class AmazonScraper extends WebScrapper {
                         String productName = driver.findElement(By.cssSelector("span#productTitle.a-size-large.product-title-word-break")).getText();
                         String productPrice = ExtractProductPrice.price(driver).replace("£", "");
                         String productColour = driver.findElement(By.cssSelector("table tbody tr.po-color td span.po-break-word")).getText();
+                        productColour = productColour.equals("Transparent") ? "Clear" : productColour;
                         String productModels = driver.findElement(By.cssSelector(".po-compatible_phone_models td .po-break-word")).getText();
                         String productImageURL = driver.findElement(By.cssSelector("span.a-declarative div img#landingImage.a-dynamic-image")).getAttribute("src");
 

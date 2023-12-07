@@ -7,6 +7,7 @@
   --dark-blue: #0069D9;
   --darker-blue: #004d9f;
   --primary-green: #279b1f;
+  --shadow-primary: rgba(32, 76, 136, 0.15);
 }
 
 html {
@@ -313,10 +314,24 @@ main {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
-  width: 60rem;
+  width: clamp(40rem, 80vw, 60rem);
+  box-shadow: 0 2px 6px 0 var(--shadow-primary);
+  border-radius: 0.75rem;
+  transition: box-shadow 200ms ease;
 }
 
-.similar-product__image img {
+.similar-product:hover {
+  box-shadow: 0 4px 8px 0 var(--shadow-primary),0 0 1px 0 var(--shadow-primary);
+}
+
+.similar-product__image,
+.similar-product__website {
+  width: 5rem;
+  border-radius: .75rem;
+}
+
+.similar-product__website img {
+  width: auto;
   border-radius: .75rem;
 }
 
