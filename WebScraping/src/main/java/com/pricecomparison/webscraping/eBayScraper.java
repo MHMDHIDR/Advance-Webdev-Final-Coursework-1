@@ -40,7 +40,7 @@ public class eBayScraper extends WebScrapper {
 
                         // Scrape product information
                         String productName = driver.findElement(By.cssSelector("h1.x-item-title__mainTitle .ux-textspans--BOLD")).getText();
-                        String productPrice = driver.findElement(By.cssSelector(".x-bin-price__content div span.ux-textspans")).getText().replace("each", "");
+                        String productPrice = driver.findElement(By.cssSelector(".x-bin-price__content div span.ux-textspans")).getText().replace("each", "").replace("£", "");
                         String imageElement = driver.findElement(By.cssSelector("div[data-idx='0'] img")).getAttribute("src");
                         List<String> phoneModels = extractPhoneModels();
                         List<String> phoneColours = extractPhoneColours();

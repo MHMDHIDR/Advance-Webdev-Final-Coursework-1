@@ -86,12 +86,7 @@ public class AmazonScraper extends WebScrapper {
                         }
                     } catch (WebDriverException e) {
                         System.err.println(e.getMessage());
-                        // Navigate back to the search results page
-                        continue;
                     }
-
-                    // Navigate back to the search results page
-                    driver.navigate().back();
                 }
             }
         } catch (Exception e) {
