@@ -10,6 +10,11 @@ import org.openqa.selenium.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * BestBuyScraper class extends WebScrapper class
+ * and implements the run method.
+ * It scrapes the BestBuy website for phone cases.
+ */
 public class BestBuyScraper extends WebScrapper {
     private static final String WEBSITE = "BestBuy";
 

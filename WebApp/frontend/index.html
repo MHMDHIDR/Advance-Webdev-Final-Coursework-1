@@ -87,6 +87,10 @@
         totalPages: 1,
       },
       methods: {
+        /**
+         * Save the searchQuery in sessionStorage
+         * Then Redirect to search.html to perform search
+         */
         redirectSearch: function () {
           //Save in sessionStorage
           sessionStorage.setItem('searchQuery', this.searchQuery);
@@ -94,11 +98,11 @@
           window.location.href = './search.html';
         },
 
+        /**
+         * Load cases and limit per page based on the query parameter
+         * Returns an array of cases then sort them randomly
+         */
         loadProducts: function () {
-          /**
-           * Load cases and limit per page based on the query parameter
-           * Returns an array of cases then sort them randomly
-           */
           fetch(`http://localhost:4000/case/${getPageNumber()}`)
             .then(response => response.json())
             .then(dataFromJSON => {

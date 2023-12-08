@@ -8,15 +8,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.boot.MetadataSources;
-import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CaseDao {
     private SessionFactory sessionFactory;
-    private WebDriver driver;
 
+    /**
+     * Initialize the SessionFactory instance.
+     */
     public void init() {
         try {
             StandardServiceRegistryBuilder standardServiceRegistryBuilder = new StandardServiceRegistryBuilder();
@@ -35,6 +36,12 @@ public class CaseDao {
         }
     }
 
+    /**
+     * saveCase saves the phone case model to the cases_variant table in the pricecomparison_db databases.
+     * @param cases ArrayList of PhoneCase objects to be saved to the database
+     * @param model String of the phone model
+     * uses my custom method filtered() to remove unwanted characters from the model
+     */
     public void saveCase(ArrayList<PhoneCase> cases, String model) {
         Session session = sessionFactory.openSession();
         String filteredModel = filtered(model).toLowerCase();
@@ -56,6 +63,13 @@ public class CaseDao {
         session.close();
     }
 
+    /**
+     * saveVariant saves the phone case variant to the cases_variant table in the pricecomparison_db database.
+     * @param variants ArrayList of PhoneCaseVariation objects to be saved to the database
+     * @param phoneCase PhoneCase object to be saved to the database
+     * @param color String of the phone case color
+     * @param imgUrl String of the phone case image url
+     */
     public void saveVariant(ArrayList<PhoneCaseVariation> variants, PhoneCase phoneCase, String color, String imgUrl) {
         Session session = sessionFactory.openSession();
 
@@ -81,6 +95,14 @@ public class CaseDao {
         session.close();
     }
 
+    /**
+     * savePrice saves the phone case price to the price_comparison table in the pricecomparison_db database.
+     * @param phoneCaseVariation PhoneCaseVariation object to be saved to the database
+     * @param Website String of the website name
+     * @param productName String of the product name
+     * @param productPrice String of the product price
+     * @param productUrl String of the product url
+     */
     public void savePrice(PhoneCaseVariation phoneCaseVariation, String Website, String productName, String productPrice, String productUrl) {
         Session session = sessionFactory.openSession();
 
@@ -113,7 +135,12 @@ public class CaseDao {
         session.close();
     }
 
-    //filter models from unwanted characters
+    /**
+     * filtered() removes unwanted characters from the model
+     * @param filteredModel String of the model to be filtered
+     * uses regex to remove unwanted characters
+     * @return String of the filtered model
+     */
     public String filtered(String filteredModel) {
         return filteredModel
                 .replaceAll("\\[|For Apple|For|Apple|]", "")
@@ -123,7 +150,12 @@ public class CaseDao {
                 .trim();
     }
 
-    //check if model is filtered and checked
+    /**
+     * isFilteredAndChecked() checks if the model is filtered and checked
+     * @param cleanedModel String of the model to be checked
+     * uses regex to check if the model is filtered and checked
+     * @return boolean true if the model is filtered and checked, false otherwise
+     */
     public boolean isFilteredAndChecked(String cleanedModel) {
         cleanedModel = cleanedModel.toLowerCase();
         return cleanedModel.startsWith("iphone ")
@@ -134,6 +166,12 @@ public class CaseDao {
                 && cleanedModel.matches("(?i)iPhone\\s\\d+|iPhone\\s\\d+s|iPhone\\s\\d+c|iPhone\\s\\d+\\sPro|iPhone\\s\\d+\\sPlus|iPhone\\s\\d+\\sPro\\sMax|iPhone\\s\\d+\\sMini|iPhone\\sx|iPhone\\sxr|iPhone\\sxs|iPhone\\sxs\\smax|iPhone\\sse");
     }
 
+    /**
+     * getModels() splits the productModels string into an array of models
+     * @param productModels String of the product models
+     * uses regex to split the productModels string
+     * @return String[] of the models
+     */
     public String[] getModels(String productModels) {
         String[] models = productModels.split("[,/]");
         // Trim each model
@@ -143,13 +181,23 @@ public class CaseDao {
         return models;
     }
 
+    /**
+     * printData() prints the product information below:
+     * @param productUrl String of the product url
+     * @param productName String of the product name
+     * @param productPrice String of the product price
+     * @param productImageURL String of the product image url
+     * @param productModels String of the product models
+     * @param productColour String of the product colour
+     */
     public void printData(String productUrl, String productName, String productPrice, String productImageURL, String productModels, String productColour) {
-        System.out.println("Product URL: " + productUrl + "\n" +
-                "Product Name: " + productName + "\n" +
-                "productPrice: " + productPrice + "\n" +
-                "productImageURL: " + productImageURL + "\n" +
-                "productModels: " + productModels + "\n" +
-                "productColour: " + productColour + "\n" +
+        System.out.println(
+            "Product URL: " + productUrl + "\n" +
+            "Product Name: " + productName + "\n" +
+            "productPrice: " + productPrice + "\n" +
+            "productImageURL: " + productImageURL + "\n" +
+            "productModels: " + productModels + "\n" +
+            "productColour: " + productColour + "\n" +
         "-------------------------------------------------------------");
     }
 }

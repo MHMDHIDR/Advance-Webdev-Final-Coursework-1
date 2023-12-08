@@ -79,6 +79,11 @@ public class AppConfig {
         return backmarketScraper;
     }
 
+    /**
+     * Method is used to create a CaseDao bean that
+     * will be used to save the scraped data to the database.
+     * it also initializes the session factory.
+     * */
     @Bean
     public CaseDao caseDao() {
         CaseDao caseDao = new CaseDao();

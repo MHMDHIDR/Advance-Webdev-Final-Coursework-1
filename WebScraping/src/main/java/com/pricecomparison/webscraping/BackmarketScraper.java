@@ -10,6 +10,11 @@ import org.openqa.selenium.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * BackmarketScraper class extends WebScrapper class
+ * and implements the run method.
+ * It scrapes the Backmarket website for phone cases.
+ */
 public class BackmarketScraper extends WebScrapper {
     private static final String WEBSITE = "Backmarket";
 
@@ -128,6 +133,11 @@ public class BackmarketScraper extends WebScrapper {
         System.out.println("✔ BackmarketScraper thread finished scraping.");
     }
 
+    /**
+     * Accept cookies is a method to click on accept cookies
+     * button if the button is found, then print a message
+     * @param driver the WebDriver
+     */
     private void acceptCookies(WebDriver driver) {
         try {
             WebElement cookiesButton = driver.findElement(By.cssSelector("[data-qa=\"accept-cta\"]"));

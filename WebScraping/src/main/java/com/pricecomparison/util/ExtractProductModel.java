@@ -3,7 +3,16 @@ package com.pricecomparison.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Extracts the iPhone model(s) class
+ */
 public class ExtractProductModel {
+    /**
+     * Extracts the iPhone model(s) from the product name
+     * @param productName - the name of the product
+     * matches it with the regex pattern
+     * and then returns the matched model(s)
+     */
     public static String model(String productName) {
         // Use a regex pattern to match the iPhone model(s) in the product name
         Pattern pattern = Pattern.compile("(iPhone\\s*\\d+\\s*(?:Pro\\s*Max|Pro|Mini)?(?:\\s*[XRS]+(?:\\s*Pro\\s*Max|\\s*Pro|\\s*Mini)?)?(?:\\s*S)?)", Pattern.CASE_INSENSITIVE);

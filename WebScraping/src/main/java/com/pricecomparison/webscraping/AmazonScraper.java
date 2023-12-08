@@ -13,6 +13,11 @@ import org.openqa.selenium.WebDriverException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * AmazonScraper class extends WebScrapper class
+ * and implements the run method.
+ * It scrapes the Amazon website for phone cases.
+ */
 public class AmazonScraper extends WebScrapper {
     private static final String WEBSITE = "Amazon";
 
@@ -22,7 +27,9 @@ public class AmazonScraper extends WebScrapper {
         WebDriver driver = getDriver();
 
         try {
-            // Iterate over multiple pages
+            /* Iterate through each page of the search results
+             * and scrape the product information
+             */
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
                 driver.get(url);

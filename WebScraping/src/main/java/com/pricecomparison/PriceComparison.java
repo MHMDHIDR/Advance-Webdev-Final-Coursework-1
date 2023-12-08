@@ -2,6 +2,14 @@ package com.pricecomparison;
 
 import jakarta.persistence.*;
 
+/**
+ * PriceComparison
+ * This class is used to store the price comparison data for a phone case variation.
+ * I used the @OneToOne annotation to create a one-to-one relationship between the
+ * caseVariant field and the PhoneCaseVariation class.
+ * I used the @JoinColumn annotation to specify `case_variant_id` as the foreign key
+ * column name in the price comparison table.
+ */
 @Entity
 @Table(name = "comparison")
 public class PriceComparison {

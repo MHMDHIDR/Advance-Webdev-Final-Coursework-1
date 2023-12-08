@@ -2,6 +2,15 @@ package com.pricecomparison;
 
 import jakarta.persistence.*;
 
+/**
+ * This class represents a variation of a phone case. For example, a phone case
+ * may come in multiple colors, so each color would be a variation of the phone
+ * case.
+ * I used the @OneToOne annotation to create a one-to-one relationship between
+ * this class and the PriceComparison class. This means that each phone case
+ * variation has one price comparison, and each price comparison has one phone
+ * case variation.
+ */
 @Entity
 @Table(name = "cases_variants")
 public class PhoneCaseVariation {

@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * eBayScraper class extends WebScrapper class
+ * and implements the run method.
+ * It scrapes the eBay website for phone cases.
+ */
 public class eBayScraper extends WebScrapper {
     private static final String WEBSITE = "eBay";
 
@@ -105,6 +110,10 @@ public class eBayScraper extends WebScrapper {
     }
 
 
+    /**
+     * Extracts the phone models from the given selectors
+     * @return @extractPhoneInfo() that returns The phone models List
+     */
     private List<String> extractPhoneModels() {
         List<String> modelsSelectors = Arrays.asList(
                 ".x-msku__select-box[selectboxlabel='iPhone Model']",
@@ -116,6 +125,10 @@ public class eBayScraper extends WebScrapper {
         return extractPhoneInfo(modelsSelectors, "N/A");
     }
 
+    /**
+     * Extracts the phone colours from the given selectors
+     * @return The phone colours List
+     */
     private List<String> extractPhoneColours() {
         List<String> colorSelectors = Arrays.asList(
                 ".x-msku__select-box[selectboxlabel='Case Colour']",
@@ -124,6 +137,12 @@ public class eBayScraper extends WebScrapper {
         return extractPhoneInfo(colorSelectors, "Clear");
     }
 
+    /**
+     * Extracts the phone information from the given selectors
+     * @param selectors The selectors to use to extract the phone information
+     * @param defaultInfo The default information to return if none of the selectors match
+     * @return The phone information List
+     */
     private List<String> extractPhoneInfo(List<String> selectors, String defaultInfo) {
         for (String selector : selectors) {
             try {

@@ -9,13 +9,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-//Using Selenium to execute JavaScript
+// Import Selenium and using it to execute JavaScript
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * ArgosScraper class extends WebScrapper class
+ * and implements the run method.
+ * It scrapes the Argos website for phone cases.
+ */
 public class ArgosScraper extends WebScrapper {
     private static final String WEBSITE = "Argos";
 

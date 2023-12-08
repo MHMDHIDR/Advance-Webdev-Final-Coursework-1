@@ -3,6 +3,12 @@ package com.pricecomparison;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ * The PhoneCase class represents a phone case model.
+ * It contains a list of PhoneCaseVariation objects.
+ * Each PhoneCaseVariation object contains a list of PriceComparison objects.
+ * It is a one-to-many relationship between PhoneCase and PhoneCaseVariation.
+ */
 @Entity
 @Table(name = "`case`")
 public class PhoneCase {

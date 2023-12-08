@@ -3,7 +3,15 @@ package com.pricecomparison.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Utility class to convert currency
+ */
 public class CurrencyConverter {
+    /**
+     * Convert a price from USD to GBP
+     * @param productPriceUSD The price to convert
+     * @return The converted price
+     */
     public static String convertToGBP(String productPriceUSD) {
         // Convert to GBP
         double gbpRate = 0.79;
@@ -16,5 +24,4 @@ public class CurrencyConverter {
 
         return String.valueOf(convertedPriceGBP);
     }
-
 }

@@ -5,6 +5,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 
 public class App {
+    /**
+     * Main method to start scrapper manager
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         // Create the Spring context
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);

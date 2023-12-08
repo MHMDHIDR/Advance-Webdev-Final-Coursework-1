@@ -9,9 +9,18 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * HibernateUtil class is used to create a session factory for hibernate
+ * and to create a data source for the database
+ */
 @Configuration
 public class HibernateUtil {
 
+    /**
+     * sessionFactory method is used to create a session factory for hibernate
+     * @param dataSource is the data source for the database
+     * @return the session factory
+     */
     @Bean
     public SessionFactory sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBuilder sessionFactoryBuilder = new LocalSessionFactoryBuilder(dataSource);
