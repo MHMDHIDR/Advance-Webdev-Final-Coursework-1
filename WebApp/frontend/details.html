@@ -76,13 +76,13 @@
                                     <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.png' "
                                         :alt="similarCase.website" :title="similarCase.website" width="auto"
                                         height="50" />
+                                    <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
+                                        <strong>
+                                            {{ similarCase.name.split('iPhone')[0] }}
+                                            {{ extractPhoneModel(similarCase.phone_model) }}
+                                        </strong>
+                                    </a>
                                 </div>
-                                <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
-                                    <strong>
-                                        {{ similarCase.name.split('iPhone')[0] }}
-                                        {{ extractPhoneModel(similarCase.phone_model) }}
-                                    </strong>
-                                </a>
                                 <div class="similar-product__info--buy">
                                     <span class="similar-product__info--price">£{{ similarCase.price }}</span>
                                     <a class="similar-product__info--button case__button" :href="similarCase.url"
@@ -111,7 +111,7 @@
                 loadCaseDetails: function () {
                     const caseId = new URLSearchParams(window.location.search).get('id');
                     // fetch using case ID
-                    fetch(`http://localhost:4000/case/${caseId}`)
+                    fetch(`http://localhost:4000/case/byId/${caseId}`)
                         .then((response) => response.json())
                         .then((dataFromJSON) => {
                             this.caseDetails = dataFromJSON;

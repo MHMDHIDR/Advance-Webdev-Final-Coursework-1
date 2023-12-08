@@ -52,18 +52,40 @@
               </div>
             </a>
           </div>
+
+          <div class="pagination">
+            <a href="search.html">First</a>
+            <a v-if="currentPage > 1" :href="'search.html?page=' + (currentPage - 1)">Previous</a>
+
+            <!--
+              Display the search pages dynamically using the displayPages computed property
+            -->
+            <template v-for="page in displayPages">
+              <span v-if="page === '...'">{{ page }}</span>
+              <a v-else :key="page" :href="'search.html?page=' + page" :class="{ 'current': page === currentPage }">
+                {{ page }}
+              </a>
+            </template>
+
+            <a v-if="currentPage < totalPages" :href="'search.html?page=' + (currentPage + 1)">Next</a>
+            <a :href="'search.html?page=' + totalPages">Last</a>
+          </div>
         </div>
       </main>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { getPageNumber } from './utils/index.js';
+
     new Vue({
       el: '#app',
       data: {
         MAX_NAME_LENGTH: 60,
         searchQuery: '',
-        searchResults: []
+        searchResults: [],
+        currentPage: 1,
+        totalPages: 1,
       },
       methods: {
         // Retrieve search query from sessionStorage
@@ -77,7 +99,7 @@
         // Fetch search results based on the search query
         fetchSearchResults: function () {
           const encodedSearchQuery = encodeURIComponent(this.searchQuery)
-          fetch(`http://localhost:4000/search?query=${encodedSearchQuery}`)
+          fetch(`http://localhost:4000/search/${getPageNumber()}?query=${encodedSearchQuery}`)
             .then(response => response.json())
             .then(dataFromJSON => this.searchResults = dataFromJSON)
             .catch(error => console.error('Error fetching search results:', error))
@@ -91,10 +113,55 @@
           this.fetchSearchResults()
         }
       },
+      computed: {
+        /**
+         * method to generate an array of page numbers in the pagination row
+         * Returns an array of page numbers based on the totalPages
+         */
+        pages: function () {
+          return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        },
+        /**
+       * Calculate the pages to display dynamically
+       */
+        displayPages: function () {
+          const range = 5; // Number of pages to display at a time
+          const pages = [];
+          const start = Math.max(1, this.currentPage - Math.floor(range / 2));
+          const end = Math.min(start + range - 1, this.totalPages);
+
+          if (start > 1) {
+            pages.push(1);
+            if (start > 2) {
+              pages.push('...'); // Display ellipsis if there are hidden pages
+            }
+          }
+
+          for (let i = start; i <= end; i++) {
+            pages.push(i);
+          }
+
+          if (end < this.totalPages) {
+            // If there are more pages to display, display ellipsis
+            if (end < this.totalPages - 1) {
+              pages.push('...');
+            }
+            // Else I'm Displaying the last page number
+            pages.push(this.totalPages);
+          }
+
+          return pages;
+        }
+      },
       created() {
         // Retrieve search query and fetch search results on page load
         this.retrieveSearchQuery()
         this.fetchSearchResults()
+        // Set currentPage and totalPages based on the query parameter (if present)
+        const queryParams = new URLSearchParams(window.location.search)
+        const page = parseInt(queryParams.get('page')) || 1
+        this.currentPage = page
+        this.totalPages = 10
       }
     });
   </script>

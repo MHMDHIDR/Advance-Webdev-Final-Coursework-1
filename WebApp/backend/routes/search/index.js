@@ -1,11 +1,9 @@
-import express from 'express';
-import { searchResults } from './searchResults.js';
+import express from 'express'
+import { searchResults } from './searchResults.js'
 
-const router = express.Router();
+const router = express.Router()
 
 // Use the route handlers with router.get
-router.get('/', searchResults);
+router.get('/:page?', searchResults)
 
-export default router;
-
-
+export default router

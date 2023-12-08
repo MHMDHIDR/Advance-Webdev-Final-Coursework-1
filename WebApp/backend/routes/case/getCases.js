@@ -1,10 +1,22 @@
 import pool from '../../utils/db.js'
 import { ITEMS_PER_PAGE } from '../../utils/const.js'
+
+/**
+ *
+ * @desc    Get cases variants for comparison
+ * @route   GET /api/case/:page
+ * @access  Public
+ * @param {*} req
+ * @param {*} res
+ * @return  {Object} { rows }
+ * @return  {Object} { error }
+ */
 export const getCases = async (req, res) => {
   try {
     const page = parseInt(req.params.page) || 1
     const offset = (page - 1) * ITEMS_PER_PAGE
 
+    //get all cases variants
     const query = `
         SELECT cv.*, co.name, co.price
         FROM cases_variants AS cv

@@ -52,11 +52,14 @@
             </div>
           </a>
         </div>
+
         <div class="pagination">
           <a href="index.html">First</a>
           <a v-if="currentPage > 1" :href="'index.html?page=' + (currentPage - 1)">Previous</a>
 
-          <!-- Display the pages dynamically with ellipsis -->
+          <!--
+            Display the pages dynamically using the displayPages computed property
+          -->
           <template v-for="page in displayPages">
             <span v-if="page === '...'">{{ page }}</span>
             <a v-else :key="page" :href="'index.html?page=' + page" :class="{ 'current': page === currentPage }">
@@ -71,7 +74,9 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { getPageNumber } from './utils/index.js';
+
     new Vue({
       el: '#app',
       data: {
@@ -89,21 +94,15 @@
           window.location.href = './search.html';
         },
 
-        getPageNumber: function () {
-          //Get page number from query parameter
-          const queryParams = new URLSearchParams(window.location.search)
-          const page = parseInt(queryParams.get('page')) || 1
-          return page;
-        },
-
         loadProducts: function () {
           /**
            * Load cases and limit per page based on the query parameter
+           * Returns an array of cases then sort them randomly
            */
-          fetch(`http://localhost:4000/case/${this.getPageNumber()}`)
+          fetch(`http://localhost:4000/case/${getPageNumber()}`)
             .then(response => response.json())
             .then(dataFromJSON => {
-              this.products = dataFromJSON//.sort(() => 0.5 - Math.random())
+              this.products = dataFromJSON.sort(() => 0.5 - Math.random())
             })
         }
       },
@@ -116,8 +115,8 @@
           return Array.from({ length: this.totalPages }, (_, i) => i + 1);
         },
         /**
-     * Calculate the pages to display dynamically
-     */
+       * Calculate the pages to display dynamically
+       */
         displayPages: function () {
           const range = 5; // Number of pages to display at a time
           const pages = [];
