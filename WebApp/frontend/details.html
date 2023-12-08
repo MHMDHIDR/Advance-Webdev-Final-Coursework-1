@@ -12,138 +12,143 @@
 </head>
 
 <body>
-<div id="app">
-    <div class="container">
-        <header class="header">
-            <a href="./">
-                <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
-            </a>
+    <div id="app">
+        <div class="container">
+            <header class="header">
+                <a href="./">
+                    <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170"
+                        height="64" />
+                </a>
 
-            <form class="search" @submit.prevent="redirectSearch">
-                <label>
-                    <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
-                </label>
-                <button type="submit">Search</button>
-            </form>
-        </header>
+                <form class="search" @submit.prevent="redirectSearch">
+                    <label>
+                        <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
+                    </label>
+                    <button type="submit">Search</button>
+                </form>
+            </header>
 
-        <main>
-            <a href="./" class="back__button">
-                <img src="./assets/back_button.svg" width="50" height="50"  alt="Back to Homepage"/>
-            </a>
+            <main>
+                <a href="./" class="back__button">
+                    <img src="./assets/back_button.svg" width="50" height="50" alt="Back to Homepage" />
+                </a>
 
-            <div v-if="!caseDetails.id" class="loading">
-                <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="256" height="256" />
-            </div>
+                <div v-if="!caseDetails.id" class="loading">
+                    <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="256" height="256" />
+                </div>
 
-            <section class="case" :title="caseDetails.name" v-else>
-                <img class="case__image" :src="caseDetails.image_url" :alt="caseDetails.name" width="auto" height="500" />
+                <section class="case" :title="caseDetails.name" v-else>
+                    <img class="case__image" :src="caseDetails.image_url" :alt="caseDetails.name" width="auto"
+                        height="500" />
 
-                <div class="case__details">
-                    <h2>
-                        <strong>Model: </strong>
-                        <span>{{ caseDetails.phone_model }}</span>
-                    </h2>
-                    <div class="case__details--name">
-                        <h2>Description: </h2>
-                        <span>{{ caseDetails.name }}</span>
-                    </div>
-                    <p>
-                        <strong>Color: </strong>
-                        <span class="case__details--color" :style="{
+                    <div class="case__details">
+                        <h2>
+                            <strong>Model: </strong>
+                            <span>{{ caseDetails.phone_model }}</span>
+                        </h2>
+                        <div class="case__details--name">
+                            <h2>Description: </h2>
+                            <span>{{ caseDetails.name }}</span>
+                        </div>
+                        <p>
+                            <strong>Color: </strong>
+                            <span class="case__details--color" :style="{
                             'border': caseDetails.color === 'Clear' ? '1px solid #000' : 'none',
                             'background-color': caseDetails.color !== 'Clear' ? caseDetails.color : 'transparent'
                         }"></span>
-                        <span>{{ caseDetails.color }}</span>
-                    </p>
-                </div>
-            </section>
+                            <span>{{ caseDetails.color }}</span>
+                        </p>
+                    </div>
+                </section>
 
-            <div class="divider"></div>
+                <div class="divider"></div>
 
-            <!-- Similar iPhone Cases -->
-            <section class="similar-cases" v-if="similarCases.length">
-                <div class="similar-products">
-                    <h2>Prices</h2>
-                    <div class="similar-product" v-for="similarCase in similarCases" :key="similarCase.id">
-                        <div class="similar-product__image">
-                            <img :src="similarCase.image_url" :alt="similarCase.name" width="auto" height="50" />
-                        </div>
-                        <div class="similar-product__info">
-                            <div class="similar-product__website">
-                                <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.png' " :alt="similarCase.website" :title="similarCase.website" width="auto" height="50" />
+                <!-- Similar iPhone Cases -->
+                <section class="similar-cases" v-if="similarCases.length">
+                    <div class="similar-products">
+                        <h2>Prices</h2>
+                        <div class="similar-product" v-for="similarCase in similarCases" :key="similarCase.id">
+                            <div class="similar-product__image">
+                                <img :src="similarCase.image_url" :alt="similarCase.name" width="auto" height="50" />
                             </div>
-                            <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
-                                <strong>
-                                    {{ similarCase.name.split('iPhone')[0] }}
-                                    {{ extractPhoneModel(similarCase.phone_model) }}
-                                </strong>
-                            </a>
-                            <div class="similar-product__info--buy">
-                                <span class="similar-product__info--price">£{{ similarCase.price }}</span>
-                                <a class="similar-product__info--button case__button" :href="similarCase.url" target="_blank">Buy!</a>
+                            <div class="similar-product__info">
+                                <div class="similar-product__website">
+                                    <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.png' "
+                                        :alt="similarCase.website" :title="similarCase.website" width="auto"
+                                        height="50" />
+                                </div>
+                                <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
+                                    <strong>
+                                        {{ similarCase.name.split('iPhone')[0] }}
+                                        {{ extractPhoneModel(similarCase.phone_model) }}
+                                    </strong>
+                                </a>
+                                <div class="similar-product__info--buy">
+                                    <span class="similar-product__info--price">£{{ similarCase.price }}</span>
+                                    <a class="similar-product__info--button case__button" :href="similarCase.url"
+                                        target="_blank">Buy</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </main>
+                </section>
+            </main>
+        </div>
     </div>
-</div>
 
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            MAX_NAME_LENGTH: 60,
-            caseDetails: {},
-            products: [],
-            similarCases: [],
-            searchQuery: '',
-            title: '',
-        },
-        methods: {
-            loadCaseDetails: function () {
-                const caseId = new URLSearchParams(window.location.search).get('id');
-                // fetch using case ID
-                fetch(`http://localhost:3001/case/${caseId}`)
-                    .then((response) => response.json())
-                    .then((dataFromJSON) => {
-                        this.caseDetails = dataFromJSON;
-                        document.title = dataFromJSON.name || 'iPhone Cases Comparison';
-                        this.loadSimilarCases(caseId);
-                    })
-                    .catch((error) => console.error('Error fetching case details:', error));
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                MAX_NAME_LENGTH: 60,
+                caseDetails: {},
+                products: [],
+                similarCases: [],
+                searchQuery: '',
+                title: '',
             },
+            methods: {
+                loadCaseDetails: function () {
+                    const caseId = new URLSearchParams(window.location.search).get('id');
+                    // fetch using case ID
+                    fetch(`http://localhost:4000/case/${caseId}`)
+                        .then((response) => response.json())
+                        .then((dataFromJSON) => {
+                            this.caseDetails = dataFromJSON;
+                            document.title = dataFromJSON.name || 'iPhone Cases Comparison';
+                            this.loadSimilarCases(caseId);
+                        })
+                        .catch((error) => console.error('Error fetching case details:', error));
+                },
 
-            loadSimilarCases: function (caseId) {
-                // fetch similar cases using the new endpoint with caseId
-                fetch(`http://localhost:3001/case/similar/${caseId}`)
-                    .then((response) => response.json())
-                    .then((dataFromJSON) => {
-                        return this.similarCases = dataFromJSON
-                    })
-                    .catch((error) => console.error('Error fetching similar cases:', error));
-            },
+                loadSimilarCases: function (caseId) {
+                    // fetch similar cases using the new endpoint with caseId
+                    fetch(`http://localhost:4000/case/similar/${caseId}`)
+                        .then((response) => response.json())
+                        .then((dataFromJSON) => {
+                            return this.similarCases = dataFromJSON
+                        })
+                        .catch((error) => console.error('Error fetching similar cases:', error));
+                },
 
-            extractPhoneModel: function (fullPhoneModel) {
-                return fullPhoneModel.charAt(0) +
-                fullPhoneModel.charAt(1).toUpperCase() +
-                fullPhoneModel.slice(2)
-            },
+                extractPhoneModel: function (fullPhoneModel) {
+                    return fullPhoneModel.charAt(0) +
+                        fullPhoneModel.charAt(1).toUpperCase() +
+                        fullPhoneModel.slice(2)
+                },
 
-            redirectSearch: function () {
-                //Save in sessionStorage
-                sessionStorage.setItem('searchQuery', this.searchQuery);
-                //Redirect to search.html to perform search
-                window.location.href = './search.html';
+                redirectSearch: function () {
+                    //Save in sessionStorage
+                    sessionStorage.setItem('searchQuery', this.searchQuery);
+                    //Redirect to search.html to perform search
+                    window.location.href = './search.html';
+                },
             },
-        },
-        created() {
-            this.loadCaseDetails();
-        },
-    });
-</script>
+            created() {
+                this.loadCaseDetails();
+            },
+        });
+    </script>
 </body>
 
 </html>

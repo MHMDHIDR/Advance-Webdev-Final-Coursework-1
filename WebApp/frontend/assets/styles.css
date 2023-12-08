@@ -366,3 +366,29 @@ main {
   padding: 0.35rem 2rem;
   margin-left: calc(100% - 10rem);
 }
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-block: 4rem;
+}
+
+.pagination a {
+  padding: 8px 16px;
+  margin: 0 4px;
+  text-decoration: none;
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  border-radius: .2rem;
+  cursor: pointer;
+}
+
+.pagination a:hover,
+.pagination a.current {
+  background-color: var(--primary-blue);
+  color: #fff;
+}

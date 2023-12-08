@@ -12,92 +12,92 @@
 </head>
 
 <body>
-<div id="app">
-  <div class="container">
-    <header class="header">
-      <a href="./">
-        <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
-      </a>
+  <div id="app">
+    <div class="container">
+      <header class="header">
+        <a href="./">
+          <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
+        </a>
 
-      <form class="search" @submit.prevent="searchCases">
-        <label>
-          <!-- Binding the input to the searchQuery variable -->
-          <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
-        </label>
-        <button type="submit">Search</button>
-      </form>
-    </header>
+        <form class="search" @submit.prevent="searchCases">
+          <label>
+            <!-- Binding the input to the searchQuery variable -->
+            <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
+          </label>
+          <button type="submit">Search</button>
+        </form>
+      </header>
 
-    <main class="container">
-      <a href="./" class="back__button">
-        <img src="./assets/back_button.svg" width="50" height="50" alt="Back to Homepage"/>
-      </a>
+      <main class="container">
+        <a href="./" class="back__button">
+          <img src="./assets/back_button.svg" width="50" height="50" alt="Back to Homepage" />
+        </a>
 
-      <p v-if="searchResults.length === 0" class="loading">
-        No results found. Please try again.
-      </p>
+        <p v-if="searchResults.length === 0" class="loading">
+          No results found. Please try again.
+        </p>
 
-      <div v-else id="searchResults">
-        <h2 class="search-query-header">Search Results for: {{ searchQuery }}</h2>
+        <div v-else id="searchResults">
+          <h2 class="search-query-header">Search Results for: {{ searchQuery }}</h2>
 
-        <div class="products">
-          <a v-for="result in searchResults" :key="result.id" class="product" :href="'/details.html?id=' + result.id">
-            <div class="product__image">
-              <img :src="result.image_url" :alt="result.phone_model" width="120" height="200" />
-            </div>
-            <div class="product__info">
-              <h4 class="product__info--name">{{ result.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
-              <span class="product__info--price">£{{ result.price }}</span>
-              <button class="product__info--details">Show Details</button>
-            </div>
-          </a>
+          <div class="products">
+            <a v-for="result in searchResults" :key="result.id" class="product" :href="'/details.html?id=' + result.id">
+              <div class="product__image">
+                <img :src="result.image_url" :alt="result.phone_model" width="120" height="200" />
+              </div>
+              <div class="product__info">
+                <h4 class="product__info--name">{{ result.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
+                <span class="product__info--price">£{{ result.price }}</span>
+                <button class="product__info--details">Show Details</button>
+              </div>
+            </a>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   </div>
-</div>
 
-<script>
-  new Vue({
-    el: '#app',
-    data: {
-      MAX_NAME_LENGTH: 60,
-      searchQuery: '',
-      searchResults: []
-    },
-    methods: {
-      // Retrieve search query from sessionStorage
-      retrieveSearchQuery: function () {
-        const storedSearchQuery = sessionStorage.getItem('searchQuery');
-        if (storedSearchQuery) {
-          this.searchQuery = storedSearchQuery;
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        MAX_NAME_LENGTH: 60,
+        searchQuery: '',
+        searchResults: []
+      },
+      methods: {
+        // Retrieve search query from sessionStorage
+        retrieveSearchQuery: function () {
+          const storedSearchQuery = sessionStorage.getItem('searchQuery');
+          if (storedSearchQuery) {
+            this.searchQuery = storedSearchQuery;
+          }
+        },
+
+        // Fetch search results based on the search query
+        fetchSearchResults: function () {
+          const encodedSearchQuery = encodeURIComponent(this.searchQuery)
+          fetch(`http://localhost:4000/search?query=${encodedSearchQuery}`)
+            .then(response => response.json())
+            .then(dataFromJSON => this.searchResults = dataFromJSON)
+            .catch(error => console.error('Error fetching search results:', error))
+        },
+
+        // Handle form submission
+        searchCases: function () {
+          // Update sessionStorage when searchQuery changes
+          sessionStorage.setItem('searchQuery', this.searchQuery)
+          //fetch search results
+          this.fetchSearchResults()
         }
       },
-
-      // Fetch search results based on the search query
-      fetchSearchResults: function () {
-        const encodedSearchQuery = encodeURIComponent(this.searchQuery)
-        fetch(`http://localhost:3001/search?query=${encodedSearchQuery}`)
-          .then(response => response.json())
-          .then(dataFromJSON => this.searchResults = dataFromJSON)
-          .catch(error => console.error('Error fetching search results:', error))
-      },
-
-      // Handle form submission
-      searchCases: function () {
-        // Update sessionStorage when searchQuery changes
-        sessionStorage.setItem('searchQuery', this.searchQuery)
-        //fetch search results
+      created() {
+        // Retrieve search query and fetch search results on page load
+        this.retrieveSearchQuery()
         this.fetchSearchResults()
       }
-    },
-    created() {
-      // Retrieve search query and fetch search results on page load
-      this.retrieveSearchQuery()
-      this.fetchSearchResults()
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 
 </html>

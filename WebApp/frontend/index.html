@@ -12,80 +12,154 @@
 </head>
 
 <body>
-<div id="app">
-  <div class="container">
-    <header class="header">
-      <a href="./">
-        <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
-      </a>
-
-      <form class="search" @submit.prevent="redirectSearch">
-        <label>
-          <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
-        </label>
-        <button type="submit">Search</button>
-      </form>
-    </header>
-
-    <main class="container">
-      <section class="featured">
-        <div class="featured__text">
-          <h1>Find the perfect phone case that matches your personality</h1>
-          <span>Best Deals from all stores.</span>
-        </div>
-        <a href="#products" class="featured__cta">Shop Now</a>
-      </section>
-
-      <div v-if="products.length === 0" class="loading">
-        <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="256" height="256" />
-      </div>
-
-      <div id="products" class="products">
-        <a v-for="product in products" :key="product.id" class="product" :href="'/details.html?id=' + product.id">
-          <div class="product__image">
-            <img :src="product.image_url" :alt="product.phone_model" width="120" height="200" />
-          </div>
-          <div class="product__info">
-            <h4 class="product__info--name">{{ product.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
-            <span class="product__info--price">£{{ product.price }}</span>
-            <button class="product__info--details">Show Details</button>
-          </div>
+  <div id="app">
+    <div class="container">
+      <header class="header">
+        <a href="./">
+          <img class="logo" src="./assets/logo.svg" alt="iPhone Case Price Comparison Logo" width="170" height="64" />
         </a>
-      </div>
-    </main>
+
+        <form class="search" @submit.prevent="redirectSearch">
+          <label>
+            <input v-model="searchQuery" type="text" placeholder="Search by your iPhone model" />
+          </label>
+          <button type="submit">Search</button>
+        </form>
+      </header>
+
+      <main class="container">
+        <section class="featured">
+          <div class="featured__text">
+            <h1>Find the perfect phone case that matches your personality</h1>
+            <span>Best Deals from all stores.</span>
+          </div>
+          <a href="#products" class="featured__cta">Shop Now</a>
+        </section>
+
+        <div v-if="products.length === 0" class="loading">
+          <img src="./assets/loading.gif" alt="Loading iPhone Cases" width="256" height="256" />
+        </div>
+
+        <div id="products" class="products">
+          <a v-for="product in products" :key="product.id" class="product" :href="'/details.html?id=' + product.id">
+            <div class="product__image">
+              <img :src="product.image_url" :alt="product.phone_model" width="120" height="200" />
+            </div>
+            <div class="product__info">
+              <h4 class="product__info--name">{{ product.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
+              <span class="product__info--price">£{{ product.price }}</span>
+              <button class="product__info--details">Show Details</button>
+            </div>
+          </a>
+        </div>
+        <div class="pagination">
+          <a href="index.html">First</a>
+          <a v-if="currentPage > 1" :href="'index.html?page=' + (currentPage - 1)">Previous</a>
+
+          <!-- Display the pages dynamically with ellipsis -->
+          <template v-for="page in displayPages">
+            <span v-if="page === '...'">{{ page }}</span>
+            <a v-else :key="page" :href="'index.html?page=' + page" :class="{ 'current': page === currentPage }">
+              {{ page }}
+            </a>
+          </template>
+
+          <a v-if="currentPage < totalPages" :href="'index.html?page=' + (currentPage + 1)">Next</a>
+          <a :href="'index.html?page=' + totalPages">Last</a>
+        </div>
+      </main>
+    </div>
   </div>
-</div>
 
-<script>
-  new Vue({
-    el: '#app',
-    data: {
-      MAX_NAME_LENGTH: 60,
-      searchQuery: '',
-      products: []
-    },
-    methods: {
-      redirectSearch: function () {
-        //Save in sessionStorage
-        sessionStorage.setItem('searchQuery', this.searchQuery);
-        //Redirect to search.html to perform search
-        window.location.href = './search.html';
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        MAX_NAME_LENGTH: 60,
+        searchQuery: '',
+        products: [],
+        currentPage: 1,
+        totalPages: 1,
       },
+      methods: {
+        redirectSearch: function () {
+          //Save in sessionStorage
+          sessionStorage.setItem('searchQuery', this.searchQuery);
+          //Redirect to search.html to perform search
+          window.location.href = './search.html';
+        },
 
-      loadProducts: function () {
-        fetch('http://localhost:3001/case')
-          .then(response => response.json())
-          .then(dataFromJSON => {
-            const randomCases = dataFromJSON.sort(() => 0.5 - Math.random())
-            this.products = randomCases.slice(0, 20)
-          })
+        getPageNumber: function () {
+          //Get page number from query parameter
+          const queryParams = new URLSearchParams(window.location.search)
+          const page = parseInt(queryParams.get('page')) || 1
+          return page;
+        },
+
+        loadProducts: function () {
+          /**
+           * Load cases and limit per page based on the query parameter
+           */
+          fetch(`http://localhost:4000/case/${this.getPageNumber()}`)
+            .then(response => response.json())
+            .then(dataFromJSON => {
+              this.products = dataFromJSON//.sort(() => 0.5 - Math.random())
+            })
+        }
+      },
+      computed: {
+        /**
+         * method to generate an array of page numbers in the pagination row
+         * Returns an array of page numbers based on the totalPages
+         */
+        pages: function () {
+          return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        },
+        /**
+     * Calculate the pages to display dynamically
+     */
+        displayPages: function () {
+          const range = 5; // Number of pages to display at a time
+          const pages = [];
+          const start = Math.max(1, this.currentPage - Math.floor(range / 2));
+          const end = Math.min(start + range - 1, this.totalPages);
+
+          if (start > 1) {
+            pages.push(1);
+            if (start > 2) {
+              pages.push('...'); // Display ellipsis if there are hidden pages
+            }
+          }
+
+          for (let i = start; i <= end; i++) {
+            pages.push(i);
+          }
+
+          if (end < this.totalPages) {
+            // If there are more pages to display, display ellipsis
+            if (end < this.totalPages - 1) {
+              pages.push('...');
+            }
+            // Else I'm Displaying the last page number
+            pages.push(this.totalPages);
+          }
+
+          return pages;
+        }
+      },
+      created() {
+        /**
+         * Load products from the API when the page is created
+         */
+        this.loadProducts()
+        // Set currentPage and totalPages based on the query parameter (if present)
+        const queryParams = new URLSearchParams(window.location.search)
+        const page = parseInt(queryParams.get('page')) || 1
+        this.currentPage = page
+        this.totalPages = 1000
       }
-    },
-    created() {
-      this.loadProducts()
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 
 </html>
