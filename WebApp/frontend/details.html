@@ -64,17 +64,20 @@
             <!-- Similar iPhone Cases -->
             <section class="similar-cases" v-if="similarCases.length">
                 <div class="similar-products">
-                    <h2>Prices for the same model</h2>
+                    <h2>Prices</h2>
                     <div class="similar-product" v-for="similarCase in similarCases" :key="similarCase.id">
-                        <div class="similar-product__website">
-                            <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.svg' " :alt="similarCase.website" :title="similarCase.website" width="auto" height="50" />
-                        </div>
                         <div class="similar-product__image">
                             <img :src="similarCase.image_url" :alt="similarCase.name" width="auto" height="50" />
                         </div>
                         <div class="similar-product__info">
+                            <div class="similar-product__website">
+                                <img :src="'/assets/'+ similarCase.website.toLowerCase() +'.png' " :alt="similarCase.website" :title="similarCase.website" width="auto" height="50" />
+                            </div>
                             <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
-                                <strong>{{ similarCase.name.split('Case')[0] }} Case</strong>
+                                <strong>
+                                    {{ similarCase.name.split('iPhone')[0] }}
+                                    {{ extractPhoneModel(similarCase.phone_model) }}
+                                </strong>
                             </a>
                             <div class="similar-product__info--buy">
                                 <span class="similar-product__info--price">£{{ similarCase.price }}</span>
@@ -124,16 +127,9 @@
             },
 
             extractPhoneModel: function (fullPhoneModel) {
-                // Split the string by spaces
-                const words = fullPhoneModel.split(' ');
-                // Find the first occurrence of "iPhone"
-                const iPhoneIndex = words.findIndex(word => word === 'iPhone');
-                // If "iPhone" is found, concatenate it with the iPhone model
-                if (iPhoneIndex !== -1 && iPhoneIndex < words.length - 1) {
-                    return words[iPhoneIndex] + ' ' + words[iPhoneIndex + 1];
-                } else {
-                    return '';
-                }
+                return fullPhoneModel.charAt(0) +
+                fullPhoneModel.charAt(1).toUpperCase() +
+                fullPhoneModel.slice(2)
             },
 
             redirectSearch: function () {

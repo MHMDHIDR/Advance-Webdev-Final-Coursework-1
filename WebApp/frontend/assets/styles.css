@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -75,6 +77,7 @@ main {
   border: 1px solid #777;
 }
 
+/*noinspection ALL*/
 .search button {
   font-size: 1.25em;
   padding: .5rem .7rem;
@@ -133,6 +136,7 @@ main {
   cursor: pointer;
   transition-duration: 300ms;
 }
+
 .featured__cta:hover {
   background-color: #404040
 }
@@ -321,17 +325,20 @@ main {
 }
 
 .similar-product:hover {
-  box-shadow: 0 4px 8px 0 var(--shadow-primary),0 0 1px 0 var(--shadow-primary);
+  box-shadow: 0 4px 8px 0 var(--shadow-primary), 0 0 1px 0 var(--shadow-primary);
 }
 
-.similar-product__image,
 .similar-product__website {
-  width: 5rem;
-  border-radius: .75rem;
+  max-height: 2rem;
 }
 
 .similar-product__website img {
-  width: auto;
+  height: 100%;
+  max-width: 8rem;
+}
+
+.similar-product__image {
+  width: 5rem;
   border-radius: .75rem;
 }
 

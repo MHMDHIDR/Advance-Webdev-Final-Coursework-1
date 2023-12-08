@@ -11,7 +11,7 @@ export const getSimilarCases = async (req, res) => {
 
     try {
         const similarCasesQuery = `
-            SELECT cv.*, co.name, co.price, co.url, co.website
+            SELECT cv.*, c.phone_model, co.name, co.price, co.url, co.website
             FROM cases_variants AS cv
                  JOIN \`case\` AS c ON cv.case_id = c.id
                  JOIN comparison AS co ON cv.id = co.case_variant_id
