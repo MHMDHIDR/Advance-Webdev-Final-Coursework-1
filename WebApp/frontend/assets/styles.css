@@ -380,22 +380,51 @@ main {
 
 /* Pagination styles */
 .pagination {
-  display: flex;
+  --links__size: 3rem;
+
   flex: 1;
-  justify-content: center;
+  gap: .75rem;
   list-style: none;
   padding: 0;
   margin-block: 4rem;
 }
 
+.pagination,
 .pagination a {
-  padding: 8px 16px;
-  margin: 0 4px;
-  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination a {
   color: var(--primary-blue);
   border: 1px solid var(--primary-blue);
-  border-radius: .2rem;
+  border-radius: 50%;
+  padding: 0.5rem;
   cursor: pointer;
+}
+
+.pagination a,
+.pagination a img {
+  width: var(--links__size);
+  height: var(--links__size);
+}
+
+.pagination a:has(img) {
+  border: none;
+  display: contents;
+}
+
+.pagination a:nth-child(2) img {
+  transform: rotate(180deg)
+}
+
+.pagination a img {
+  border-radius: 50%;
+}
+
+.pagination a.current {
+  font-weight: bold;
 }
 
 .pagination a:hover,

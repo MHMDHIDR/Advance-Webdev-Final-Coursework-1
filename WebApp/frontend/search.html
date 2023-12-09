@@ -55,7 +55,9 @@
 
           <div class="pagination">
             <a href="search.html">First</a>
-            <a v-if="currentPage > 1" :href="'search.html?page=' + (currentPage - 1)">Previous</a>
+            <a v-if="currentPage > 1" :href="'search.html?page=' + (currentPage - 1)">
+              <img src="./assets/arrow-animated.gif" alt="Previous Page" width="50" height="50" />
+            </a>
 
             <!--
               Display the search pages dynamically using the displayPages computed property
@@ -67,7 +69,9 @@
               </a>
             </template>
 
-            <a v-if="currentPage < totalPages" :href="'search.html?page=' + (currentPage + 1)">Next</a>
+            <a v-if="currentPage < totalPages" :href="'search.html?page=' + (currentPage + 1)">
+              <img src="./assets/arrow-animated.gif" alt="Next Page" width="50" height="50" />
+            </a>
             <a :href="'search.html?page=' + totalPages">Last</a>
           </div>
         </div>

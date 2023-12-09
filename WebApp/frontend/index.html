@@ -55,10 +55,12 @@
 
         <div class="pagination">
           <a href="index.html">First</a>
-          <a v-if="currentPage > 1" :href="'index.html?page=' + (currentPage - 1)">Previous</a>
+          <a v-if="currentPage > 1" :href="'index.html?page=' + (currentPage - 1)">
+            <img src="./assets/arrow-animated.gif" alt="Previous Page" width="50" height="50" />
+          </a>
 
           <!--
-            Display the pages dynamically using the displayPages computed property
+            Display the pages numbers dynamically using the displayPages computed property
           -->
           <template v-for="page in displayPages">
             <span v-if="page === '...'">{{ page }}</span>
@@ -67,7 +69,9 @@
             </a>
           </template>
 
-          <a v-if="currentPage < totalPages" :href="'index.html?page=' + (currentPage + 1)">Next</a>
+          <a v-if="currentPage < totalPages" :href="'index.html?page=' + (currentPage + 1)">
+            <img src="./assets/arrow-animated.gif" alt="Next Page" width="50" height="50" />
+          </a>
           <a :href="'index.html?page=' + totalPages">Last</a>
         </div>
       </main>
