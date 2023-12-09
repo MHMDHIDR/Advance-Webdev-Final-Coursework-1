@@ -43,7 +43,7 @@
           <div class="products">
             <a v-for="result in searchResults" :key="result.id" class="product" :href="'/details.html?id=' + result.id">
               <div class="product__image">
-                <img :src="result.image_url" :alt="result.phone_model" width="120" height="200" />
+                <img :src="result.image_url" :alt="result.name+ ' for ' +result.phone_model" width="120" height="200" />
               </div>
               <div class="product__info">
                 <h4 class="product__info--name">{{ result.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>

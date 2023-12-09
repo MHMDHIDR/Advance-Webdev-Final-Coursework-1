@@ -78,6 +78,7 @@
                                         height="50" />
                                     <a class="similar-product__info--name" :href="'?id=' + similarCase.id">
                                         <strong>
+                                            {{ similarCase.color }}
                                             {{ similarCase.name.split('iPhone')[0] }}
                                             {{ extractPhoneModel(similarCase.phone_model) }}
                                         </strong>

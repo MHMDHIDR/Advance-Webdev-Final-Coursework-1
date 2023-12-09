@@ -43,7 +43,8 @@
         <div id="products" class="products">
           <a v-for="product in products" :key="product.id" class="product" :href="'/details.html?id=' + product.id">
             <div class="product__image">
-              <img :src="product.image_url" :alt="product.phone_model" width="120" height="200" />
+              <img :src="product.image_url" :alt="product.name+ ' for ' +product.phone_model" width="120"
+                height="200" />
             </div>
             <div class="product__info">
               <h4 class="product__info--name">{{ product.name.substring(0, MAX_NAME_LENGTH) + '...' }}</h4>
@@ -53,7 +54,7 @@
           </a>
         </div>
 
-        <div class="pagination">
+        <div v-if="products.length > 0" class="pagination">
           <a href="index.html">First</a>
           <a v-if="currentPage > 1" :href="'index.html?page=' + (currentPage - 1)">
             <img src="./assets/arrow-animated.gif" alt="Previous Page" width="50" height="50" />
@@ -163,7 +164,7 @@
         const queryParams = new URLSearchParams(window.location.search)
         const page = parseInt(queryParams.get('page')) || 1
         this.currentPage = page
-        this.totalPages = 1000
+        this.totalPages = 1400
       }
     });
   </script>

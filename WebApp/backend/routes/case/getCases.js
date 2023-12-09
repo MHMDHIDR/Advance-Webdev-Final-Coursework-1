@@ -18,7 +18,7 @@ export const getCases = async (req, res) => {
 
     //get all cases variants
     const query = `
-        SELECT cv.*, co.name, co.price
+        SELECT c.phone_model, cv.*, co.name, co.price
         FROM cases_variants AS cv
         JOIN \`case\` AS c ON cv.case_id = c.id
         JOIN comparison AS co ON cv.id = co.case_variant_id

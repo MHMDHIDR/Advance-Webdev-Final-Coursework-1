@@ -339,7 +339,7 @@ main {
 
 .similar-product__website img {
   height: 100%;
-  max-height: 2rem;
+  max-height: clamp(1rem, 2.5vh, 2rem);
   max-width: 8rem;
   width: fit-content
 }
