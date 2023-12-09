@@ -14,6 +14,10 @@ import java.util.List;
  * BestBuyScraper class extends WebScrapper class
  * and implements the run method.
  * It scrapes the BestBuy website for phone cases.
+ *
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 public class BestBuyScraper extends WebScrapper {
     private static final String WEBSITE = "BestBuy";
@@ -119,7 +123,7 @@ public class BestBuyScraper extends WebScrapper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+            quitDriver();
         }
 
         System.out.println("✔ BestBuyScraper Thread finished scraping.");

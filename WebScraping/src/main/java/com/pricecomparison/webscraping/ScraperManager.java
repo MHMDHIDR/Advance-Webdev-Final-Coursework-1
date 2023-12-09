@@ -12,7 +12,7 @@ public class ScraperManager {
     /**
      * Constructor for ScraperManager class.
      */
-    public void startScraping(){
+    public void startScraping() {
         for(WebScrapper scraper : scraperList) {
             scraper.start();
         }

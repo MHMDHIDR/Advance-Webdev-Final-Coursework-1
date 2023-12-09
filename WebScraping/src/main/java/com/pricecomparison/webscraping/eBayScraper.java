@@ -104,9 +104,10 @@ public class eBayScraper extends WebScrapper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+            quitDriver();
         }
-            System.out.println("✔ eBayScraper thread finished scraping.");
+
+        System.out.println("✔ eBayScraper thread finished scraping.");
     }
 
 

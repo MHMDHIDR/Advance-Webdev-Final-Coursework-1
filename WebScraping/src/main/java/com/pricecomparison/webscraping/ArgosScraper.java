@@ -20,6 +20,10 @@ import java.util.Arrays;
  * ArgosScraper class extends WebScrapper class
  * and implements the run method.
  * It scrapes the Argos website for phone cases.
+ *
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 public class ArgosScraper extends WebScrapper {
     private static final String WEBSITE = "Argos";
@@ -107,7 +111,7 @@ public class ArgosScraper extends WebScrapper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+            quitDriver();
         }
 
 

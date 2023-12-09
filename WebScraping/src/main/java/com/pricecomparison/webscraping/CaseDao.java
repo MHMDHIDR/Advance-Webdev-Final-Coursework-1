@@ -12,6 +12,24 @@ import org.hibernate.boot.MetadataSources;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CaseDao class is used to save the phone case data to the database.
+ * It uses Hibernate to connect to the database.
+ * <p>
+ *     <h1>Example usage:</h1>
+ *     <pre>{@code
+ *     CaseDao caseDao = new CaseDao();
+ *     caseDao.init();
+ *     caseDao.saveCase(cases, model);
+ *     caseDao.saveVariant(variants, phoneCase, color, imgUrl);
+ *     caseDao.savePrice(phoneCaseVariation, Website, productName, productPrice, productUrl);
+ *     }</pre>
+ *     <p>
+ *         <b>Note:</b> The init() method must be called in the WebScraper
+ *         before using the saveCase(), saveVariant() and savePrice() methods.
+ *     </p>
+ * </p>
+ */
 public class CaseDao {
     private SessionFactory sessionFactory;
 

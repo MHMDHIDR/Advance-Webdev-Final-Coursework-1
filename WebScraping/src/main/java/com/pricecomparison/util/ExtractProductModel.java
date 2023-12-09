@@ -4,7 +4,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Extracts the iPhone model(s) class
+ * <h1>Extracts the iPhone model(s) class</h1>
+ * <p>
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 public class ExtractProductModel {
     /**

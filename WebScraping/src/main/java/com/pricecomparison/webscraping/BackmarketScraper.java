@@ -29,7 +29,8 @@ public class BackmarketScraper extends WebScrapper {
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.backmarket.co.uk/en-gb/search?q=iphone_case&page=" + page;
                 driver.get(url);
-                acceptCookies(driver);
+                //must accept cookies
+                cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
 
                 // Find and process each product on the page
                 List<WebElement> productLinks = driver.findElements(By.cssSelector(".productCard a"));
@@ -45,7 +46,8 @@ public class BackmarketScraper extends WebScrapper {
                     try {
                         // Navigate to the product page
                         driver.get(productUrl);
-                        acceptCookies(driver);
+                        //must accept cookies
+                cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
 
                         // Sleep randomly for 1-2.5 seconds
                         try {
@@ -127,25 +129,10 @@ public class BackmarketScraper extends WebScrapper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+            quitDriver();
         }
 
         System.out.println("✔ BackmarketScraper thread finished scraping.");
-    }
-
-    /**
-     * Accept cookies is a method to click on accept cookies
-     * button if the button is found, then print a message
-     * @param driver the WebDriver
-     */
-    private void acceptCookies(WebDriver driver) {
-        try {
-            WebElement cookiesButton = driver.findElement(By.cssSelector("[data-qa=\"accept-cta\"]"));
-            cookiesButton.click();
-            System.out.println("BackMarket Accept Cookies button clicked.");
-        } catch (Exception e) {
-            System.err.println("BackMarket Accept Cookies button not found. Continuing without clicking it.");
-        }
     }
 
     /**

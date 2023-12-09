@@ -6,7 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class App {
     /**
-     * Main method to start scrapper manager
+     * <h1>Main method to start scrapper manager</h1>
      * @param args Command line arguments
      */
     public static void main(String[] args) {

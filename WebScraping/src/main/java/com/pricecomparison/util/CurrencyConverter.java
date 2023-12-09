@@ -4,7 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Utility class to convert currency
+ * <h1>Utility class to convert currency</h1>
+ * <p>
+ *
+ * @see <a href="https://www.baeldung.com/java-round-decimal-number">https://www.baeldung.com/java-round-decimal-number</a>
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 public class CurrencyConverter {
     /**

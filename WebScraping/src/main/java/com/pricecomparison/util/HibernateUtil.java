@@ -10,8 +10,15 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * HibernateUtil class is used to create a session factory for hibernate
- * and to create a data source for the database
+ * <h1>HibernateUtil class</h1>
+ * <p>
+ * is used to create a session factory for
+ * hibernate and to create a data source for the database
+ *
+ * @see <a href="https://www.baeldung.com/hibernate-4-spring">https://www.baeldung.com/hibernate-4-spring</a>
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 @Configuration
 public class HibernateUtil {

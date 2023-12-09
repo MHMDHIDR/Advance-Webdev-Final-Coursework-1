@@ -14,9 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AmazonScraper class extends WebScrapper class
+ * <h1>AmazonScraper class extends WebScrapper class</h1>
  * and implements the run method.
+ * <p>
  * It scrapes the Amazon website for phone cases.
+ *
+ * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
+ * @version 1.0
+ * @since   2023-12-10
  */
 public class AmazonScraper extends WebScrapper {
     private static final String WEBSITE = "Amazon";
@@ -35,7 +40,7 @@ public class AmazonScraper extends WebScrapper {
                 driver.get(url);
 
                 //must accept cookies
-                acceptCookies(driver);
+                cookies.accept(driver, ".sp-cc-accept", WEBSITE);
 
                 // Get all product links on the page
                 List<WebElement> productLinks = driver.findElements(By.cssSelector("a.a-link-normal.s-no-outline"));
@@ -100,19 +105,9 @@ public class AmazonScraper extends WebScrapper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.quit();
+            quitDriver();
         }
 
         System.out.println("✔ AmazonScraper thread finished scraping.");
-    }
-
-    private void acceptCookies(WebDriver driver) {
-        try {
-            WebElement cookiesButton = driver.findElement(By.id("sp-cc-accept"));
-            cookiesButton.click();
-            System.out.println("Amazon Cookies button clicked.");
-        } catch (Exception e) {
-            System.err.println("Amazon Cookies Not found. Continuing without clicking it.");
-        }
     }
 }
