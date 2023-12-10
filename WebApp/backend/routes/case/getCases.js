@@ -25,9 +25,19 @@ export const getCases = async (req, res) => {
       `
     } else {
       const page = parseInt(req.params.page) || 1
+
+      // Query to get the total number of cases
+      const totalCountQuery = 'SELECT COUNT(*) AS total FROM cases_variants'
+      const [totalCountResult] = await pool.query(totalCountQuery)
+      const totalCount = totalCountResult[0].total
+
+      if (isNaN(page) || page < 1 || page > Math.ceil(totalCount / ITEMS_PER_PAGE)) {
+        return res.status(400).json({ error: 'Invalid page parameter' })
+      }
+
       const offset = (page - 1) * ITEMS_PER_PAGE
 
-      //get all cases variants
+      // get all cases variants
       query = `
         SELECT c.phone_model, cv.*, co.name, co.price
         FROM cases_variants AS cv
@@ -41,6 +51,12 @@ export const getCases = async (req, res) => {
     res.json(rows)
   } catch (error) {
     console.error('Error fetching case variants:', error.message)
-    res.status(500).json({ error: 'Internal Server Error' })
+
+    // Handle specific errors and send appropriate response
+    if (error instanceof SyntaxError || error instanceof TypeError) {
+      res.status(400).json({ error: 'Bad request syntax or unsupported query parameter' })
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
   }
 }

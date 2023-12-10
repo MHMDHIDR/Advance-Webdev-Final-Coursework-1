@@ -10,6 +10,8 @@
   --darker-blue: #004d9f;
   --primary-green: #279b1f;
   --shadow-primary: rgba(32, 76, 136, 0.15);
+  --animation-delay-base: 0.2s;
+  --animation-delay-increment: 0.2s;
 }
 
 html {
@@ -34,6 +36,7 @@ img {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 main.container {
@@ -290,7 +293,7 @@ main {
 }
 
 .similar-products {
-  gap: 1rem;
+  gap: 2rem;
 }
 
 /*=== Divider ===*/
@@ -321,10 +324,25 @@ main {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
-  width: clamp(40rem, 80vw, 60rem);
+  width: clamp(40rem, 80vw, 70rem);
   box-shadow: 0 2px 6px 0 var(--shadow-primary);
   border-radius: 0.75rem;
-  transition: box-shadow 200ms ease;
+}
+
+.similar-products.animate .similar-product:nth-child(1) {
+  animation: product-show calc(var(--animation-delay-base) + (var(--animation-delay-increment) * 0)) 1;
+}
+
+.similar-products.animate .similar-product:nth-child(2) {
+  animation: product-show calc(var(--animation-delay-base) + (var(--animation-delay-increment) * 1)) 1;
+}
+
+.similar-products.animate .similar-product:nth-child(3) {
+  animation: product-show calc(var(--animation-delay-base) + (var(--animation-delay-increment) * 2)) 1;
+}
+
+.similar-products.animate .similar-product:nth-child(4) {
+  animation: product-show calc(var(--animation-delay-base) + (var(--animation-delay-increment) * 3)) 1;
 }
 
 .similar-product:hover {
@@ -642,4 +660,18 @@ main {
   -o-transform: rotate(225deg);
   -webkit-transform: rotate(225deg);
   transform: rotate(225deg);
+}
+
+@keyframes product-show {
+  from {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(40%);
+  }
+
+  to {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

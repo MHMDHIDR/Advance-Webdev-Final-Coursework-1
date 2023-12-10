@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node index",
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "test": "PORT=4001 mocha --exit test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,10 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mysql2": "^3.6.5"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

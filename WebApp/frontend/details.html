@@ -65,8 +65,7 @@
 
                 <!-- Similar iPhone Cases -->
                 <section class="similar-cases" v-if="similarCases.length">
-                    <div class="similar-products">
-                        <h2>Prices</h2>
+                    <div class="similar-products animate">
                         <div class="similar-product" v-for="similarCase in similarCases" :key="similarCase.id">
                             <div class="similar-product__image">
                                 <img :src="similarCase.image_url" :alt="similarCase.name" width="auto" height="50" />

@@ -6,7 +6,7 @@ import { getSimilarCases } from './getSimilarCases.js'
 const router = express.Router()
 
 // Use the route handlers with router.get
-router.get('/:page?', getCases)
+router.get('/:page(\\d+)?', getCases)
 router.get('/byId/:id', getCaseById)
 router.get('/similar/:id', getSimilarCases)
 

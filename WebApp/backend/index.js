@@ -4,7 +4,7 @@ import caseRoutes from './routes/case/index.js'
 import searchRoutes from './routes/search/index.js'
 
 const app = express()
-const port = 4000
+const port = process.env.PORT || 4000
 
 // Enable CORS to allow requests from the frontend
 app.use(cors())
@@ -15,3 +15,5 @@ app.use('/search', searchRoutes)
 
 // Start the server
 app.listen(port, () => console.log(`Server is running on http://localhost:${port}`))
+
+export default app
