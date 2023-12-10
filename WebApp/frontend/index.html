@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
   <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
   <link rel="icon" href="./assets/favicon.svg" />
   <link rel="stylesheet" href="./assets/styles.css" />
@@ -29,11 +30,43 @@
 
       <main class="container">
         <section class="featured">
-          <div class="featured__text">
-            <h1>Find the perfect phone case that matches your personality</h1>
-            <span>Best Deals from all stores.</span>
+          <div class="csslider">
+            <input type="radio" name="slides" v-for="(product, index) in sliderProducts" :id="'slides_' + (index + 1)"
+              :checked="index === 0" />
+            <ul>
+              <!-- Add the new content as the first element -->
+              <li>
+                <div class="featured__text">
+                  <h1>Find the perfect phone case that matches your personality</h1>
+                  <span>Best Deals from all stores.</span>
+                </div>
+                <a href="#products" class="featured__cta">Shop Now</a>
+              </li>
+              <!-- Loop through the products and display each one -->
+              <li v-for="product in sliderProducts">
+                <!-- Customize the content based on your product data -->
+                <div class="product-slide">
+                  <img class="featured__img" :src="product.image_url" :alt="product.name" width="300" height="200" />
+                  <h3>
+                    <a :href="'/details.html?id=' + product.id">
+                      {{ product.name.substring(0, MAX_NAME_LENGTH) + '...' }}
+                    </a>
+                  </h3>
+                  <strong class="product__info--price">
+                    £{{ product.price }}
+                  </strong>
+                </div>
+              </li>
+            </ul>
+            <div class="arrows">
+              <label v-for="(product, index) in sliderProducts" :for="'slides_' + (index + 1)"></label>
+            </div>
+            <div class="navigation">
+              <div>
+                <label v-for="(product, index) in sliderProducts" :for="'slides_' + (index + 1)"></label>
+              </div>
+            </div>
           </div>
-          <a href="#products" class="featured__cta">Shop Now</a>
         </section>
 
         <div v-if="products.length === 0" class="loading">
@@ -88,8 +121,9 @@
         MAX_NAME_LENGTH: 60,
         searchQuery: '',
         products: [],
+        sliderProducts: [],
         currentPage: 1,
-        totalPages: 1,
+        totalPages: 1
       },
       methods: {
         /**
@@ -113,6 +147,18 @@
             .then(dataFromJSON => {
               this.products = dataFromJSON.sort(() => 0.5 - Math.random())
             })
+        },
+
+        /**
+         * Load Limited cases and limit per page based on the query parameter
+         * Returns an array of cases then sort them randomly
+         */
+        loadLimitedCases: function () {
+          fetch(`http://localhost:4000/case?limited=5`)
+            .then(response => response.json())
+            .then(dataFromJSON => {
+              this.sliderProducts = dataFromJSON.sort(() => 0.5 - Math.random())
+            });
         }
       },
       computed: {
@@ -160,11 +206,17 @@
          * Load products from the API when the page is created
          */
         this.loadProducts()
+        this.loadLimitedCases()
         // Set currentPage and totalPages based on the query parameter (if present)
         const queryParams = new URLSearchParams(window.location.search)
-        const page = parseInt(queryParams.get('page')) || 1
-        this.currentPage = page
+        this.currentPage = parseInt(queryParams.get('page')) || 1
         this.totalPages = 1400
+      },
+      loadProducts() {
+        return this.loadProducts()
+      },
+      loadLimitedCases() {
+        return this.loadLimitedCases()
       }
     });
   </script>

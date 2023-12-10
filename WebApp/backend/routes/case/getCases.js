@@ -13,17 +13,29 @@ import { ITEMS_PER_PAGE } from '../../utils/const.js'
  */
 export const getCases = async (req, res) => {
   try {
-    const page = parseInt(req.params.page) || 1
-    const offset = (page - 1) * ITEMS_PER_PAGE
+    let query = ''
+    if (req.query.limited) {
+      const limit = parseInt(req.query.limited)
+      query = `
+        SELECT c.phone_model, cv.*, co.name, co.price
+        FROM cases_variants AS cv
+        JOIN \`case\` AS c ON cv.case_id = c.id
+        JOIN comparison AS co ON cv.id = co.case_variant_id
+        LIMIT ${limit}
+      `
+    } else {
+      const page = parseInt(req.params.page) || 1
+      const offset = (page - 1) * ITEMS_PER_PAGE
 
-    //get all cases variants
-    const query = `
+      //get all cases variants
+      query = `
         SELECT c.phone_model, cv.*, co.name, co.price
         FROM cases_variants AS cv
         JOIN \`case\` AS c ON cv.case_id = c.id
         JOIN comparison AS co ON cv.id = co.case_variant_id
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `
+      `
+    }
 
     const [rows] = await pool.query(query)
     res.json(rows)
