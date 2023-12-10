@@ -14,10 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * <p>
  *     This class uses the JUnit to test caseDao methods.
  * </p>
+ * @see CaseDao
+ * @see CaseDao#init()
+ * @see CaseDao#filtered(String)
+ * @see CaseDao#isFilteredAndChecked(String)
+ * @see CaseDao#saveCase(ArrayList, String)
+ * @see CaseDao#printData(String, String, String, String, String, String)
  *
  * <h1>Example usage:</h1>
  *     <pre>{@code
- *         TestCaseDao testCaseDao = new TestCaseDao();
+ *         CaseDaoTest testCaseDao = new CaseDaoTest();
  *         testCaseDao.setUp();
  *         testCaseDao.testFiltered();
  *         testCaseDao.testIsFilteredAndChecked();
@@ -30,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @version 1.0
  * @since 2023-12-10
  */
-public class TestCaseDao {
+public class CaseDaoTest {
     private CaseDao caseDao;
 
     @BeforeEach

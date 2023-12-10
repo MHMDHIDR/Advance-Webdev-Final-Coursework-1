@@ -1,6 +1,7 @@
 package com.pricecomparison.webscraping;
 
 import com.pricecomparison.util.Cookies;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -15,6 +16,7 @@ public class WebScrapper extends Thread {
     CaseDao caseDao;
     Cookies cookies;
     WebDriver driver;
+    JavascriptExecutor jsExecutor;
 
     public CaseDao getCaseDao() {
         return caseDao;
@@ -29,6 +31,10 @@ public class WebScrapper extends Thread {
             driver = new ChromeDriver();
         }
         return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 
     public void quitDriver() {
