@@ -5,24 +5,6 @@ import app from '../../index.js'
 const expect = chai.expect
 const request = supertest(app)
 
-let server
-
-before(done => {
-  // Start the server before running tests
-  server = app.listen(4001, () => {
-    console.log('Server is running on http://localhost:4002')
-    done()
-  })
-})
-
-after(done => {
-  // Close the server after all tests are completed
-  server.close(() => {
-    console.log('Server closed')
-    done()
-  })
-})
-
 describe('GET /case/:page', () => {
   it('should get cases with default pagination', async () => {
     const response = await request.get('/case/1')

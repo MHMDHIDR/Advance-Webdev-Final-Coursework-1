@@ -50,8 +50,6 @@ export const getCases = async (req, res) => {
     const [rows] = await pool.query(query)
     res.json(rows)
   } catch (error) {
-    console.error('Error fetching case variants:', error.message)
-
     // Handle specific errors and send appropriate response
     if (error instanceof SyntaxError || error instanceof TypeError) {
       res.status(400).json({ error: 'Bad request syntax or unsupported query parameter' })
