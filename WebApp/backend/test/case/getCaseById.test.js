@@ -1,8 +1,7 @@
-import chai from 'chai'
+import { expect } from 'chai'
 import supertest from 'supertest'
 import app from '../../index.js'
 
-const expect = chai.expect
 const request = supertest(app)
 
 /**

@@ -2,12 +2,11 @@ import pool from '../../utils/db.js'
 import { ITEMS_PER_PAGE } from '../../utils/const.js'
 
 /**
- *
  * @desc    Get search result based on phone model
  * @route   GET /api/search/:page
  * @access  Public
- * @param {*} req
- * @param {*} res
+ * @param   {*} req
+ * @param   {*} res
  * @return  {Object} { searchResultsRows }
  * @return  {Object} { error }
  */
@@ -17,7 +16,13 @@ export const searchResults = async (req, res) => {
   const offset = (page - 1) * ITEMS_PER_PAGE
 
   try {
-    //search based on phone model and case name
+    if (isNaN(page) || page < 1 || page === undefined || page === null) {
+      return res.status(404).json({ error: 'Invalid page parameter' })
+    }
+    if (!searchQuery || searchQuery === '' || searchQuery === undefined) {
+      return res.status(500).json({ error: 'No search query provided' })
+    }
+
     const searchQuerySQL = `
         SELECT cv.*, co.name, co.price, c.phone_model
         FROM cases_variants AS cv

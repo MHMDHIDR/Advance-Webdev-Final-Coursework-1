@@ -40,5 +40,15 @@ public class ArgosScraperTest {
 
         // Clean up resources
         argosScraper.quitDriver();
+
+        /*
+        * Mock the CaseDao
+        * Inject it to ArgosScraper
+        * Call the run method on the argosScraper
+        * use case Dao to verify that the data was saved
+        *
+        * verify(mockCaseDao, at Least(10)).saveCase(....)
+        *
+        * */
     }
 }

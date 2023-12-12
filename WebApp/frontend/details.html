@@ -105,30 +105,28 @@
                 products: [],
                 similarCases: [],
                 searchQuery: '',
-                title: '',
+                title: ''
             },
             methods: {
                 loadCaseDetails: function () {
-                    const caseId = new URLSearchParams(window.location.search).get('id');
+                    const caseId = new URLSearchParams(window.location.search).get('id')
                     // fetch using case ID
                     fetch(`http://localhost:4000/case/byId/${caseId}`)
                         .then((response) => response.json())
                         .then((dataFromJSON) => {
-                            this.caseDetails = dataFromJSON;
-                            document.title = dataFromJSON.name || 'iPhone Cases Comparison';
-                            this.loadSimilarCases(caseId);
+                            this.caseDetails = dataFromJSON
+                            document.title = dataFromJSON.name || 'iPhone Cases Comparison'
+                            this.loadSimilarCases(caseId)
                         })
-                        .catch((error) => console.error('Error fetching case details:', error));
+                        .catch((error) => console.error('Error fetching case details:', error))
                 },
 
                 loadSimilarCases: function (caseId) {
                     // fetch similar cases using the new endpoint with caseId
                     fetch(`http://localhost:4000/case/similar/${caseId}`)
                         .then((response) => response.json())
-                        .then((dataFromJSON) => {
-                            return this.similarCases = dataFromJSON
-                        })
-                        .catch((error) => console.error('Error fetching similar cases:', error));
+                        .then((dataFromJSON) => { this.similarCases = dataFromJSON })
+                        .catch((error) => console.error('Error fetching similar cases:', error))
                 },
 
                 extractPhoneModel: function (fullPhoneModel) {
@@ -139,13 +137,13 @@
 
                 redirectSearch: function () {
                     //Save in sessionStorage
-                    sessionStorage.setItem('searchQuery', this.searchQuery);
+                    sessionStorage.setItem('searchQuery', this.searchQuery)
                     //Redirect to search.html to perform search
-                    window.location.href = './search.html';
+                    window.location.href = './search.html'
                 },
             },
             created() {
-                this.loadCaseDetails();
+                this.loadCaseDetails()
             },
         });
     </script>

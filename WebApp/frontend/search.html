@@ -54,22 +54,23 @@
           </div>
 
           <div class="pagination">
-            <a href="search.html">First</a>
-            <a v-if="currentPage > 1" :href="'search.html?page=' + (currentPage - 1)">
+            <a href="search.html" v-if="currentPage > 1">First</a>
+            <a v-if="currentPage > 1"
+              :href="(currentPage - 1) === 1 ? 'search.html' : 'search.html?page=' + (currentPage - 1)">
               <img src="./assets/arrow-animated.gif" alt="Previous Page" width="50" height="50" />
             </a>
-
             <!--
               Display the search pages dynamically using the displayPages computed property
             -->
             <template v-for="page in displayPages">
               <span v-if="page === '...'">{{ page }}</span>
-              <a v-else :key="page" :href="'search.html?page=' + page" :class="{ 'current': page === currentPage }">
+              <a v-else :key="page" :class="{ 'current': page === currentPage }"
+                :href="page === 1 ? 'search.html' : 'search.html?page=' + page">
                 {{ page }}
               </a>
             </template>
 
-            <a v-if="currentPage < totalPages" :href="'search.html?page=' + (currentPage + 1)">
+            <a v-if=" currentPage < totalPages" :href="'search.html?page=' + (currentPage + 1)">
               <img src="./assets/arrow-animated.gif" alt="Next Page" width="50" height="50" />
             </a>
             <a :href="'search.html?page=' + totalPages">Last</a>
