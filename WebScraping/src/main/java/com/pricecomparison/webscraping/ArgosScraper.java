@@ -67,7 +67,7 @@ public class ArgosScraper extends WebScrapper {
 
                 for (Element product : productElements) {
                     String productName = product.select("div[data-test='component-product-card-title']").text();
-                    String productPrice = product.select("div[data-test='component-product-card-price'] strong").text(); //Remove the pound symbol from the price
+                    String productPrice = product.select("div[data-test='component-product-card-price'] strong").text().replace("£", "");
                     String productLink = "https://www.argos.co.uk/"+product.select("[data-test='component-product-card-textContainer'] a[data-test='component-product-card-title-link']").attr("href");
                     String productImageURL = "https:" + product.select("[data-test=\"component-product-card-imageWrapper\"] img").attr("src");
 

@@ -1,13 +1,11 @@
 package com.pricecomparison.test.webscraping;
 
-import com.pricecomparison.PhoneCase;
 import com.pricecomparison.webscraping.ArgosScraper;
 import com.pricecomparison.webscraping.CaseDao;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,11 +36,8 @@ public class ArgosScraperTest {
         // Proceed with your test as usual
         argosScraper.start();
 
-        // Instead of verify, check the state of the driver, e.g., assert something about the page source.
+        // Assert the page source is not null
         String pageSource = driver.getPageSource();
-        assertNotNull(pageSource);
-
-        // assert that the page source contains the cases
         assertNotNull(pageSource);
 
         try {
