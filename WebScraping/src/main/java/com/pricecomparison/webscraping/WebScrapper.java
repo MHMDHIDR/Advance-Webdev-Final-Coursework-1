@@ -16,7 +16,6 @@ public class WebScrapper extends Thread {
     CaseDao caseDao;
     Cookies cookies;
     WebDriver driver;
-    JavascriptExecutor jsExecutor;
 
     public CaseDao getCaseDao() {
         return caseDao;

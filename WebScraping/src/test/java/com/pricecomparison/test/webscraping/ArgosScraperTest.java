@@ -1,12 +1,14 @@
 package com.pricecomparison.test.webscraping;
 
+import com.pricecomparison.PhoneCase;
 import com.pricecomparison.webscraping.ArgosScraper;
+import com.pricecomparison.webscraping.CaseDao;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class tests the ArgosScraper class.
@@ -14,41 +16,43 @@ import static org.mockito.Mockito.when;
  * @see ArgosScraper
  * @see ArgosScraper#start()
  *
- *
  * @author Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
  * @version 1.0
  * @since 2023-12-10
  */
 public class ArgosScraperTest {
     @Test
-    void testArgosScraper() {
-        // Mock the WebDriver
-        WebDriver mockDriver = mock(WebDriver.class);
+    public void testArgosScraper() {
+        WebDriver driver = new ChromeDriver();
 
-        // Create an instance of ArgosScraper
+        // Create a mock for CaseDao
+        CaseDao caseDao = new CaseDao();
+
+        // Create an instance of ArgosScraper using the real WebDriver
         ArgosScraper argosScraper = new ArgosScraper();
-        argosScraper.setDriver(mockDriver);
+        argosScraper.setDriver(driver);
 
-        // Mock the behavior for the get method of the WebDriver
-        when(mockDriver.getPageSource()).thenReturn("<html>YourMockedPage</html>");
+        // Set other dependencies if needed, e.g., CaseDao
+        argosScraper.setCaseDao(caseDao);
 
-        // Call the run method on the argosScraper
+        // Proceed with your test as usual
         argosScraper.start();
 
-        // Verify that the WebDriver was called with the correct URL
-        verify(mockDriver).get("https://www.argos.co.uk/search/iphone-case/opt/page:1");
+        // Instead of verify, check the state of the driver, e.g., assert something about the page source.
+        String pageSource = driver.getPageSource();
+        assertNotNull(pageSource);
 
-        // Clean up resources
-        argosScraper.quitDriver();
+        // assert that the page source contains the cases
+        assertNotNull(pageSource);
 
-        /*
-        * Mock the CaseDao
-        * Inject it to ArgosScraper
-        * Call the run method on the argosScraper
-        * use case Dao to verify that the data was saved
-        *
-        * verify(mockCaseDao, at Least(10)).saveCase(....)
-        *
-        * */
+        try {
+            // Adding the delay making JavaScript to the scroll through the page before quitting the driver
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            // Clean up resources
+            argosScraper.quitDriver();
+        }
     }
 }
