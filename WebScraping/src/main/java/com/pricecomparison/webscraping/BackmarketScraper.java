@@ -2,6 +2,7 @@ package com.pricecomparison.webscraping;
 
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.util.Cookies;
 import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.Const;
 
@@ -29,8 +30,10 @@ public class BackmarketScraper extends WebScrapper {
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.backmarket.co.uk/en-gb/search?q=iphone_case&page=" + page;
                 driver.get(url);
+
+                sleep(2000);
                 //must accept cookies
-                cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
+                Cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
 
                 // Find and process each product on the page
                 List<WebElement> productLinks = driver.findElements(By.cssSelector(".productCard a"));
@@ -46,8 +49,10 @@ public class BackmarketScraper extends WebScrapper {
                     try {
                         // Navigate to the product page
                         driver.get(productUrl);
+                        sleep(3000);
+
                         //must accept cookies
-                cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
+                        Cookies.accept(driver, "[data-qa=\"accept-cta\"]", WEBSITE);
 
                         // Sleep randomly for 1-2.5 seconds
                         try {
@@ -94,8 +99,8 @@ public class BackmarketScraper extends WebScrapper {
                             productColour
                         );
 
-                        String[] models = caseDao.getModels(productModels);
-                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        String[] models = caseDao.getModels(productModels) == null ? new String[]{productModels} : caseDao.getModels(productModels);
+                        List<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
                             model = caseDao.filtered(model);
 
@@ -119,11 +124,7 @@ public class BackmarketScraper extends WebScrapper {
 
                     } catch (WebDriverException e) {
                         e.printStackTrace();
-                        continue; // Skip the rest of the loop and move to the next iteration
                     }
-
-                    // Navigate back to the search results page
-                    //driver.navigate().back();
                 }
             }
         } catch (Exception e) {

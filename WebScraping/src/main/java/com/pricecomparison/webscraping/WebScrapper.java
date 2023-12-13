@@ -1,9 +1,9 @@
 package com.pricecomparison.webscraping;
 
-import com.pricecomparison.util.Cookies;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.time.Duration;
 
 /**
  * This class includes getters and setters for the CaseDao, WebDriver and Cookies.
@@ -14,7 +14,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
  */
 public class WebScrapper extends Thread {
     CaseDao caseDao;
-    Cookies cookies;
     WebDriver driver;
 
     public CaseDao getCaseDao() {
@@ -28,6 +27,8 @@ public class WebScrapper extends Thread {
     public WebDriver getDriver() {
         if (driver == null) {
             driver = new ChromeDriver();
+            //Set the page load timeout
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         }
         return driver;
     }

@@ -40,7 +40,7 @@ public class Cookies {
      *    </p>
      *
      */
-    public void accept(WebDriver driver, String cookiesButtonSelector, String WEBSITE) {
+    public static void accept(WebDriver driver, String cookiesButtonSelector, String WEBSITE) {
         try {
             WebElement cookiesButton = driver.findElement(By.cssSelector(cookiesButtonSelector));
             cookiesButton.click();

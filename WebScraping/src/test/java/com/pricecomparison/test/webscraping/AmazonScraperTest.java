@@ -1,45 +1,44 @@
 package com.pricecomparison.test.webscraping;
 
-import com.pricecomparison.webscraping.ArgosScraper;
+import com.pricecomparison.webscraping.AmazonScraper;
 import com.pricecomparison.webscraping.CaseDao;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 /**
- * This class tests the ArgosScraper class.
+ * This class tests the AmazonScraper class.
  *
- * @see ArgosScraper
- * @see ArgosScraper#start()
+ * @see AmazonScraper
+ * @see AmazonScraper#start()
  *
  * @author Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
  * @version 1.0
  * @since 2023-12-10
  */
-public class ArgosScraperTest {
+public class AmazonScraperTest {
     @Test
-    public void testArgosScraper() {
+    public void testAmazonScraper() {
         // Create a mock for CaseDao
         CaseDao caseDao = mock(CaseDao.class);
 
-        // Create an instance of ArgosScraper using the real WebDriver
-        ArgosScraper argosScraper = new ArgosScraper();
+        // Create an instance of AmazonScraper using the real WebDriver
+        AmazonScraper amazonScraper = new AmazonScraper();
 
         // Setting the dependencies (injecting the mock caseDao)
-        argosScraper.setCaseDao(caseDao);
+        amazonScraper.setCaseDao(caseDao);
 
         // Proceed with your test as usual
-        argosScraper.start();
+        amazonScraper.start();
 
         //Wait for thread to finish
         try {
-            argosScraper.join();
+            amazonScraper.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         verify(caseDao, atLeast(10)).filtered(anyString());
-        verify(caseDao, atLeast(10)).printData(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
 
         try {
             // Adding the delay making JavaScript to the scroll through the page before quitting the driver
@@ -48,7 +47,7 @@ public class ArgosScraperTest {
             e.printStackTrace();
         } finally {
             // Clean up resources
-            argosScraper.quitDriver();
+            amazonScraper.quitDriver();
         }
     }
 }

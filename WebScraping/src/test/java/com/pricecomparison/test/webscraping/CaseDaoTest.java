@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see CaseDao#init()
  * @see CaseDao#filtered(String)
  * @see CaseDao#isFilteredAndChecked(String)
- * @see CaseDao#saveCase(ArrayList, String)
+ * @see CaseDao#saveCase(List, String)
  * @see CaseDao#printData(String, String, String, String, String, String)
  *
  * <h1>Example usage:</h1>

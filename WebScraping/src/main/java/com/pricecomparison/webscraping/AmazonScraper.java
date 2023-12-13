@@ -2,16 +2,16 @@ package com.pricecomparison.webscraping;
 
 import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
+import com.pricecomparison.util.ExtractProductModel;
 import com.pricecomparison.util.ExtractProductPrice;
 import com.pricecomparison.util.Const;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <h1>AmazonScraper class extends WebScrapper class</h1>
@@ -26,6 +26,8 @@ import java.util.List;
 public class AmazonScraper extends WebScrapper {
     private static final String WEBSITE = "Amazon";
 
+    eBayScraper eBayScraper = new eBayScraper();
+
     @Override
     public void run() {
         // Initialize the WebDriver
@@ -35,12 +37,12 @@ public class AmazonScraper extends WebScrapper {
             /* Iterate through each page of the search results
              * and scrape the product information
              */
+
+            //should find 31 Items on the first page
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
                 driver.get(url);
-
-                //must accept cookies
-                cookies.accept(driver, ".sp-cc-accept", WEBSITE);
+                sleep(3000);
 
                 // Get all product links on the page
                 List<WebElement> productLinks = driver.findElements(By.cssSelector("a.a-link-normal.s-no-outline"));
@@ -60,11 +62,10 @@ public class AmazonScraper extends WebScrapper {
                         // Scrape product information
                         String productName = driver.findElement(By.cssSelector("span#productTitle.a-size-large.product-title-word-break")).getText();
                         String productPrice = ExtractProductPrice.price(driver).replace("£", "");
+                        String productImageURL = driver.findElement(By.cssSelector("span.a-declarative div img#landingImage.a-dynamic-image")).getAttribute("src");
+                        String productModels = Objects.equals(extractPhoneModels().toString(), "N/A") ? ExtractProductModel.model(productName) : extractPhoneModels().toString();
                         String productColour = driver.findElement(By.cssSelector("table tbody tr.po-color td span.po-break-word")).getText();
                         productColour = productColour.equals("Transparent") ? "Clear" : productColour;
-                        String productModels = driver.findElement(By.cssSelector(".po-compatible_phone_models td .po-break-word")).getText();
-                        String productImageURL = driver.findElement(By.cssSelector("span.a-declarative div img#landingImage.a-dynamic-image")).getAttribute("src");
-
 
                         caseDao.printData(
                             productUrl,
@@ -75,8 +76,8 @@ public class AmazonScraper extends WebScrapper {
                             productColour
                         );
 
-                        String[] models = caseDao.getModels(productModels);
-                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        String[] models =  caseDao.getModels(productModels)  == null ? new String[] {productModels} : caseDao.getModels(productModels);
+                        List<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
                             model = caseDao.filtered(model);
 
@@ -101,6 +102,12 @@ public class AmazonScraper extends WebScrapper {
                         System.err.println(e.getMessage());
                     }
                 }
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,5 +116,13 @@ public class AmazonScraper extends WebScrapper {
         }
 
         System.out.println("✔ AmazonScraper thread finished scraping.");
+    }
+
+    private List<String> extractPhoneModels() {
+        List<String> modelsSelectors = Arrays.asList(
+                ".po-compatible_phone_models td .po-break-word",
+                "#inline-twister-expanded-dimension-text-size_name"
+        );
+        return eBayScraper.extractPhoneInfo(modelsSelectors, "span", "N/A");
     }
 }

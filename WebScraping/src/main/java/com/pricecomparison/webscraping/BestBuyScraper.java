@@ -29,6 +29,7 @@ public class BestBuyScraper extends WebScrapper {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
         try {
+            //should find 18 Items on the first page
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
                 String bestBuyUrl = "https://www.bestbuy.com/site/searchpage.jsp?st=iPhone+case&intl=nosplash&cp=" + page;
                 driver.get(bestBuyUrl);
@@ -71,7 +72,7 @@ public class BestBuyScraper extends WebScrapper {
                             System.out.println("Got model and color from specifications");
                             productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
                             productColour = driver.findElement(By.cssSelector("ul:nth-child(2) div:nth-child(8) div.description")).getText();
-                        } catch (org.openqa.selenium.NoSuchElementException error) {
+                        } catch (NoSuchElementException error) {
                             System.err.println("--Got the Color from ProductName--");
                             productModels = driver.findElement(By.cssSelector("ul:nth-child(1) div:nth-child(3) div.description")).getText();
                             productColour = extractColor(productName);
@@ -89,8 +90,8 @@ public class BestBuyScraper extends WebScrapper {
                         );
 
 
-                        String[] models = caseDao.getModels(productModels);
-                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        String[] models = caseDao.getModels(productModels) == null ? new String[]{productModels} : caseDao.getModels(productModels);
+                        List<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
                             model = caseDao.filtered(model);
 
@@ -114,10 +115,7 @@ public class BestBuyScraper extends WebScrapper {
 
                     } catch (WebDriverException e) {
                         System.err.println(e.getMessage());
-                        continue;
                     }
-
-                    driver.navigate().back();
                 }
             }
         } catch (Exception e) {

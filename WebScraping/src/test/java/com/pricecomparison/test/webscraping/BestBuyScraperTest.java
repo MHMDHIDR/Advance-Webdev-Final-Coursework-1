@@ -1,54 +1,54 @@
 package com.pricecomparison.test.webscraping;
 
-import com.pricecomparison.webscraping.ArgosScraper;
+import com.pricecomparison.webscraping.BestBuyScraper;
 import com.pricecomparison.webscraping.CaseDao;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 /**
- * This class tests the ArgosScraper class.
+ * This class tests the BestBuyScraper class.
  *
- * @see ArgosScraper
- * @see ArgosScraper#start()
+ * @see BestBuyScraper
+ * @see BestBuyScraper#start()
  *
  * @author Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
  * @version 1.0
  * @since 2023-12-10
  */
-public class ArgosScraperTest {
+public class BestBuyScraperTest {
     @Test
-    public void testArgosScraper() {
+    public void testBestBuyScraper() {
         // Create a mock for CaseDao
         CaseDao caseDao = mock(CaseDao.class);
 
-        // Create an instance of ArgosScraper using the real WebDriver
-        ArgosScraper argosScraper = new ArgosScraper();
+        // Create an instance of BestBuyScraper using the real WebDriver
+        BestBuyScraper bestBuyScraper = new BestBuyScraper();
 
         // Setting the dependencies (injecting the mock caseDao)
-        argosScraper.setCaseDao(caseDao);
+        bestBuyScraper.setCaseDao(caseDao);
 
         // Proceed with your test as usual
-        argosScraper.start();
+        bestBuyScraper.start();
 
         //Wait for thread to finish
         try {
-            argosScraper.join();
+            bestBuyScraper.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        verify(caseDao, atLeast(10)).filtered(anyString());
-        verify(caseDao, atLeast(10)).printData(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
+        // Verify that the printData() and saveCase() methods are called at least 10 times --> or I can also try calling them atLeastOnce()
+        verify(caseDao, atLeast(10)).printData( anyString(),anyString(),anyString(),anyString(),anyString(),anyString());
 
         try {
-            // Adding the delay making JavaScript to the scroll through the page before quitting the driver
+            // Adding the delay
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             // Clean up resources
-            argosScraper.quitDriver();
+            bestBuyScraper.quitDriver();
         }
     }
 }

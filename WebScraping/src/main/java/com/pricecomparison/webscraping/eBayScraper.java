@@ -4,10 +4,7 @@ import com.pricecomparison.PhoneCase;
 import com.pricecomparison.PhoneCaseVariation;
 import com.pricecomparison.util.Const;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +31,15 @@ public class eBayScraper extends WebScrapper {
                 // Get all product links on the page
                 List<WebElement> productLinks = driver.findElements(By.cssSelector("a.s-item__link"));
 
-                // Iterate through each product URL
-                for (int i = 1; i < productLinks.size(); i++) {
-                    WebElement productLink = productLinks.get(i);
-                    String productUrl = productLink.getAttribute("href");
+                // Collect all product URLs and remove the first one because it is not a product
+                List<String> productUrls = new ArrayList<>();
+                for (WebElement productLink : productLinks) {
+                    productUrls.add(productLink.getAttribute("href"));
+                }
+                productUrls.remove(0);
 
+                // Iterate through each product URL
+                for (String productUrl : productUrls) {
                     try {
                         // Navigate to the product page
                         driver.get(productUrl);
@@ -60,8 +61,8 @@ public class eBayScraper extends WebScrapper {
                         );
 
                         // Apply model checking
-                        String[] models = caseDao.getModels(phoneModels.toString());
-                        ArrayList<PhoneCase> cases = new ArrayList<>();
+                        String[] models = caseDao.getModels(phoneModels.toString())  == null ? new String[]{phoneModels.toString()} : caseDao.getModels(phoneModels.toString());
+                        List<PhoneCase> cases = new ArrayList<>();
                         for (String model : models) {
                             model = caseDao.filtered(model);
 
@@ -85,13 +86,12 @@ public class eBayScraper extends WebScrapper {
                                 caseDao.savePrice(phoneCaseVariation, WEBSITE, productName, productPrice, productUrl);
                             }
                         }
+                    } catch (NoSuchElementException error) {
+                        System.out.println("⚠ NoSuchElementException: " + error.getMessage());
+                    } catch (TimeoutException exTimeout) {
+                        System.out.println("⚠ TimeoutException: " + exTimeout.getMessage());
                     } catch (WebDriverException e) {
-                        System.out.println(e.getMessage());
-                    } finally {
-                        // Navigate back to the search results page
-                        driver.navigate().back();
-                        // Re-fetch the product links after navigating back
-                        productLinks = driver.findElements(By.cssSelector("a.s-item__link"));
+                        e.printStackTrace();
                     }
                 }
 
@@ -123,7 +123,7 @@ public class eBayScraper extends WebScrapper {
                 ".x-msku__select-box[selectboxlabel='MODEL']",
                 ".x-msku__select-box[selectboxlabel='Device']"
         );
-        return extractPhoneInfo(modelsSelectors, "N/A");
+        return extractPhoneInfo(modelsSelectors, "","N/A");
     }
 
     /**
@@ -135,7 +135,7 @@ public class eBayScraper extends WebScrapper {
                 ".x-msku__select-box[selectboxlabel='Case Colour']",
                 ".x-msku__select-box[selectboxlabel='Color']"
         );
-        return extractPhoneInfo(colorSelectors, "Clear");
+        return extractPhoneInfo(colorSelectors, "","Clear");
     }
 
     /**
@@ -144,7 +144,9 @@ public class eBayScraper extends WebScrapper {
      * @param defaultInfo The default information to return if none of the selectors match
      * @return The phone information List
      */
-    private List<String> extractPhoneInfo(List<String> selectors, String defaultInfo) {
+    public List<String> extractPhoneInfo(List<String> selectors, String tagName, String defaultInfo) {
+        tagName = tagName == null || tagName.isEmpty() ? "option" : tagName;
+
         for (String selector : selectors) {
             try {
                 List<WebElement> selectElements = driver.findElements(By.cssSelector(selector));
@@ -153,7 +155,7 @@ public class eBayScraper extends WebScrapper {
                     List<String> phoneInfo = new ArrayList<>();
 
                     for (WebElement selectElement : selectElements) {
-                        List<WebElement> optionElements = selectElement.findElements(By.tagName("option"));
+                        List<WebElement> optionElements = selectElement.findElements(By.tagName(tagName));
                         for (int j = 1; j < optionElements.size(); j++) {
                             phoneInfo.add(optionElements.get(j).getText());
                         }

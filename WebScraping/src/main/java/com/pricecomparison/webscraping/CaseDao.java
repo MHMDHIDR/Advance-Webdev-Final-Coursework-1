@@ -60,7 +60,7 @@ public class CaseDao {
      * @param model String of the phone model
      * uses my custom method filtered() to remove unwanted characters from the model
      */
-    public void saveCase(ArrayList<PhoneCase> cases, String model) {
+    public void saveCase(List<PhoneCase> cases, String model) {
         Session session = sessionFactory.openSession();
         String filteredModel = filtered(model).toLowerCase();
 

@@ -15,6 +15,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * ArgosScraper class extends WebScrapper class
@@ -86,9 +87,10 @@ public class ArgosScraper extends WebScrapper {
                     );
 
                     String[] models = ExtractProductModel.model(productName).replace("Apple", "").trim().split(",");
-                    ArrayList<PhoneCase> cases = new ArrayList<>();
+                    List<PhoneCase> cases = new ArrayList<>();
                     for (String model : models) {
                         model = caseDao.filtered(model);
+
                         if (!caseDao.isFilteredAndChecked(model)) {
                             continue;
                         }
@@ -96,7 +98,7 @@ public class ArgosScraper extends WebScrapper {
                         caseDao.saveCase(cases, model);
                     }
 
-                    ArrayList<PhoneCaseVariation> variants = new ArrayList<PhoneCaseVariation>();
+                    ArrayList<PhoneCaseVariation> variants = new ArrayList<>();
                     for (PhoneCase phoneCase : cases) {
                         // Create PhoneCaseVariation object and save it to the database
                         caseDao.saveVariant(variants, phoneCase, productColour, productImageURL);
