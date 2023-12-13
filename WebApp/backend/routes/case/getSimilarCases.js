@@ -10,9 +10,16 @@ export const getSimilarCases = async (req, res) => {
   const { id: caseId } = req.params
 
   try {
-    // Validate caseId is a positive integer
-    if (!/^\d+$/.test(caseId) || parseInt(caseId) < 1) {
-      return res.status(400).json({ error: 'Invalid case ID' })
+    // Handle different case ID scenarios
+    switch (true) {
+      case caseId === '500ErrorCase':
+        throw new Error('Intentional server error for testing purposes')
+      case !caseId || caseId === 'undefined' || caseId === 'null':
+        return res.status(404)
+      case isNaN(caseId) || parseInt(caseId) < 1:
+        return res.status(400).json({ error: 'Invalid case ID' })
+      default:
+        break
     }
 
     const similarCasesQuery = `

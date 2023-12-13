@@ -47,4 +47,12 @@ describe('GET /case/byId/:id', () => {
     expect(response.status).to.equal(404)
     expect(response.body).to.have.property('error', 'Case not found')
   })
+
+  it('should handle an existing but malformed case ID and return 400 status', async () => {
+    // Malformed case ID
+    const response = await request.get('/case/byId/20abc')
+
+    expect(response.status).to.equal(400)
+    expect(response.body).to.have.property('error', 'Invalid case ID')
+  })
 })

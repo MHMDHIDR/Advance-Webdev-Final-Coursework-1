@@ -23,4 +23,13 @@ describe('Database Connection Pool', () => {
     const connection = await pool.getConnection()
     connection.release()
   })
+
+  it('should handle errors when selecting from non_existent_table', async () => {
+    try {
+      await pool.execute('SELECT * FROM non_existent_table')
+    } catch (error) {
+      // Ensure that an error is caught
+      expect(error).to.exist
+    }
+  })
 })

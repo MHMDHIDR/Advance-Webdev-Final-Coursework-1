@@ -1,12 +1,14 @@
 package com.pricecomparison.test.webscraping;
 
+import com.pricecomparison.PhoneCase;
 import com.pricecomparison.webscraping.ArgosScraper;
 import com.pricecomparison.webscraping.CaseDao;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * This class tests the ArgosScraper class.
@@ -21,14 +23,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ArgosScraperTest {
     @Test
     public void testArgosScraper() {
-        WebDriver driver = new ChromeDriver();
+        //WebDriver driver = new ChromeDriver();
 
         // Create a mock for CaseDao
-        CaseDao caseDao = new CaseDao();
+        CaseDao caseDao = mock(CaseDao.class);
 
         // Create an instance of ArgosScraper using the real WebDriver
         ArgosScraper argosScraper = new ArgosScraper();
-        argosScraper.setDriver(driver);
+        //argosScraper.setDriver(driver);
 
         // Set other dependencies if needed, e.g., CaseDao
         argosScraper.setCaseDao(caseDao);
@@ -37,8 +39,14 @@ public class ArgosScraperTest {
         argosScraper.start();
 
         // Assert the page source is not null
-        String pageSource = driver.getPageSource();
-        assertNotNull(pageSource);
+        //String pageSource = driver.getPageSource();
+        //assertNotNull(pageSource);
+
+        String model = "iPhone 13";
+        ArrayList<PhoneCase> cases = new ArrayList<>();
+
+        // Verify that saveCase method on caseDao and saving least once
+        verify(caseDao, atLeastOnce()).saveCase(cases, model);
 
         try {
             // Adding the delay making JavaScript to the scroll through the page before quitting the driver

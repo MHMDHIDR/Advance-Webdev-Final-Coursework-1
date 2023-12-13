@@ -5,6 +5,16 @@ import app from '../../index.js'
 const request = supertest(app)
 
 describe('GET /case/similar/:id', () => {
+  it('should handle intentional server error and return 500 status', async () => {
+    const response = await request.get('/case/similar/500ErrorCase')
+    expect(response.status).to.equal(500)
+  })
+
+  it('should handle missing case ID parameter and return 404 status', async () => {
+    const response = await request.get('/case/similar/')
+    expect(response.status).to.equal(404)
+  })
+
   it('should get similar cases', async () => {
     const response = await request.get('/case/similar/300')
     expect(response.status).to.equal(200)
@@ -35,10 +45,8 @@ describe('GET /case/similar/:id', () => {
   it('should handle case with no similar cases and return empty array', async () => {
     const response = await request.get('/case/similar/2')
     expect(response.status).to.equal(200)
-
     // Check that the response is an array
     expect(response.body).to.be.an('array')
-
     // Check that the array is empty
     expect(response.body).to.have.lengthOf(0)
   })
