@@ -18,6 +18,13 @@ import java.util.List;
 public class eBayScraper extends WebScrapper {
     private static final String WEBSITE = "eBay";
 
+    /**
+     * This is the constructor of the eBayScraper class.
+     */
+    public eBayScraper() {
+        super();
+    }
+
     // Initialize the WebDriver
     WebDriver driver = getDriver();
 
@@ -113,7 +120,7 @@ public class eBayScraper extends WebScrapper {
 
     /**
      * Extracts the phone models from the given selectors
-     * @return @extractPhoneInfo() that returns The phone models List
+     * @return @extractPhoneInfo The phone models List
      */
     private List<String> extractPhoneModels() {
         List<String> modelsSelectors = Arrays.asList(
@@ -142,7 +149,9 @@ public class eBayScraper extends WebScrapper {
      * Extracts the phone information from the given selectors
      * @param selectors The selectors to use to extract the phone information
      * @param defaultInfo The default information to return if none of the selectors match
-     * @return The phone information List
+     * @param tagName The tag name to use to extract the phone information
+     *
+     * @return phoneInfo The phone information List
      */
     public List<String> extractPhoneInfo(List<String> selectors, String tagName, String defaultInfo) {
         tagName = tagName == null || tagName.isEmpty() ? "option" : tagName;

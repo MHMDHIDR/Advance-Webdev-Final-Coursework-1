@@ -14,6 +14,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cases_variants")
 public class PhoneCaseVariation {
+    /**
+     * This is the constructor of the ExtractProductPrice class.
+     */
+    public PhoneCaseVariation() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -29,33 +34,71 @@ public class PhoneCaseVariation {
     @Column(name = "image_url")
     private String imageUrl;
 
+    /**
+     * This field is used to create a one-to-one relationship between this class
+     * and the PriceComparison class.
+     */
     @OneToOne(mappedBy = "caseVariant", cascade = CascadeType.ALL)
     private PriceComparison priceComparison;
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * @param color The color of the phone case.
+     */
     public void setColor(String color) {
         this.color = color;
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * @param imageUrl The URL of the image of the phone case.
+     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * @param phoneCase The phone case that this variation belongs to.
+     */
     public void setPhoneCase(PhoneCase phoneCase) {
         this.phoneCase = phoneCase;
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * @param priceComparison The price comparison of this variation.
+     */
     public void setPriceComparison(PriceComparison priceComparison) {
         this.priceComparison = priceComparison;
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * Gets The ID of the phone case variation.
+     *
+     * @return id The ID of the phone case variation.
+     */
     public String getId() {
         return String.valueOf(id);
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * Gets The phone case that this variation belongs to.
+     *
+     * @return color The color of the phone case.
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * This constructor is used to create a new PhoneCaseVariation object.
+     * Gets The phone case that this variation belongs to.
+     *
+     * @return imageUrl The URL of the image of the phone case.
+     */
     public String getImageUrl() {
         return imageUrl;
     }

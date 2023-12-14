@@ -15,8 +15,8 @@ import java.util.List;
 /**
  * CaseDao class is used to save the phone case data to the database.
  * It uses Hibernate to connect to the database.
- * <p>
- *     <h1>Example usage:</h1>
+ * <div>
+ *     <h2>Example usage:</h2>
  *     <pre>{@code
  *     CaseDao caseDao = new CaseDao();
  *     caseDao.init();
@@ -28,10 +28,15 @@ import java.util.List;
  *         <b>Note:</b> The init() method must be called in the WebScraper
  *         before using the saveCase(), saveVariant() and savePrice() methods.
  *     </p>
- * </p>
+ * </div>
  */
 public class CaseDao {
     private SessionFactory sessionFactory;
+
+    /**
+     * Constructor for CaseDao class.
+     */
+    public CaseDao() {}
 
     /**
      * Initialize the SessionFactory instance.
@@ -155,8 +160,9 @@ public class CaseDao {
 
     /**
      * filtered() removes unwanted characters from the model
+     * uses regex to remove unwanted characters from the model
      * @param filteredModel String of the model to be filtered
-     * uses regex to remove unwanted characters
+     *
      * @return String of the filtered model
      */
     public String filtered(String filteredModel) {
@@ -170,8 +176,9 @@ public class CaseDao {
 
     /**
      * isFilteredAndChecked() checks if the model is filtered and checked
-     * @param cleanedModel String of the model to be checked
      * uses regex to check if the model is filtered and checked
+     * @param cleanedModel String of the model to be checked
+     *
      * @return boolean true if the model is filtered and checked, false otherwise
      */
     public boolean isFilteredAndChecked(String cleanedModel) {

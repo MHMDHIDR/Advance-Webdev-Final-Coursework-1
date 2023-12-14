@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * <h1>Utility class to extract the price of a product from a website</h1>
+ * <h2>Utility class to extract the price of a product from a website</h2>
  * <p>
  * args: driver - the WebDriver object
  * returns: the price of the product as a String
@@ -16,6 +16,11 @@ import org.openqa.selenium.WebElement;
  */
 public class ExtractProductPrice {
     /**
+     * This is the constructor of the ExtractProductPrice class.
+     */
+    public ExtractProductPrice() {}
+
+    /**
      * @param driver - the WebDriver object
      * The method takes a WebDriver object as an argument, and returns a String
      * containing the price of the product.
@@ -24,8 +29,7 @@ public class ExtractProductPrice {
      * first selector fails, it tries the second selector.
      * If both selectors fail, the method logs an error and returns a default value of £0.00.
      * @return the price of the product as a String
-     * throws Exception if both selectors fail
-     * </p>
+     * throws firstSelectorException Exception if both selectors fail
      */
     public static String price(WebDriver driver) {
         try {

@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * <h1>Utility class to convert currency</h1>
- * <p>
+ * <h2>Utility class to convert currency</h2>
+ * <br>
  *
  * @see <a href="https://www.baeldung.com/java-round-decimal-number">https://www.baeldung.com/java-round-decimal-number</a>
  * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
@@ -13,6 +13,10 @@ import java.math.RoundingMode;
  * @since   2023-12-10
  */
 public class CurrencyConverter {
+    /**
+     * CurrencyConverter constructor for the utility class
+     */
+    public CurrencyConverter() {}
     /**
      * Convert a price from USD to GBP
      * @param productPriceUSD The price to convert

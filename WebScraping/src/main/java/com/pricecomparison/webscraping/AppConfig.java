@@ -14,34 +14,33 @@ import java.util.ArrayList;
  *     and it used to initialize the ScraperManager bean and the WebScrapper beans.
  * </p>
  *
- * <p>
- *     Example:
- *     <pre>
- *         {@code
- *         @Configuration
- *         @ComponentScan(basePackages = "com.pricecomparison")
- *         public class AppConfig {
- *         @Bean
- *         public ScraperManager scraperManager() {
- *              ScraperManager scraperManager = new ScraperManager();
- *              ArrayList<WebScrapper> scraperList = new ArrayList<>();;
- *              scraperList.add(amazonScraper());
- *              scraperList.add(argosScraper());
- *              scraperList.add(eBayScraper());
- *              scraperList.add(bestBuyScraper());
- *              scraperList.add(backmarketScraper());
- *              scraperManager.setScraperList(scraperList);
- *              return scraperManager;
- *         }
- *         @Bean
- *         public AmazonScraper amazonScraper() {
- *              AmazonScraper amazonScraper = new AmazonScraper();
- *              amazonScraper.setCaseDao(caseDao());
- *              return amazonScraper;
- *         }
- *    </pre>
- *  </p>
- *
+ * <b> Example: AppConfig using ScraperManager and AmazonScraper beans</b>
+ * <pre>
+ *       {@code
+ *        @Configuration
+ *        @ComponentScan(basePackages = "com.pricecomparison")
+ *        public class AppConfig {
+ *            @Bean
+ *            public ScraperManager scraperManager() {
+ *                 ScraperManager scraperManager = new ScraperManager();
+ *                 ArrayList<WebScrapper> scraperList = new ArrayList<>();;
+ *                 scraperList.add(amazonScraper());
+ *                 scraperList.add(argosScraper());
+ *                 scraperList.add(eBayScraper());
+ *                 scraperList.add(bestBuyScraper());
+ *                 scraperList.add(backmarketScraper());
+ *                 scraperManager.setScraperList(scraperList);
+ *                 return scraperManager;
+ *            }
+ *            @Bean
+ *            public AmazonScraper amazonScraper() {
+ *                 AmazonScraper amazonScraper = new AmazonScraper();
+ *                 amazonScraper.setCaseDao(caseDao());
+ *                 return amazonScraper;
+ *            }
+ *        }
+ *     }
+ * </pre>
  *
  * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
  * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
@@ -52,8 +51,17 @@ import java.util.ArrayList;
 @ComponentScan(basePackages = "com.pricecomparison")
 public class AppConfig {
     /**
+     * AppConfig constructor
+     * It is used to create an AppConfig object
+     */
+    public AppConfig() {}
+
+    /**
      * Method is used to create a ScraperManager bean that
      * will be used to manage the scrapers and scrape the websites.
+     * it also initializes the WebScrapper beans.
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return ScraperManager bean
      */
     @Bean
     public ScraperManager scraperManager() {
@@ -71,6 +79,8 @@ public class AppConfig {
     /**
      * AmazonScraper bean will be used to scrape the Amazon website.
      * Also, the CaseDao bean is injected into the AmazonScraper bean
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return AmazonScraper bean
      */
     @Bean
     public AmazonScraper amazonScraper() {
@@ -82,6 +92,8 @@ public class AppConfig {
     /**
      * ArgosScraper bean will be used to scrape the Argos website.
      * Also, the CaseDao bean is injected into the ArgosScraper bean
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return ArgosScraper bean
      */
     @Bean
     public ArgosScraper argosScraper() {
@@ -93,6 +105,8 @@ public class AppConfig {
     /**
      * eBayScraper bean will be used to scrape the eBay website.
      * Also, the CaseDao bean is injected into the eBayScraper bean
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return eBayScraper bean
      */
     @Bean
     public eBayScraper eBayScraper() {
@@ -104,6 +118,8 @@ public class AppConfig {
     /**
      * BestBuyScraper bean will be used to scrape the BestBuy website.
      * Also, the CaseDao bean is injected into the BestBuyScraper bean
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return BestBuyScraper bean
      */
     @Bean
     public BestBuyScraper bestBuyScraper() {
@@ -114,7 +130,9 @@ public class AppConfig {
 
     /**
      * BackmarketScraper bean will be used to scrape the Backmarket website.
-      Also, the CaseDao bean is injected into the BackmarketScraper bean
+     * Also, the CaseDao bean is injected into the BackmarketScraper bean
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return BackmarketScraper bean
      */
     @Bean
     public BackmarketScraper backmarketScraper() {
@@ -127,6 +145,8 @@ public class AppConfig {
      * Method is used to create a CaseDao bean that
      * will be used to save the scraped data to the database.
      * it also initializes the session factory.
+     * @see <a href="https://www.javatpoint.com/spring-bean">Spring Bean</a>
+     * @return CaseDao bean
      */
     @Bean
     public CaseDao caseDao() {

@@ -29,6 +29,13 @@ import java.util.List;
 public class ArgosScraper extends WebScrapper {
     private static final String WEBSITE = "Argos";
 
+    /**
+     * This is the constructor of the ArgosScraper class.
+     */
+    public ArgosScraper() {
+        super();
+    }
+
     @Override
     public void run() {
         // Initialize the WebDriver

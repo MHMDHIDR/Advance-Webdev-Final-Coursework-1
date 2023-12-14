@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * <h1>HibernateUtil class</h1>
+ * <h2>HibernateUtil class</h2>
  * <p>
  * is used to create a session factory for
  * hibernate and to create a data source for the database
@@ -22,6 +22,10 @@ import java.util.Properties;
  */
 @Configuration
 public class HibernateUtil {
+    /**
+     * This is the constructor of the ExtractProductPrice class.
+     */
+    public HibernateUtil() {}
 
     /**
      * sessionFactory method is used to create a session factory for hibernate
@@ -36,12 +40,22 @@ public class HibernateUtil {
         return sessionFactoryBuilder.buildSessionFactory();
     }
 
+    /**
+     * hibernateProperties method is used to create a session factory for hibernate
+     * and to set the properties of the hibernate session factory
+     * @return hibernateProperties - the properties of the hibernate session factory
+     */
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         return hibernateProperties;
     }
 
+    /**
+     * sessionFactory method is used to create a session factory for hibernate
+     * and to get a data source for the database
+     * @return dataSource - the data source for the database
+     */
     @Bean
     public static DataSource getDataSource() {
         BasicDataSource dataSource = new BasicDataSource();

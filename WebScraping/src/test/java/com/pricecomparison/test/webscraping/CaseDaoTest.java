@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see CaseDao#saveCase(List, String)
  * @see CaseDao#printData(String, String, String, String, String, String)
  *
- * <h1>Example usage:</h1>
+ * <h2>Example usage:</h2>
  *     <pre>{@code
  *         CaseDaoTest testCaseDao = new CaseDaoTest();
  *         testCaseDao.setUp();

@@ -13,6 +13,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "comparison")
 public class PriceComparison {
+    /**
+     * This is the constructor of the ExtractProductPrice class.
+     */
+    public PriceComparison() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -34,21 +39,43 @@ public class PriceComparison {
     @Column(name = "url")
     private String url;
 
+    /**
+     * Constructor
+     * @param caseVariant Sets The phone case variation that this price comparison is for.
+     */
     public void setCaseVariant(PhoneCaseVariation caseVariant) {
         this.caseVariant = caseVariant;
     }
 
+    /**
+     * Constructor
+     * takes parameter name of type String and sets the name of the price comparison.
+     * @param name Sets the name of the price comparison.
+     */
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Constructor
+     * @param website Sets the website of the price comparison.
+     */
     public void setWebsite(String website) {
         this.website = website;
     }
 
+    /**
+     * Constructor
+     * @param price Sets the price of the price comparison.
+     */
     public void setPrice(String price) {
         this.price = price;
     }
 
+    /**
+     * Constructor
+     * @param url Sets the url of the price comparison.
+     */
     public void setUrl(String url) {
         this.url = url;
     }

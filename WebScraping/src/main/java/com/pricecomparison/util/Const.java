@@ -1,7 +1,7 @@
 package com.pricecomparison.util;
 
 /**
- * <h1>Utility class to store constants</h1>
+ * <h2>Utility class to store constants</h2>
  *
  * @see <a href="https://www.javatpoint.com/final-keyword">Final Keyword</a>
  * @author  Mohammed Ibrahim
@@ -9,6 +9,11 @@ package com.pricecomparison.util;
  * @since   2023-12-10
  */
 public class Const {
+    /**
+     * This is the constructor for the Const class.
+     */
+    public Const() {}
+
     /**
      * The maximum number of pages to be scraped.
      * This is used to prevent the program from scraping too many pages.

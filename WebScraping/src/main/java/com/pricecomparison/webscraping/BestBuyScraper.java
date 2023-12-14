@@ -22,6 +22,13 @@ import java.util.List;
 public class BestBuyScraper extends WebScrapper {
     private static final String WEBSITE = "BestBuy";
 
+    /**
+     * This is the constructor of the BestBuyScraper class.
+     */
+    public BestBuyScraper() {
+        super();
+    }
+
     @Override
     public void run() {
         // Initialize the WebDriver

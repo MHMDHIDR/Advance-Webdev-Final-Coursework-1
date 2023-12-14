@@ -4,18 +4,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <h1>Extracts the iPhone model(s) class</h1>
- * <p>
+ * <h2>Extracts the iPhone model(s) class</h2>
+ * <br>
  * @author  Mohammed Ibrahim  <a href="https://github.com/MHMDHIDR">Mohammed Ibrahim</a>
  * @version 1.0
  * @since   2023-12-10
  */
 public class ExtractProductModel {
     /**
+     * Default constructor for the ExtractProductModel class
+     */
+    public ExtractProductModel() {}
+    /**
      * Extracts the iPhone model(s) from the product name
      * @param productName - the name of the product
      * matches it with the regex pattern
      * and then returns the matched model(s)
+     * @return productModel - from the name of the product
      */
     public static String model(String productName) {
         // Use a regex pattern to match the iPhone model(s) in the product name

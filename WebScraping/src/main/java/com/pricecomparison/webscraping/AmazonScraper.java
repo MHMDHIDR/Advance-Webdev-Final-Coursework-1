@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * <h1>AmazonScraper class extends WebScrapper class</h1>
+ * <h2>AmazonScraper class extends WebScrapper class</h2>
  * and implements the run method.
  * <p>
  * It scrapes the Amazon website for phone cases.
@@ -28,6 +28,22 @@ public class AmazonScraper extends WebScrapper {
 
     eBayScraper eBayScraper = new eBayScraper();
 
+    /**
+     * This is the constructor of the AmazonScraper class.
+     */
+    public AmazonScraper() {
+        super();
+    }
+
+    /**
+     * This method is used to scrape the Amazon website for phone cases.
+     * <p>
+     *     It iterates through each page of the search results
+     *     and scrape the product information.
+     *     <br>
+     *     It then saves the product information to the database.
+     * </p>
+     */
     @Override
     public void run() {
         // Initialize the WebDriver
@@ -37,9 +53,8 @@ public class AmazonScraper extends WebScrapper {
             /* Iterate through each page of the search results
              * and scrape the product information
              */
-
-            //should find 31 Items on the first page
             for (int page = 1; page <= Const.MAX_PAGES; page++) {
+                //should find 31 Items on the first page
                 String url = "https://www.amazon.co.uk/s?k=iPhone+case&page=" + page;
                 driver.get(url);
                 sleep(3000);
@@ -118,6 +133,14 @@ public class AmazonScraper extends WebScrapper {
         System.out.println("✔ AmazonScraper thread finished scraping.");
     }
 
+    /**
+     * This method is used to extract the phone models from the Amazon website.
+     * <p>
+     *     It iterates through each selector and extract the phone models.
+     * </p>
+     *
+     * @return List of phone models
+     */
     private List<String> extractPhoneModels() {
         List<String> modelsSelectors = Arrays.asList(
                 ".po-compatible_phone_models td .po-break-word",

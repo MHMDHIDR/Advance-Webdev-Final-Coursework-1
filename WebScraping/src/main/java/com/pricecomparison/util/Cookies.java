@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
- * <h1>Cookies class</h1>
+ * <h2>Cookies class</h2>
  * The Cookies class implements a method to click on accept cookies
  * button if the button is found, then print a message.
  * <p>
@@ -18,27 +18,29 @@ import org.openqa.selenium.WebElement;
  */
 public class Cookies {
     /**
+     * This is the constructor for the Const class.
+     */
+    public Cookies() {}
+
+    /**
      * Accept cookies is a method to click on accept cookies, then print a message
      * @param driver the WebDriver
      * @param cookiesButtonSelector the css selector of the cookies button to be clicked
      * @param WEBSITE the name of the website
+     * <br>
+     *     Example:
+     *     <pre>
+     *         {@code
+     *             acceptCookies(driver,"sp-cc-accept","Amazon");
+     *         }
+     *     </pre>
      *
-     *    <p>
-     *        Example:
-     *        <pre>
-     *            {@code
-     *                acceptCookies(driver,"sp-cc-accept","Amazon");
-     *            }
-     *        </pre>
-     *
-     *        Output:
-     *         <pre>
-     *             {@code
-     *                 Amazon Cookies button clicked.
-     *             }
-     *         </pre>
-     *    </p>
-     *
+     *     Output:
+     *      <pre>
+     *          {@code
+     *              Amazon Cookies button clicked.
+     *          }
+     *      </pre>
      */
     public static void accept(WebDriver driver, String cookiesButtonSelector, String WEBSITE) {
         try {

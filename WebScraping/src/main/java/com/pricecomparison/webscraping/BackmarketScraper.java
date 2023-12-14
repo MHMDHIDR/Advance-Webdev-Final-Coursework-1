@@ -19,6 +19,13 @@ import java.util.List;
 public class BackmarketScraper extends WebScrapper {
     private static final String WEBSITE = "Backmarket";
 
+    /**
+     * This is the constructor of the BackmarketScraper class.
+     */
+    public BackmarketScraper() {
+        super();
+    }
+
     @Override
     public void run() {
         // Initialize the WebDriver

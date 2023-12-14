@@ -11,6 +11,12 @@ public class ScraperManager {
 
     /**
      * Constructor for ScraperManager class.
+     * (No specific logic in this constructor.)
+     */
+    public ScraperManager() {}
+
+    /**
+     * Starts the scraping process by invoking the start method on each WebScrapper object.
      */
     public void startScraping() {
         for(WebScrapper scraper : scraperList) {
@@ -18,8 +24,11 @@ public class ScraperManager {
         }
     }
 
+
     /**
-     * Getter to get the list of WebScrapper objects.
+     * getScraperList Getter to get the list of WebScrapper objects.
+     *
+     * @return scraperList the list of WebScrapper objects
      */
     public ArrayList<WebScrapper> getScraperList() {
         return scraperList;
@@ -27,6 +36,7 @@ public class ScraperManager {
 
     /**
      * Setter to set the list of WebScrapper objects.
+     * @param scraperList list of WebScrapper objects
      */
     public void setScraperList(ArrayList<WebScrapper> scraperList) {
         this.scraperList = scraperList;
