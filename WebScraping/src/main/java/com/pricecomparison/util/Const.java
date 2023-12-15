@@ -18,5 +18,5 @@ public class Const {
      * The maximum number of pages to be scraped.
      * This is used to prevent the program from scraping too many pages.
      */
-    public static final int MAX_PAGES = 10;
+    public static final int MAX_PAGES = 1;
 }

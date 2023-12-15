@@ -68,8 +68,24 @@ main {
   border-bottom: 1px solid #ccc;
 }
 
+.header.animate-slidedown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: slideDown 1s ease-in-out 1;
+}
+
 .logo {
   margin: 10px;
+}
+
+.header.animate-slidedown .logo {
+  width: 5rem;
+  height: auto;
 }
 
 .search input {
@@ -665,6 +681,16 @@ main {
   -o-transform: rotate(225deg);
   -webkit-transform: rotate(225deg);
   transform: rotate(225deg);
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes product-show {

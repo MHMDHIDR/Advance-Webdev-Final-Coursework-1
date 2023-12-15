@@ -96,7 +96,9 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { scrollHeader } from './utils/index.js'
+
         new Vue({
             el: '#app',
             data: {
@@ -143,6 +145,7 @@
                 },
             },
             created() {
+                scrollHeader()
                 this.loadCaseDetails()
             },
         });

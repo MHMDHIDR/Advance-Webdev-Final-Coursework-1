@@ -81,7 +81,7 @@
   </div>
 
   <script type="module">
-    import { getPageNumber } from './utils/index.js';
+    import { getPageNumber, scrollHeader } from './utils/index.js'
 
     new Vue({
       el: '#app',
@@ -159,6 +159,7 @@
         }
       },
       created() {
+        scrollHeader()
         // Retrieve search query and fetch search results on page load
         this.retrieveSearchQuery()
         this.fetchSearchResults()

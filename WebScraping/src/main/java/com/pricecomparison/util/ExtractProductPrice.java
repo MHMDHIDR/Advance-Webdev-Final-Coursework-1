@@ -21,7 +21,7 @@ public class ExtractProductPrice {
     public ExtractProductPrice() {}
 
     /**
-     * @param driver - the WebDriver object
+     * @param driver the WebDriver object to be used
      * The method takes a WebDriver object as an argument, and returns a String
      * containing the price of the product.
      * <p>
